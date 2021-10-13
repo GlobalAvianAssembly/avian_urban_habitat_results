@@ -21,7 +21,15 @@ load_cluster_data <- function() {
             body_morphspace.pc1.mean AS pc1, 
             body_morphspace.pc2.mean AS pc2, 
             body_morphspace.pc3.mean AS pc3, 
-            body_morphspace.pc4.mean AS pc4
+            body_morphspace.pc4.mean AS pc4,
+            abs(body_morphspace.pc1.avg_delta) AS abs_pc1_delta, 
+            abs(body_morphspace.pc2.avg_delta) AS abs_pc2_delta, 
+            abs(body_morphspace.pc3.avg_delta) AS abs_pc3_delta, 
+            abs(body_morphspace.pc4.avg_delta) AS abs_pc4_delta,
+            body_morphspace.pc1.avg_delta AS pc1_delta, 
+            body_morphspace.pc2.avg_delta AS pc2_delta, 
+            body_morphspace.pc3.avg_delta AS pc3_delta, 
+            body_morphspace.pc4.avg_delta AS pc4_delta
         FROM model2.cluster_analysis"
   
     tb <- bq_project_query(projectid, sql)
@@ -72,7 +80,7 @@ ggplot(cluster_data, aes(y = presence_ratio, x = pc4)) + geom_point()
 
 ```{r}
 model <- lm(
-  presence_ratio ~ foraging_niche + trophic_niche + is_noctural + pc1 + pc2 + pc3 + pc4,
+  presence_ratio ~ foraging_niche + trophic_niche + is_noctural + pc1 + pc2 + pc3 + pc4 + pc1_delta + pc2_delta + pc3_delta + pc4_delta + abs_pc1_delta + abs_pc2_delta + abs_pc3_delta + abs_pc4_delta,
   data=cluster_data
 )
 dredge_result <- dredge(model)

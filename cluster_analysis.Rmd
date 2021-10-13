@@ -1,0 +1,85 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+response <- try(system('~/google-cloud-sdk/bin/gcloud projects list --quiet', intern = T))
+projectid <- strsplit(response[2], " ")[[1]][1]
+projectid
+```
+
+```{r}
+load_cluster_data <- function() {
+  filename <- 'clusters.csv'
+  
+  if (!file.exists(filename)) {
+    sql <- "SELECT
+            presence_ratio,
+            foraging_niche, 
+            trophic_niche, 
+            is_noctural, 
+            body_morphspace.pc1.mean AS pc1, 
+            body_morphspace.pc2.mean AS pc2, 
+            body_morphspace.pc3.mean AS pc3, 
+            body_morphspace.pc4.mean AS pc4
+        FROM model2.cluster_analysis"
+  
+    tb <- bq_project_query(projectid, sql)
+
+    data <- bq_table_download(tb)
+    write_csv(data, filename)
+  }
+  
+  data <- read_csv(filename)
+  
+  data[is.na(data$foraging_niche),]$foraging_niche <- 'Omnivore'
+  
+  data$foraging_niche = as.factor(data$foraging_niche)
+  data$trophic_niche = as.factor(data$trophic_niche)
+  data$is_noctural = as.factor(data$is_noctural)
+  
+  data
+}
+```
+
+
+```{r}
+cluster_data <- load_cluster_data()
+cluster_data
+```
+
+```{r}
+options(na.action = "na.fail") 
+```
+
+```{r}
+source("./dredge_functions.R")
+```
+
+
+```{r}
+ggplot(cluster_data, aes(y = presence_ratio, x = pc1)) + geom_point()
+```
+```{r}
+ggplot(cluster_data, aes(y = presence_ratio, x = pc2)) + geom_point()
+```
+```{r}
+ggplot(cluster_data, aes(y = presence_ratio, x = pc3)) + geom_point()
+```
+```{r}
+ggplot(cluster_data, aes(y = presence_ratio, x = pc4)) + geom_point()
+```
+
+```{r}
+model <- lm(
+  presence_ratio ~ foraging_niche + trophic_niche + is_noctural + pc1 + pc2 + pc3 + pc4,
+  data=cluster_data
+)
+dredge_result <- dredge(model)
+result <- summary(model.avg(dredge_result, subset = delta < 10))
+
+summ <- model_summary('merlin', 'richness', result)
+summ
+```
+
+

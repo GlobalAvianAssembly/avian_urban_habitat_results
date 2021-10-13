@@ -1,0 +1,64 @@
+---
+title: "Percentage of Regional Richness"
+output: html_notebook
+---
+
+Run 'download_data.Rmd` First!
+
+```{r}
+options(na.action = "na.fail") 
+```
+
+```{r}
+source("./dredge_functions.R")
+```
+
+```{r}
+model_average_richness <- function(data) {
+  model_average(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + absolute_latitude_scaled + longitude_scaled + (1|city_name), data, 4)
+}
+```
+
+----------------------
+Merlin: Difference in richness
+----------------------
+```{r}
+merlin_richness_result <- model_average_richness(merlin)
+merlin_richness_sum <- model_summary('merlin', 'richness', merlin_richness_result)
+merlin_richness_sum
+```
+
+----------------------
+Birdlife: Difference in richness
+----------------------
+```{r}
+bl_richness_result <- model_average_richness(birdlife)
+bl_richness_sum <- model_summary('birdlife', 'richness', bl_richness_result)
+bl_richness_sum
+```
+
+----------------------
+Both: Difference in richness
+----------------------
+```{r}
+both_richness_result <- model_average_richness(both)
+both_richness_sum <- model_summary('both', 'richness', both_richness_result)
+both_richness_sum
+```
+
+----------------------
+Either: Difference in richness
+----------------------
+```{r}
+either_richness_result <- model_average_richness(either)
+either_richness_sum <- model_summary('either', 'richness', either_richness_result)
+either_richness_sum
+```
+
+----------------------
+Full result
+----------------------
+```{r}
+richness_all <- full_join(full_join(merlin_richness_sum, bl_richness_sum), full_join(both_richness_sum, either_richness_sum))
+write_csv(richness_all, "richness_result.csv")
+```

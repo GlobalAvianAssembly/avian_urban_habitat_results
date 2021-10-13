@@ -1,0 +1,130 @@
+---
+title: "Download locality data"
+output: html_notebook
+---
+
+Clear workspace
+```{r}
+rm(list = ls())
+```
+
+```{r}
+library(bigrquery)
+library(stringr)
+library(tidyverse)
+library(dplyr)
+library(lme4)
+library(MuMIn)
+library(scales)
+```
+
+```{r}
+response <- try(system('~/google-cloud-sdk/bin/gcloud projects list --quiet', intern = T))
+projectid <- strsplit(response[2], " ")[[1]][1]
+projectid
+```
+  
+
+```{r}
+create_dataset <- function(poolname) {
+  sql <- str_replace_all("SELECT 
+    ##POOL_NAME##.percentage_of_regional_pool_present,
+    ##POOL_NAME##.difference_from_locality_trait_gravity,
+    ##POOL_NAME##.percentage_of_niches_present,
+    latitude,
+    longitude,
+    percentage_landcover_5km.closed_forest_total AS closed_forest,
+    percentage_landcover_5km.cultivated,
+    percentage_landcover_5km.herbaceous_vegetation,
+    percentage_landcover_5km.herbaceous_wetland,
+    percentage_landcover_5km.open_forest_total AS open_forest,
+    percentage_landcover_5km.permanent_water,
+    percentage_landcover_5km.shrubs,
+    percentage_landcover_5km.urban,
+    percentage_landcover_5km.elevation.mean AS mean_elevation,
+    percentage_landcover_5km.elevation.delta AS elevation_delta,
+    average_population_density.within_5km AS average_population_density,
+    urban_area.name AS city_name,
+    urban_area.location.continent,
+    urban_area.ecosystem.realm,
+    urban_area.ecosystem.biome.biome_name AS biome,
+    urban_area.country_economy.gdp_estimate_thousand_dollars_per_person AS national_gdp_estimate_thousand_dollars_per_person,
+    urban_area.country_economy.income_group AS national_income_group,
+    locality_id
+FROM model.urban_hotspot
+JOIN model2.all_species USING(locality_id, city_id)
+JOIN model.urban_area USING (city_id)", '##POOL_NAME##', poolname)
+
+  print(sql)
+  
+  tb <- bq_project_query(projectid, sql)
+
+  bq_table_download(tb)
+}
+```
+
+
+```{r}
+load_dataset <- function(poolname) {
+  filename <- str_replace('all_species_##POOL_NAME##.csv', '##POOL_NAME##', poolname)
+  
+  if (!file.exists(filename)) {
+    data <- create_dataset(poolname)
+    write_csv(data, filename)
+  }
+  
+  
+  data <- read_csv(filename)
+  
+  randomGroups = as.factor(sample(data$city_name, nrow(data), replace=TRUE))
+  
+  data$city_name = as.factor(data$city_name)
+  data$continent = relevel(as.factor(data$continent), ref = "Europe")
+  data$realm = relevel(as.factor(data$realm), ref = "Palearctic")
+  data$biome = as.factor(data$biome)
+  data$national_income_group = as.factor(data$national_income_group)
+  data$mean_elevation_scaled = rescale(data$mean_elevation, to = c(0, 1), from = range(data$mean_elevation, na.rm = TRUE, finite = TRUE))
+  data$elevation_delta_scaled = rescale(data$elevation_delta, to = c(0, 1), from = range(data$elevation_delta, na.rm = TRUE, finite = TRUE))
+  data$average_population_density_scaled = rescale(data$average_population_density, to = c(0, 1), from = range(data$average_population_density, na.rm = TRUE, finite = TRUE))
+  data$national_gdp_estimate_thousand_dollars_per_person_scaled = rescale(data$national_gdp_estimate_thousand_dollars_per_person, to = c(0, 1), from = range(data$national_gdp_estimate_thousand_dollars_per_person, na.rm = TRUE, finite = TRUE))
+  data$latitude_scaled = rescale(data$latitude, to = c(0, 1), from = range(data$latitude, na.rm = TRUE, finite = TRUE))
+  data$longitude_scaled = rescale(data$longitude, to = c(0, 1), from = range(data$longitude, na.rm = TRUE, finite = TRUE))
+  data$absolute_latitude_scaled = abs(data$latitude_scaled)
+  data
+}
+```
+
+
+Merlin
+----------------------
+
+```{r}
+merlin <- load_dataset('merlin')
+merlin
+```
+
+
+Birdlife
+----------------------
+
+```{r}
+birdlife <- load_dataset('birdlife')
+birdlife
+```
+
+
+Both
+----------------------
+
+```{r}
+both <- load_dataset('both')
+both
+```
+
+Either
+----------------------
+
+```{r}
+either <- load_dataset('either')
+either
+```

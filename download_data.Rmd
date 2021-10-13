@@ -76,8 +76,6 @@ load_dataset <- function(poolname) {
   
   data <- read_csv(filename)
   
-  randomGroups = as.factor(sample(data$city_name, nrow(data), replace=TRUE))
-  
   data$city_name = as.factor(data$city_name)
   data$continent = relevel(as.factor(data$continent), ref = "Europe")
   data$realm = relevel(as.factor(data$realm), ref = "Palearctic")

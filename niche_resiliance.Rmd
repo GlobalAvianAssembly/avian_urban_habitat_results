@@ -116,7 +116,7 @@ Find predictors
 
 ```{r}
 model_average_niche_resiliance <- function(data) {
-  model_average(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + absolute_latitude_scaled + longitude_scaled + (1|city_name), data, 4)
+  model_average(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + (1|city_name), data, 4)
 }
 ```
 

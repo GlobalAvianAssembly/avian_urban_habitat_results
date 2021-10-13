@@ -15,7 +15,7 @@ source("./dredge_functions.R")
 
 ```{r}
 model_average_richness <- function(data) {
-  model_average(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + absolute_latitude_scaled + longitude_scaled + (1|city_name), data, 4)
+  model_average(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + urban + realm + (1|city_name), data, 4)
 }
 ```
 

@@ -1,0 +1,168 @@
+---
+title: "Effectiveness at maintaining niches"
+output: html_notebook
+---
+Run 'download_data.Rmd` First!
+
+```{r}
+options(na.action = "na.fail") 
+```
+
+```{r}
+source("./dredge_functions.R")
+```
+
+---------------------------------------------------------------------
+Choose model for residuals which will form our niche reseliance score
+---------------------------------------------------------------------
+```{r}
+ggplot(merlin, aes(x = percentage_of_regional_pool_present, y = percentage_of_niches_present)) + geom_point()
+```
+```{r}
+ggplot(birdlife, aes(x = percentage_of_regional_pool_present, y = percentage_of_niches_present)) + geom_point()
+```
+
+```{r}
+model_selection_by_anova <- function(data) {
+  anova(
+    glm(data = data, percentage_of_niches_present ~ percentage_of_regional_pool_present, family = "gaussian"),
+    glm(data = data, percentage_of_niches_present ~ I(percentage_of_regional_pool_present^2), family = "gaussian"),
+    glm(data = data, percentage_of_niches_present ~ I(percentage_of_regional_pool_present^3), family = "gaussian")
+  )
+}
+
+model_selection_by_aic <- function(data) {
+  AIC(
+    glm(data = data, percentage_of_niches_present ~ percentage_of_regional_pool_present, family = "gaussian"),
+    glm(data = data, percentage_of_niches_present ~ I(percentage_of_regional_pool_present^2), family = "gaussian"),
+    glm(data = data, percentage_of_niches_present ~ I(percentage_of_regional_pool_present^3), family = "gaussian")
+  )
+}
+```
+
+```{r}
+model_selection_by_anova(merlin)
+```
+
+```{r}
+model_selection_by_aic(merlin)
+```
+
+```{r}
+model_selection_by_anova(birdlife)
+```
+
+```{r}
+model_selection_by_aic(birdlife)
+```
+
+```{r}
+model_selection_by_anova(both)
+```
+
+```{r}
+model_selection_by_aic(both)
+```
+
+```{r}
+model_selection_by_anova(either)
+```
+
+```{r}
+model_selection_by_aic(either)
+```
+
+---------------------------------------------------------------------
+Create niche reseliance score
+---------------------------------------------------------------------
+```{r}
+score_niche_reseliance <- function(data) {
+  linear_model <- glm(data = data, percentage_of_niches_present ~ percentage_of_regional_pool_present, family = "gaussian")
+  linear_model$residuals
+}
+```
+
+```{r}
+merlin$niche_resiliance <- score_niche_reseliance(merlin)
+birdlife$niche_resiliance <- score_niche_reseliance(birdlife)
+both$niche_resiliance <- score_niche_reseliance(both)
+either$niche_resiliance <- score_niche_reseliance(either)
+```
+
+----------------------
+Check correlation
+----------------------
+
+```{r}
+cor(merlin[,c("percentage_of_regional_pool_present", "niche_resiliance", "percentage_of_niches_present")])
+```
+
+
+```{r}
+cor(birdlife[,c("percentage_of_regional_pool_present", "niche_resiliance", "percentage_of_niches_present")])
+```
+
+```{r}
+cor(both[,c("percentage_of_regional_pool_present", "niche_resiliance", "percentage_of_niches_present")])
+```
+
+```{r}
+cor(either[,c("percentage_of_regional_pool_present", "niche_resiliance", "percentage_of_niches_present")])
+```
+
+----------------------
+Find predictors
+----------------------
+
+```{r}
+model_average_niche_resiliance <- function(data) {
+  model_average(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + absolute_latitude_scaled + longitude_scaled + (1|city_name), data, 4)
+}
+```
+
+
+----------------------
+Merlin: Niche Resiliance
+----------------------
+```{r}
+merlin_niche_resiliance_result <- model_average_niche_resiliance(merlin)
+merlin_niche_resiliance_sum <- model_summary('merlin', 'niche_resiliance', merlin_niche_resiliance_result)
+merlin_niche_resiliance_sum
+```
+
+----------------------
+Birdlife: Niche Resiliance
+----------------------
+```{r}
+bl_niche_resiliance_result <- model_average_niche_resiliance(birdlife)
+bl_niche_resiliance_sum <- model_summary('birdlife', 'niche_resiliance', bl_niche_resiliance_result)
+bl_niche_resiliance_sum
+```
+
+----------------------
+Both: Niche Resiliance
+----------------------
+```{r}
+both_niche_resiliance_result <- model_average_niche_resiliance(both)
+both_niche_resiliance_sum <- model_summary('both', 'niche_resiliance', both_niche_resiliance_result)
+both_niche_resiliance_sum
+```
+
+----------------------
+Either: Niche Resiliance
+----------------------
+```{r}
+either_niche_resiliance_result <- model_average_niche_resiliance(either)
+either_niche_resiliance_sum <- model_summary('either', 'niche_resiliance', either_niche_resiliance_result)
+either_niche_resiliance_sum
+```
+
+----------------------
+Full result
+----------------------
+```{r}
+niche_resiliance_all <- full_join(full_join(merlin_niche_resiliance_sum, bl_niche_resiliance_sum), full_join(both_niche_resiliance_sum, either_niche_resiliance_sum))
+write_csv(niche_resiliance_all, "niche_resiliance_result.csv")
+```
+
+

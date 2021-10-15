@@ -1,0 +1,127 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+response <- try(system('~/google-cloud-sdk/bin/gcloud projects list --quiet', intern = T))
+projectid <- strsplit(response[2], " ")[[1]][1]
+```
+
+```{r}
+options(na.action = "na.fail") 
+```
+
+```{r}
+source("./dredge_functions.R")
+```
+
+```{r}
+dredge_and_subset <- function(data) {
+  model <- lm(
+    presence_ratio ~ foraging_niche + trophic_niche + is_noctural + pc1 + pc2 + pc3 + pc4,
+    data=data
+  )
+  dredge_result <- dredge(model)
+  summary(model.avg(dredge_result, subset = delta < 10))
+}
+```
+
+```{r}
+load_species_data <- function(poolname) {
+  filename <- str_replace('species_metrics_##POOL_NAME##.csv', '##POOL_NAME##', poolname)
+  
+  if (!file.exists(filename)) {
+    column_name = str_replace_all('present_in_##POOL_NAME##_pool', '##POOL_NAME##', poolname)
+    if (poolname == 'both') {
+      column_name = 'present_in_both_pools'
+    }
+    
+    sql <- str_replace_all("
+         WITH species AS (
+              SELECT 
+                  scientific_name,
+                  count(*) AS regional_pool_count,
+                  countif(present_in_city = true) AS city_count
+              FROM model.regional_species_filtered
+              JOIN model.taxonomy USING (scientific_name)
+              WHERE ##COL_SELECT## = true
+              GROUP BY scientific_name
+          )
+          SELECT 
+              species.*,
+              body_morphspace.pc1,
+              body_morphspace.pc2,
+              body_morphspace.pc3,
+              body_morphspace.pc4,
+              trophic_niche,
+              foraging_niche,
+              is_noctural
+          FROM species
+          JOIN model.taxonomy USING (scientific_name)", '##COL_SELECT##', column_name)
+  
+    tb <- bq_project_query(projectid, sql)
+
+    data <- bq_table_download(tb)
+    write_csv(data, filename)
+  }
+  
+  data <- read_csv(filename)
+  
+  data[is.na(data$foraging_niche),]$foraging_niche <- 'Omnivore'
+  
+  data$foraging_niche = as.factor(data$foraging_niche)
+  data$trophic_niche = as.factor(data$trophic_niche)
+  data$is_noctural = as.factor(data$is_noctural)
+  data$presence_ratio = data$city_count / data$regional_pool_count
+  
+  data
+}
+```
+
+
+```{r}
+merlin_data <- load_species_data('merlin')
+merlin_data
+```
+
+
+
+```{r}
+merlin_result <- dredge_and_subset(merlin_data)
+merlin_summ <- model_summary('merlin', 'species', merlin_result)
+merlin_summ
+```
+
+```{r}
+birdlife_data <- load_species_data('birdlife')
+birdlife_result <- dredge_and_subset(birdlife_data)
+birdlife_summ <- model_summary('birdlife', 'species', birdlife_result)
+birdlife_summ
+```
+
+
+```{r}
+both_data <- load_species_data('both')
+both_result <- dredge_and_subset(both_data)
+both_summ <- model_summary('both', 'species', both_result)
+both_summ
+```
+
+
+```{r}
+either_data <- load_species_data('either')
+either_result <- dredge_and_subset(either_data)
+either_summ <- model_summary('either', 'species', either_result)
+either_summ
+```
+
+----------------------
+Full result
+----------------------
+```{r}
+all_species_results <- full_join(full_join(merlin_summ, birdlife_summ), full_join(both_summ, either_summ))
+write_csv(all_species_results, "species_result.csv")
+```
+
+
+

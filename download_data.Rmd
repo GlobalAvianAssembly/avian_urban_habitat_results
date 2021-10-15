@@ -21,7 +21,6 @@ library(scales)
 ```{r}
 response <- try(system('~/google-cloud-sdk/bin/gcloud projects list --quiet', intern = T))
 projectid <- strsplit(response[2], " ")[[1]][1]
-projectid
 ```
   
 
@@ -66,7 +65,7 @@ JOIN model.urban_area USING (city_id)", '##POOL_NAME##', poolname)
 
 ```{r}
 load_dataset <- function(poolname) {
-  filename <- str_replace('all_species_##POOL_NAME##.csv', '##POOL_NAME##', poolname)
+  filename <- str_replace('hotspot_metrics_##POOL_NAME##.csv', '##POOL_NAME##', poolname)
   
   if (!file.exists(filename)) {
     data <- create_dataset(poolname)

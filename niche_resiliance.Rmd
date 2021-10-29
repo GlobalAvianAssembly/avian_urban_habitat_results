@@ -80,6 +80,16 @@ score_niche_reseliance <- function(data) {
   linear_model <- glm(data = data, percentage_of_niches_present ~ percentage_of_regional_pool_present, family = "gaussian")
   linear_model$residuals
 }
+
+score_niche_2_reseliance <- function(data) {
+  linear_model <- glm(data = data, percentage_of_niches_2_present ~ percentage_of_regional_pool_present, family = "gaussian")
+  linear_model$residuals
+}
+
+score_niche_3_reseliance <- function(data) {
+  linear_model <- glm(data = data, percentage_of_niches_3_present ~ percentage_of_regional_pool_present, family = "gaussian")
+  linear_model$residuals
+}
 ```
 
 ```{r}
@@ -87,6 +97,16 @@ merlin$niche_resiliance <- score_niche_reseliance(merlin)
 birdlife$niche_resiliance <- score_niche_reseliance(birdlife)
 both$niche_resiliance <- score_niche_reseliance(both)
 either$niche_resiliance <- score_niche_reseliance(either)
+
+merlin$niche_2_resiliance <- score_niche_2_reseliance(merlin)
+birdlife$niche_2_resiliance <- score_niche_2_reseliance(birdlife)
+both$niche_2_resiliance <- score_niche_2_reseliance(both)
+either$niche_2_resiliance <- score_niche_2_reseliance(either)
+
+merlin$niche_3_resiliance <- score_niche_3_reseliance(merlin)
+birdlife$niche_3_resiliance <- score_niche_3_reseliance(birdlife)
+both$niche_3_resiliance <- score_niche_3_reseliance(both)
+either$niche_3_resiliance <- score_niche_3_reseliance(either)
 ```
 
 ----------------------
@@ -118,6 +138,14 @@ Find predictors
 model_average_niche_resiliance <- function(data) {
   model_average(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + (1|city_name), data, 4)
 }
+
+model_average_niche_2_resiliance <- function(data) {
+  model_average(niche_2_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + (1|city_name), data, 4)
+}
+
+model_average_niche_3_resiliance <- function(data) {
+  model_average(niche_3_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + (1|city_name), data, 4)
+}
 ```
 
 
@@ -130,6 +158,18 @@ merlin_niche_resiliance_sum <- model_summary('merlin', 'niche_resiliance', merli
 merlin_niche_resiliance_sum
 ```
 
+```{r}
+merlin_niche2_resiliance_result <- model_average_niche_2_resiliance(merlin)
+merlin_niche2_resiliance_sum <- model_summary('merlin', 'niche_2_resiliance', merlin_niche2_resiliance_result)
+merlin_niche2_resiliance_sum
+```
+
+```{r}
+merlin_niche3_resiliance_result <- model_average_niche_3_resiliance(merlin)
+merlin_niche3_resiliance_sum <- model_summary('merlin', 'niche_3_resiliance', merlin_niche3_resiliance_result)
+merlin_niche3_resiliance_sum
+```
+
 ----------------------
 Birdlife: Niche Resiliance
 ----------------------
@@ -137,6 +177,17 @@ Birdlife: Niche Resiliance
 bl_niche_resiliance_result <- model_average_niche_resiliance(birdlife)
 bl_niche_resiliance_sum <- model_summary('birdlife', 'niche_resiliance', bl_niche_resiliance_result)
 bl_niche_resiliance_sum
+```
+```{r}
+bl_niche2_resiliance_result <- model_average_niche_2_resiliance(birdlife)
+bl_niche2_resiliance_sum <- model_summary('birdlife', 'niche_2_resiliance', bl_niche2_resiliance_result)
+bl_niche2_resiliance_sum
+```
+
+```{r}
+bl_niche3_resiliance_result <- model_average_niche_3_resiliance(birdlife)
+bl_niche3_resiliance_sum <- model_summary('birdlife', 'niche_3_resiliance', bl_niche3_resiliance_result)
+bl_niche3_resiliance_sum
 ```
 
 ----------------------
@@ -148,6 +199,18 @@ both_niche_resiliance_sum <- model_summary('both', 'niche_resiliance', both_nich
 both_niche_resiliance_sum
 ```
 
+```{r}
+both_niche2_resiliance_result <- model_average_niche_2_resiliance(both)
+both_niche2_resiliance_sum <- model_summary('both', 'niche_2_resiliance', both_niche2_resiliance_result)
+both_niche2_resiliance_sum
+```
+
+```{r}
+both_niche3_resiliance_result <- model_average_niche_3_resiliance(both)
+both_niche3_resiliance_sum <- model_summary('both', 'niche_3_resiliance', both_niche3_resiliance_result)
+both_niche3_resiliance_sum
+```
+
 ----------------------
 Either: Niche Resiliance
 ----------------------
@@ -155,6 +218,18 @@ Either: Niche Resiliance
 either_niche_resiliance_result <- model_average_niche_resiliance(either)
 either_niche_resiliance_sum <- model_summary('either', 'niche_resiliance', either_niche_resiliance_result)
 either_niche_resiliance_sum
+```
+
+```{r}
+either_niche2_resiliance_result <- model_average_niche_2_resiliance(either)
+either_niche2_resiliance_sum <- model_summary('either', 'niche_2_resiliance', either_niche2_resiliance_result)
+either_niche2_resiliance_sum
+```
+
+```{r}
+either_niche3_resiliance_result <- model_average_niche_3_resiliance(either)
+either_niche3_resiliance_sum <- model_summary('either', 'niche_3_resiliance', either_niche3_resiliance_result)
+either_niche3_resiliance_sum
 ```
 
 ----------------------

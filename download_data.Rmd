@@ -30,6 +30,8 @@ create_dataset <- function(poolname) {
     ##POOL_NAME##.percentage_of_regional_pool_present,
     ##POOL_NAME##.difference_from_locality_trait_gravity,
     ##POOL_NAME##.percentage_of_niches_present,
+    ##POOL_NAME##.percentage_of_niches_2_present,
+    ##POOL_NAME##.percentage_of_niches_3_present,
     latitude,
     longitude,
     percentage_landcover_5km.closed_forest_total AS closed_forest,

@@ -24,6 +24,23 @@ Merlin: Difference in richness
 ----------------------
 ```{r}
 merlin_richness_result <- model_average_richness(merlin)
+merlin_richness_result
+```
+
+```{r}
+mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), merlin)
+r.squaredGLMM(mixed_model)
+```
+
+```{r}
+fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, merlin)
+anova(mixed_model, fixed_model)
+```
+```{r}
+anova(mixed_model, lm(percentage_of_regional_pool_present ~ city_name, merlin))
+```
+
+```{r}
 merlin_richness_sum <- model_summary('merlin', 'richness', merlin_richness_result)
 merlin_richness_sum
 ```
@@ -33,6 +50,20 @@ Birdlife: Difference in richness
 ----------------------
 ```{r}
 bl_richness_result <- model_average_richness(birdlife)
+bl_richness_result
+```
+
+```{r}
+mixed_model <- lmer(percentage_of_regional_pool_present ~ elevation_delta_scaled + mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), birdlife)
+r.squaredGLMM(mixed_model)
+```
+
+```{r}
+fixed_model <- lm(percentage_of_regional_pool_present ~ elevation_delta_scaled + mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, birdlife)
+anova(mixed_model, fixed_model)
+```
+
+```{r}
 bl_richness_sum <- model_summary('birdlife', 'richness', bl_richness_result)
 bl_richness_sum
 ```
@@ -42,6 +73,20 @@ Both: Difference in richness
 ----------------------
 ```{r}
 both_richness_result <- model_average_richness(both)
+both_richness_result
+```
+
+```{r}
+mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), both)
+r.squaredGLMM(mixed_model)
+```
+
+```{r}
+fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, both)
+anova(mixed_model, fixed_model)
+```
+
+```{r}
 both_richness_sum <- model_summary('both', 'richness', both_richness_result)
 both_richness_sum
 ```
@@ -51,6 +96,20 @@ Either: Difference in richness
 ----------------------
 ```{r}
 either_richness_result <- model_average_richness(either)
+either_richness_result
+```
+
+```{r}
+mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), either)
+r.squaredGLMM(mixed_model)
+```
+
+```{r}
+fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, either)
+anova(mixed_model, fixed_model)
+```
+
+```{r}
 either_richness_sum <- model_summary('either', 'richness', either_richness_result)
 either_richness_sum
 ```
@@ -62,3 +121,19 @@ Full result
 richness_all <- full_join(full_join(merlin_richness_sum, bl_richness_sum), full_join(both_richness_sum, either_richness_sum))
 write_csv(richness_all, "richness_result.csv")
 ```
+
+
+```{r}
+ggplot(merlin, aes(x = herbaceous_wetland, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = "lm", se = F) + geom_point(alpha = 0.1) + theme_bw()
+```
+
+```{r}
+ggplot(merlin, aes(x = open_forest, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = "lm", se = F) + geom_point(alpha = 0.1) + theme_bw()
+```
+```{r}
+ggplot(merlin, aes(x = cultivated, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = "lm", se = F) + geom_point(alpha = 0.1) + theme_bw()
+```
+
+
+
+

@@ -248,24 +248,137 @@ pre code {
 </table>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVybGluX3JpY2huZXNzX3Jlc3VsdCA8LSBtb2RlbF9hdmVyYWdlX3JpY2huZXNzKG1lcmxpbilcbmBgYCJ9 -->
-<pre class="r"><code>merlin_richness_result &lt;- model_average_richness(merlin)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVybGluX3JpY2huZXNzX3Jlc3VsdFxuXG5gYGAifQ== -->
+<pre class="r"><code>merlin_richness_result
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBpbiBkcmVkZ2UobW9kZWwpIDogY29tcGFyaW5nIG1vZGVscyBmaXR0ZWQgYnkgUkVNTFxuRml4ZWQgdGVybSBpcyBcIihJbnRlcmNlcHQpXCJcbiJ9 -->
-<pre><code>Warning in dredge(model) : comparing models fitted by REML
-Fixed term is &quot;(Intercept)&quot;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubW9kZWwuYXZnKG9iamVjdCA9IGRyZWRnZV9yZXN1bHQsIHN1YnNldCA9IGRlbHRhIDwgYWljX2RlbHRhKVxuXG5Db21wb25lbnQgbW9kZWwgY2FsbDogXG5sbWVyKGZvcm11bGEgPSBwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IDw4IHVuaXF1ZSByaHM+LCBkYXRhID0gZGF0YSlcblxuQ29tcG9uZW50IG1vZGVsczogXG4gICAgICAgICAgICAgICAgICAgICAgICBkZiAgICBsb2dMaWsgICAgIEFJQ2MgZGVsdGEgd2VpZ2h0XG4xLzIvNC81LzYvNy84LzkvMTAgICAgICAxNiAtMjUxMTQuNjkgNTAyNjEuNDUgIDAuMDAgICAwLjI4XG4xLzIvMy80LzUvNi83LzgvOS8xMCAgICAxNyAtMjUxMTMuOTIgNTAyNjEuOTIgIDAuNDYgICAwLjIyXG4xLzIvNC81LzYvNy85LzEwICAgICAgICAxNSAtMjUxMTYuNDIgNTAyNjIuODkgIDEuNDQgICAwLjE0XG4xLzIvMy80LzUvNi83LzkvMTAgICAgICAxNiAtMjUxMTUuNjcgNTAyNjMuNDAgIDEuOTUgICAwLjEwXG4xLzIvNC81LzYvNy84LzkvMTAvMTEgICAxNyAtMjUxMTQuNzUgNTAyNjMuNTcgIDIuMTIgICAwLjEwXG4xLzIvMy80LzUvNi83LzgvOS8xMC8xMSAxOCAtMjUxMTMuOTggNTAyNjQuMDMgIDIuNTggICAwLjA4XG4xLzIvNC81LzYvNy85LzEwLzExICAgICAxNiAtMjUxMTYuNDAgNTAyNjQuODYgIDMuNDAgICAwLjA1XG4xLzIvMy80LzUvNi83LzkvMTAvMTEgICAxNyAtMjUxMTUuNjIgNTAyNjUuMzIgIDMuODcgICAwLjA0XG5cblRlcm0gY29kZXM6IFxuICAgICAgICAgY2xvc2VkX2ZvcmVzdCAgICAgICAgICAgICBjdWx0aXZhdGVkIGVsZXZhdGlvbl9kZWx0YV9zY2FsZWQgIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiAgICAgaGVyYmFjZW91c193ZXRsYW5kICBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgICAgICAgICAgICBvcGVuX2ZvcmVzdCAgICAgICAgcGVybWFuZW50X3dhdGVyIFxuICAgICAgICAgICAgICAgICAgICAgMSAgICAgICAgICAgICAgICAgICAgICAyICAgICAgICAgICAgICAgICAgICAgIDMgICAgICAgICAgICAgICAgICAgICAgNCAgICAgICAgICAgICAgICAgICAgICA1ICAgICAgICAgICAgICAgICAgICAgIDYgICAgICAgICAgICAgICAgICAgICAgNyAgICAgICAgICAgICAgICAgICAgICA4IFxuICAgICAgICAgICAgICAgICByZWFsbSAgICAgICAgICAgICAgICAgc2hydWJzICAgICAgICAgICAgICAgICAgdXJiYW4gXG4gICAgICAgICAgICAgICAgICAgICA5ICAgICAgICAgICAgICAgICAgICAgMTAgICAgICAgICAgICAgICAgICAgICAxMSBcblxuTW9kZWwtYXZlcmFnZWQgY29lZmZpY2llbnRzOiAgXG4oZnVsbCBhdmVyYWdlKSBcbiAgICAgICAgICAgICAgICAgICAgICAgRXN0aW1hdGUgU3RkLiBFcnJvciBBZGp1c3RlZCBTRSB6IHZhbHVlIFByKD58enwpICAgIFxuKEludGVyY2VwdCkgICAgICAgICAgICAxNS4zOTIyMiAgICAwLjk3MDM3ICAgICAwLjk3MDUxICAxNS44NjAgIDwgMmUtMTYgKioqXG5jbG9zZWRfZm9yZXN0ICAgICAgICAgICAzLjE0NDU5ICAgIDAuNzUwNjMgICAgIDAuNzUwNzQgICA0LjE4OSAyLjgxZS0wNSAqKipcbmN1bHRpdmF0ZWQgICAgICAgICAgICAgMTEuNjk4NjYgICAgMS4wMzk2MCAgICAgMS4wMzk3NSAgMTEuMjUxICA8IDJlLTE2ICoqKlxuaGVyYmFjZW91c192ZWdldGF0aW9uICAgOC42MzAzMCAgICAxLjE1NjE2ICAgICAxLjE1NjMzICAgNy40NjQgIDwgMmUtMTYgKioqXG5oZXJiYWNlb3VzX3dldGxhbmQgICAgIDEwLjk1OTQ5ICAgIDMuMzI5NzMgICAgIDMuMzMwMjEgICAzLjI5MSAwLjAwMDk5OSAqKipcbm1lYW5fZWxldmF0aW9uX3NjYWxlZCAgLTQuMTU0NzAgICAgMi4wNTEzOSAgICAgMi4wNTE2OSAgIDIuMDI1IDAuMDQyODY2ICogIFxub3Blbl9mb3Jlc3QgICAgICAgICAgICAxMi41NTIyOCAgICAxLjA1MTc1ICAgICAxLjA1MTkwICAxMS45MzMgIDwgMmUtMTYgKioqXG5wZXJtYW5lbnRfd2F0ZXIgICAgICAgICAwLjcxNzY3ICAgIDAuNzczMDggICAgIDAuNzczMTQgICAwLjkyOCAwLjM1MzI3NCAgICBcbnJlYWxtQWZyb3Ryb3BpYyAgICAgICAgIDMuMTU2OTEgICAgMS44NjI3NiAgICAgMS44NjMwMyAgIDEuNjk1IDAuMDkwMTcwIC4gIFxucmVhbG1BdXN0cmFsYXNpYSAgICAgICAtMi44MDk0OSAgICAzLjAzMTA1ICAgICAzLjAzMTQ4ICAgMC45MjcgMC4zNTQwNDUgICAgXG5yZWFsbUluZG9tYWxheWFuICAgICAgIC0xLjM4ODk4ICAgIDEuMTc4NTAgICAgIDEuMTc4NjYgICAxLjE3OCAwLjIzODYyMiAgICBcbnJlYWxtTmVhcmN0aWMgICAgICAgICAgLTUuMDgxODIgICAgMS4zNjAzMCAgICAgMS4zNjA0OSAgIDMuNzM1IDAuMDAwMTg4ICoqKlxucmVhbG1OZW90cm9waWMgICAgICAgICAtMi4xMjI3MSAgICAxLjM4NTkyICAgICAxLjM4NjEyICAgMS41MzEgMC4xMjU2NzAgICAgXG5zaHJ1YnMgICAgICAgICAgICAgICAgICA2LjUzNTE5ICAgIDEuNTM1NjkgICAgIDEuNTM1OTEgICA0LjI1NSAyLjA5ZS0wNSAqKipcbmVsZXZhdGlvbl9kZWx0YV9zY2FsZWQgLTAuMDkzNTIgICAgMC41NjI0OCAgICAgMC41NjI1NiAgIDAuMTY2IDAuODY3OTc0ICAgIFxudXJiYW4gICAgICAgICAgICAgICAgICAtMC4wMTYwNCAgICAwLjE5NzI4ICAgICAwLjE5NzMwICAgMC4wODEgMC45MzUyMjIgICAgXG4gXG4oY29uZGl0aW9uYWwgYXZlcmFnZSkgXG4gICAgICAgICAgICAgICAgICAgICAgIEVzdGltYXRlIFN0ZC4gRXJyb3IgQWRqdXN0ZWQgU0UgeiB2YWx1ZSBQcig+fHp8KSAgICBcbihJbnRlcmNlcHQpICAgICAgICAgICAgMTUuMzkyMjIgICAgMC45NzAzNyAgICAgMC45NzA1MSAgMTUuODYwICA8IDJlLTE2ICoqKlxuY2xvc2VkX2ZvcmVzdCAgICAgICAgICAgMy4xNDQ1OSAgICAwLjc1MDYzICAgICAwLjc1MDc0ICAgNC4xODkgMi44MWUtMDUgKioqXG5jdWx0aXZhdGVkICAgICAgICAgICAgIDExLjY5ODY2ICAgIDEuMDM5NjAgICAgIDEuMDM5NzUgIDExLjI1MSAgPCAyZS0xNiAqKipcbmhlcmJhY2VvdXNfdmVnZXRhdGlvbiAgIDguNjMwMzAgICAgMS4xNTYxNiAgICAgMS4xNTYzMyAgIDcuNDY0ICA8IDJlLTE2ICoqKlxuaGVyYmFjZW91c193ZXRsYW5kICAgICAxMC45NTk0OSAgICAzLjMyOTczICAgICAzLjMzMDIxICAgMy4yOTEgMC4wMDA5OTkgKioqXG5tZWFuX2VsZXZhdGlvbl9zY2FsZWQgIC00LjE1NDcwICAgIDIuMDUxMzkgICAgIDIuMDUxNjkgICAyLjAyNSAwLjA0Mjg2NiAqICBcbm9wZW5fZm9yZXN0ICAgICAgICAgICAgMTIuNTUyMjggICAgMS4wNTE3NSAgICAgMS4wNTE5MCAgMTEuOTMzICA8IDJlLTE2ICoqKlxucGVybWFuZW50X3dhdGVyICAgICAgICAgMS4wNzE5NSAgICAwLjcxNjE3ICAgICAwLjcxNjI4ICAgMS40OTcgMC4xMzQ1MDcgICAgXG5yZWFsbUFmcm90cm9waWMgICAgICAgICAzLjE1NjkxICAgIDEuODYyNzYgICAgIDEuODYzMDMgICAxLjY5NSAwLjA5MDE3MCAuICBcbnJlYWxtQXVzdHJhbGFzaWEgICAgICAgLTIuODA5NDkgICAgMy4wMzEwNSAgICAgMy4wMzE0OCAgIDAuOTI3IDAuMzU0MDQ1ICAgIFxucmVhbG1JbmRvbWFsYXlhbiAgICAgICAtMS4zODg5OCAgICAxLjE3ODUwICAgICAxLjE3ODY2ICAgMS4xNzggMC4yMzg2MjIgICAgXG5yZWFsbU5lYXJjdGljICAgICAgICAgIC01LjA4MTgyICAgIDEuMzYwMzAgICAgIDEuMzYwNDkgICAzLjczNSAwLjAwMDE4OCAqKipcbnJlYWxtTmVvdHJvcGljICAgICAgICAgLTIuMTIyNzEgICAgMS4zODU5MiAgICAgMS4zODYxMiAgIDEuNTMxIDAuMTI1NjcwICAgIFxuc2hydWJzICAgICAgICAgICAgICAgICAgNi41MzUxOSAgICAxLjUzNTY5ICAgICAxLjUzNTkxICAgNC4yNTUgMi4wOWUtMDUgKioqXG5lbGV2YXRpb25fZGVsdGFfc2NhbGVkIC0wLjIxMjAxICAgIDAuODMxOTYgICAgIDAuODMyMDggICAwLjI1NSAwLjc5ODg4MCAgICBcbnVyYmFuICAgICAgICAgICAgICAgICAgLTAuMDYwOTQgICAgMC4zODA5OCAgICAgMC4zODEwMyAgIDAuMTYwIDAuODcyOTQ0ICAgIFxuLS0tXG5TaWduaWYuIGNvZGVzOiAgMCDigJgqKirigJkgMC4wMDEg4oCYKirigJkgMC4wMSDigJgq4oCZIDAuMDUg4oCYLuKAmSAwLjEg4oCYIOKAmSAxXG4ifQ== -->
+<pre><code>
+Call:
+model.avg(object = dredge_result, subset = delta &lt; aic_delta)
+
+Component model call: 
+lmer(formula = percentage_of_regional_pool_present ~ &lt;8 unique rhs&gt;, data = data)
+
+Component models: 
+                        df    logLik     AICc delta weight
+1/2/4/5/6/7/8/9/10      16 -25114.69 50261.45  0.00   0.28
+1/2/3/4/5/6/7/8/9/10    17 -25113.92 50261.92  0.46   0.22
+1/2/4/5/6/7/9/10        15 -25116.42 50262.89  1.44   0.14
+1/2/3/4/5/6/7/9/10      16 -25115.67 50263.40  1.95   0.10
+1/2/4/5/6/7/8/9/10/11   17 -25114.75 50263.57  2.12   0.10
+1/2/3/4/5/6/7/8/9/10/11 18 -25113.98 50264.03  2.58   0.08
+1/2/4/5/6/7/9/10/11     16 -25116.40 50264.86  3.40   0.05
+1/2/3/4/5/6/7/9/10/11   17 -25115.62 50265.32  3.87   0.04
+
+Term codes: 
+         closed_forest             cultivated elevation_delta_scaled  herbaceous_vegetation     herbaceous_wetland  mean_elevation_scaled            open_forest        permanent_water 
+                     1                      2                      3                      4                      5                      6                      7                      8 
+                 realm                 shrubs                  urban 
+                     9                     10                     11 
+
+Model-averaged coefficients:  
+(full average) 
+                       Estimate Std. Error Adjusted SE z value Pr(&gt;|z|)    
+(Intercept)            15.39222    0.97037     0.97051  15.860  &lt; 2e-16 ***
+closed_forest           3.14459    0.75063     0.75074   4.189 2.81e-05 ***
+cultivated             11.69866    1.03960     1.03975  11.251  &lt; 2e-16 ***
+herbaceous_vegetation   8.63030    1.15616     1.15633   7.464  &lt; 2e-16 ***
+herbaceous_wetland     10.95949    3.32973     3.33021   3.291 0.000999 ***
+mean_elevation_scaled  -4.15470    2.05139     2.05169   2.025 0.042866 *  
+open_forest            12.55228    1.05175     1.05190  11.933  &lt; 2e-16 ***
+permanent_water         0.71767    0.77308     0.77314   0.928 0.353274    
+realmAfrotropic         3.15691    1.86276     1.86303   1.695 0.090170 .  
+realmAustralasia       -2.80949    3.03105     3.03148   0.927 0.354045    
+realmIndomalayan       -1.38898    1.17850     1.17866   1.178 0.238622    
+realmNearctic          -5.08182    1.36030     1.36049   3.735 0.000188 ***
+realmNeotropic         -2.12271    1.38592     1.38612   1.531 0.125670    
+shrubs                  6.53519    1.53569     1.53591   4.255 2.09e-05 ***
+elevation_delta_scaled -0.09352    0.56248     0.56256   0.166 0.867974    
+urban                  -0.01604    0.19728     0.19730   0.081 0.935222    
+ 
+(conditional average) 
+                       Estimate Std. Error Adjusted SE z value Pr(&gt;|z|)    
+(Intercept)            15.39222    0.97037     0.97051  15.860  &lt; 2e-16 ***
+closed_forest           3.14459    0.75063     0.75074   4.189 2.81e-05 ***
+cultivated             11.69866    1.03960     1.03975  11.251  &lt; 2e-16 ***
+herbaceous_vegetation   8.63030    1.15616     1.15633   7.464  &lt; 2e-16 ***
+herbaceous_wetland     10.95949    3.32973     3.33021   3.291 0.000999 ***
+mean_elevation_scaled  -4.15470    2.05139     2.05169   2.025 0.042866 *  
+open_forest            12.55228    1.05175     1.05190  11.933  &lt; 2e-16 ***
+permanent_water         1.07195    0.71617     0.71628   1.497 0.134507    
+realmAfrotropic         3.15691    1.86276     1.86303   1.695 0.090170 .  
+realmAustralasia       -2.80949    3.03105     3.03148   0.927 0.354045    
+realmIndomalayan       -1.38898    1.17850     1.17866   1.178 0.238622    
+realmNearctic          -5.08182    1.36030     1.36049   3.735 0.000188 ***
+realmNeotropic         -2.12271    1.38592     1.38612   1.531 0.125670    
+shrubs                  6.53519    1.53569     1.53591   4.255 2.09e-05 ***
+elevation_delta_scaled -0.21201    0.83196     0.83208   0.255 0.798880    
+urban                  -0.06094    0.38098     0.38103   0.160 0.872944    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
 <!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxfGNpdHlfbmFtZSksIG1lcmxpbilcbnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpXG5cbmBgYCJ9 -->
+<pre class="r"><code>mixed_model &lt;- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), merlin)
+r.squaredGLMM(mixed_model)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICBSMm0gICAgICAgUjJjXG5bMSxdIDAuMTExNTk3MyAwLjU2NTk1NjJcbiJ9 -->
+<pre><code>           R2m       R2c
+[1,] 0.1115973 0.5659562</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW5vdmEobWl4ZWRfbW9kZWwsIGZpeGVkX21vZGVsKVxuXG5gYGAifQ== -->
+<pre class="r"><code>anova(mixed_model, fixed_model)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoicmVmaXR0aW5nIG1vZGVsKHMpIHdpdGggTUwgKGluc3RlYWQgb2YgUkVNTClcbiJ9 -->
+<pre><code>refitting model(s) with ML (instead of REML)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRGF0YTogbWVybGluXG5Nb2RlbHM6XG5maXhlZF9tb2RlbDogcGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQgfiBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG1cbm1peGVkX21vZGVsOiBwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxIHwgY2l0eV9uYW1lKVxuICAgICAgICAgICAgbnBhciAgIEFJQyAgIEJJQyBsb2dMaWsgZGV2aWFuY2UgIENoaXNxIERmIFByKD5DaGlzcSkgICAgXG5maXhlZF9tb2RlbCAgIDE1IDUxMzQxIDUxNDQ3IC0yNTY1NiAgICA1MTMxMSAgICAgICAgICAgICAgICAgICAgICAgICBcbm1peGVkX21vZGVsICAgMTYgNTAyOTMgNTA0MDUgLTI1MTMwICAgIDUwMjYxIDEwNTAuOCAgMSAgPCAyLjJlLTE2ICoqKlxuLS0tXG5TaWduaWYuIGNvZGVzOiAgMCDigJgqKirigJkgMC4wMDEg4oCYKirigJkgMC4wMSDigJgq4oCZIDAuMDUg4oCYLuKAmSAwLjEg4oCYIOKAmSAxXG4ifQ== -->
+<pre><code>Data: merlin
+Models:
+fixed_model: percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm
+mixed_model: percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1 | city_name)
+            npar   AIC   BIC logLik deviance  Chisq Df Pr(&gt;Chisq)    
+fixed_model   15 51341 51447 -25656    51311                         
+mixed_model   16 50293 50405 -25130    50261 1050.8  1  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW5vdmEobWl4ZWRfbW9kZWwsIGxtKHBlcmNlbnRhZ2Vfb2ZfcmVnaW9uYWxfcG9vbF9wcmVzZW50IH4gY2l0eV9uYW1lLCBtZXJsaW4pKVxuXG5gYGAifQ== -->
+<pre class="r"><code>anova(mixed_model, lm(percentage_of_regional_pool_present ~ city_name, merlin))
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoicmVmaXR0aW5nIG1vZGVsKHMpIHdpdGggTUwgKGluc3RlYWQgb2YgUkVNTClcbiJ9 -->
+<pre><code>refitting model(s) with ML (instead of REML)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRGF0YTogbWVybGluXG5Nb2RlbHM6XG5taXhlZF9tb2RlbDogcGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQgfiBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG0gKyAoMSB8IGNpdHlfbmFtZSlcbmxtKHBlcmNlbnRhZ2Vfb2ZfcmVnaW9uYWxfcG9vbF9wcmVzZW50IH4gY2l0eV9uYW1lLCBtZXJsaW4pOiBwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IGNpdHlfbmFtZVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbnBhciAgIEFJQyAgIEJJQyBsb2dMaWsgZGV2aWFuY2UgQ2hpc3EgIERmIFByKD5DaGlzcSlcbm1peGVkX21vZGVsICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMTYgNTAyOTMgNTA0MDUgLTI1MTMwICAgIDUwMjYxICAgICAgICAgICAgICAgICAgICAgXG5sbShwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IGNpdHlfbmFtZSwgbWVybGluKSAgMTM4IDUwNjA1IDUxNTc2IC0yNTE2NCAgICA1MDMyOSAgICAgMCAxMjIgICAgICAgICAgMVxuIn0= -->
+<pre><code>Data: merlin
+Models:
+mixed_model: percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1 | city_name)
+lm(percentage_of_regional_pool_present ~ city_name, merlin): percentage_of_regional_pool_present ~ city_name
+                                                            npar   AIC   BIC logLik deviance Chisq  Df Pr(&gt;Chisq)
+mixed_model                                                   16 50293 50405 -25130    50261                     
+lm(percentage_of_regional_pool_present ~ city_name, merlin)  138 50605 51576 -25164    50329     0 122          1</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVybGluX3JpY2huZXNzX3N1bSA8LSBtb2RlbF9zdW1tYXJ5KCdtZXJsaW4nLCAncmljaG5lc3MnLCBtZXJsaW5fcmljaG5lc3NfcmVzdWx0KVxubWVybGluX3JpY2huZXNzX3N1bVxuYGBgIn0= -->
 <pre class="r"><code>merlin_richness_sum &lt;- model_summary(&#39;merlin&#39;, &#39;richness&#39;, merlin_richness_result)
 merlin_richness_sum</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MzAsIm5jb2wiOjQsInN1bW1hcnkiOnsiRGVzY3JpcHRpb24iOlsiZGYgWzMwIMOXIDRdIl19fSwicmRmIjoiSDRzSUFBQUFBQUFBQXd0eWlURG1pdUJpWUdCZ1ptQmhCSktzUUNZRGEyaUltNjRGQXdNTEU1RER5TURDd0FtaUs0RFN3a0FHQ3hBTEFMRWNWSUkzT1NlL09EVWxQaTIvS0xXNEJDcklsVnlhVTVKWmxsaVNtZ0lWRWMxSUxVcEtURTdOTHkyT0wwdE5UeTFKTE1uTXo0TktDaUZKbHFlVzVDVG13YlhscGlibXhhZm1wSmFCMWNjWEp5Zm13TTNremk5SXpVTzFtTDhndFNnM01TODFyeVMrSEdoN0VVeTRLRFV4SjljeHJTaS9wQ2kvSURNWktpd0FFUzR0TGlsS3pFa3N6a3hFRWZmTVM4blBCWXBYSnNMY3lRc1c5MHROTEVvdWdSdkNCeFZFTlpxdE9LT29OS2tZeWhORCtDQWxOYWNrRWRVZnJLVkEzK2VOaGllVnd4Tm9GQ2lkT25CcUtEaGJiVk4xVUUvZExoRmRkOVZCMFdtN3N6NkR2NFBxYTZkSmUrYWxIQkNZbDdFbnkrQ2NnNmJVa2FVMTNiZnRuMzNYdGxsdnNjU0IwekU2TWZqUXBBTnNsVGQ4M203VDNmL04wbTFPbXZ5c0F5TEJ4NHQvdjlwNWdPRjNRSTd0MUE0SEtSWDJyc3FxOC91M2YxakE5RmYxeWY0SjJjY05aclBJazJ6dlI3VnRVUXJUR2ttMjk3U3kwY0tyRnhmdVgyLzBVTG9uN0EvTTMzWi95em05Yjhxa01hQUIrNEFZWmpQUjFNUDJTejgxVHJLKzdnNFh2emFINjBkalc2MzlkdEg0eDFQVDlPeXZyVmdUSS95WDEvNWN0MVkyNzFRUmU0M0pKWHV5Nm43Wkh4RDkzTzY5MDhidTZ5dGZnUkJ1S2Z2WHh3cU5QWmxXMkw5OUcxYVZJSkZQc3IwSHpkdnF1UlpKa1d6dnl3azVVMm92UExOLy9WNkRlL3NSZGJSeWlTV3ROQ2RuaUxIWmlvRkpQTFZrV1BCUXF3L1d2TVRjMUdKb0ZMSEF5cHZVaWdKZzJaUllrbDlVQ1JXU0tNcE16c2hMTFM2T3owMHR5c2tFRmxYRkpabTV3SklIS2krSUxsOEFzeUEzSDFnU29ObktXWlJmcmdlem1SZUltUm9nYVU0TzNYbkp3T0lLNWp5WUlGZEtZa21pWGxvUlVEK1E5dzlOQzN0K0FhajhBV3BpQWxXTHJHaWFHWXZRQlBoTDgwQXVTZEZOemlqTnk5WTFBVmtBbG9ZQVhpaGJEb25OQXJHUzZUL1VLRlpZRUtmbXBXZm13WUtFTlNjeEtSV1dndmlBUGdaN1dLK2dLRE1QWG4wQVJZdjFTdkpMRW1IcXVKTHpjMkFpWUw4eC9BTUFQa2trZkEwSUFBQT0ifQ== -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["explanatory"],"name":[1],"type":["chr"],"align":["left"]},{"label":["richness_merlin_estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["richness_merlin_p"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["model"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"closed_forest","2":"3.14459279","3":"0.0000281","4":"full"},{"1":"cultivated","2":"11.69866253","3":"0.0000000","4":"full"},{"1":"herbaceous_vegetation","2":"8.63030443","3":"0.0000000","4":"full"},{"1":"herbaceous_wetland","2":"10.95949229","3":"0.0009985","4":"full"},{"1":"mean_elevation_scaled","2":"-4.15469641","3":"0.0428658","4":"full"},{"1":"open_forest","2":"12.55228154","3":"0.0000000","4":"full"},{"1":"permanent_water","2":"0.71767198","3":"0.3532741","4":"full"},{"1":"realmAfrotropic","2":"3.15691258","3":"0.0901699","4":"full"},{"1":"realmAustralasia","2":"-2.80949459","3":"0.3540450","4":"full"},{"1":"realmIndomalayan","2":"-1.38898336","3":"0.2386220","4":"full"},{"1":"realmNearctic","2":"-5.08181554","3":"0.0001875","4":"full"},{"1":"realmNeotropic","2":"-2.12271199","3":"0.1256699","4":"full"},{"1":"shrubs","2":"6.53518502","3":"0.0000209","4":"full"},{"1":"elevation_delta_scaled","2":"-0.09351540","3":"0.8679739","4":"full"},{"1":"urban","2":"-0.01603614","3":"0.9352219","4":"full"},{"1":"closed_forest","2":"3.14459279","3":"0.0000281","4":"subset"},{"1":"cultivated","2":"11.69866253","3":"0.0000000","4":"subset"},{"1":"herbaceous_vegetation","2":"8.63030443","3":"0.0000000","4":"subset"},{"1":"herbaceous_wetland","2":"10.95949229","3":"0.0009985","4":"subset"},{"1":"mean_elevation_scaled","2":"-4.15469641","3":"0.0428658","4":"subset"},{"1":"open_forest","2":"12.55228154","3":"0.0000000","4":"subset"},{"1":"permanent_water","2":"1.07195125","3":"0.1345070","4":"subset"},{"1":"realmAfrotropic","2":"3.15691258","3":"0.0901699","4":"subset"},{"1":"realmAustralasia","2":"-2.80949459","3":"0.3540450","4":"subset"},{"1":"realmIndomalayan","2":"-1.38898336","3":"0.2386220","4":"subset"},{"1":"realmNearctic","2":"-5.08181554","3":"0.0001875","4":"subset"},{"1":"realmNeotropic","2":"-2.12271199","3":"0.1256699","4":"subset"},{"1":"shrubs","2":"6.53518502","3":"0.0000209","4":"subset"},{"1":"elevation_delta_scaled","2":"-0.21201165","3":"0.7988799","4":"subset"},{"1":"urban","2":"-0.06093505","3":"0.8729439","4":"subset"}],"options":{"columns":{"min":{},"max":[10],"total":[4]},"rows":{"min":[10],"max":[10],"total":[30]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <table>
@@ -277,24 +390,34 @@ merlin_richness_sum</code></pre>
 </table>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmxfcmljaG5lc3NfcmVzdWx0IDwtIG1vZGVsX2F2ZXJhZ2VfcmljaG5lc3MoYmlyZGxpZmUpXG5gYGAifQ== -->
-<pre class="r"><code>bl_richness_result &lt;- model_average_richness(birdlife)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmxfcmljaG5lc3NfcmVzdWx0IDwtIG1vZGVsX2F2ZXJhZ2VfcmljaG5lc3MoYmlyZGxpZmUpXG5ibF9yaWNobmVzc19yZXN1bHRcbmBgYCJ9 -->
+<pre class="r"><code>bl_richness_result &lt;- model_average_richness(birdlife)
+bl_richness_result</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBpbiBkcmVkZ2UobW9kZWwpIDogY29tcGFyaW5nIG1vZGVscyBmaXR0ZWQgYnkgUkVNTFxuRml4ZWQgdGVybSBpcyBcIihJbnRlcmNlcHQpXCJcbiJ9 -->
-<pre><code>Warning in dredge(model) : comparing models fitted by REML
-Fixed term is &quot;(Intercept)&quot;</code></pre>
-<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IGVsZXZhdGlvbl9kZWx0YV9zY2FsZWQgKyBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG0gKyAoMXxjaXR5X25hbWUpLCBiaXJkbGlmZSlcbnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpXG5gYGAifQ== -->
+<pre class="r"><code>mixed_model &lt;- lmer(percentage_of_regional_pool_present ~ elevation_delta_scaled + mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), birdlife)
+r.squaredGLMM(mixed_model)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZml4ZWRfbW9kZWwgPC0gbG0ocGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQgfiBlbGV2YXRpb25fZGVsdGFfc2NhbGVkICsgbWVhbl9lbGV2YXRpb25fc2NhbGVkICsgY2xvc2VkX2ZvcmVzdCArIGN1bHRpdmF0ZWQgKyBoZXJiYWNlb3VzX3ZlZ2V0YXRpb24gKyBoZXJiYWNlb3VzX3dldGxhbmQgKyBvcGVuX2ZvcmVzdCArIHBlcm1hbmVudF93YXRlciArIHNocnVicyArIHJlYWxtLCBiaXJkbGlmZSlcbmFub3ZhKG1peGVkX21vZGVsLCBmaXhlZF9tb2RlbClcbmBgYCJ9 -->
+<pre class="r"><code>fixed_model &lt;- lm(percentage_of_regional_pool_present ~ elevation_delta_scaled + mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, birdlife)
+anova(mixed_model, fixed_model)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmxfcmljaG5lc3Nfc3VtIDwtIG1vZGVsX3N1bW1hcnkoJ2JpcmRsaWZlJywgJ3JpY2huZXNzJywgYmxfcmljaG5lc3NfcmVzdWx0KVxuYmxfcmljaG5lc3Nfc3VtXG5gYGAifQ== -->
 <pre class="r"><code>bl_richness_sum &lt;- model_summary(&#39;birdlife&#39;, &#39;richness&#39;, bl_richness_result)
 bl_richness_sum</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MzAsIm5jb2wiOjQsInN1bW1hcnkiOnsiRGVzY3JpcHRpb24iOlsiZGYgWzMwIMOXIDRdIl19fSwicmRmIjoiSDRzSUFBQUFBQUFBQXd0eWlURG1pdUJpWUdCZ1ptQmhCSktzUUNZRGEyaUltNjRGQXdNTEU1RER5TURDd0FtaUs0RFN3a0FHQ3hBTEFMRWNWSUkzT1NlL09EVWxQaTIvS0xXNEJDcklsVnlhVTVKWmxsaVNtZ0lWRVV2TlNRWHlNL1B6NGxOU2Mwb1M0NHVURTNQZ3NxSVpxVVZKaWNtcCthWEY4V1dwNmFrbFlKVlFTU0VreWZMVWtwekVQTGkyM05URXZIaUV5U2htY3VjWHBPYWhPb3UvS0RVeEo5Y3hyU2kvcENpL0lETVpLaXdBRVM0dExpbEt6RWtzemt4RUVmZk1TOG5QQllwWEpzSWN4QXNXOTB0TkxFb3VnUnZDQnhWRU5acXRPS09vTktrWVpuOUJhbEZ1WWw1cVhrbDhPVEJzaXFEQ3JLVkEvK1dOaGllVnd4Tm9CaWlkT3ZCTzV4TmFNaXZWUVgzV1cyUDVUL3I3TDZ1VW5yYUkvT2lna3JIYVNmSVpvNFB5ajB1ZDI4dlBIZUJwejRoSmxERjMwSitRRlNydDBMYi8xM1VlMTEvdm54L2dVSFNwdHBxeS9JREFpOVJXR3dIdC9iOVBlbDcvNlNsNlFLQ3pkWnByM0QwSHBSbkxVaU8rUjlpZityOVdObnp4TWZzVmYyVVN4WGxmWTlqNzZOYXplK3UrWDZPNnZYZCtiTk5jTkN2Qy91amNITjI2d0JDWXYrMWVQMGtTT2NHbnlBQUY5aytueFp3ek41Q0E4eHVhV1AvTE5uNjBYL0g0K21wZkJSZTQrRGtYcTBQRmE4dnREN09aVlQwTDBMRmJkZjNUckQzclBlelh4NnpYclovS1k4K3hYM2paMG8vVDRlcWZlei9jT2tsMmlmMnJiY1g5emxlZE1PeDkwRi81b2UyWkpkWHRmYlFpUlBBQ2o0ejkwN08zdTY1dXJFQXJsMWpTU25OeWhoaWJyUmlZdGxOTGhnVVB0ZnBnelV2TVRTMkdSaEVMckVSSnJTZ0FsajZKSmZsRmxWQWhxYUxNNUl5ODFPTGkrS1RNb3BTY3pMVFVlR0J4azVrTHpOMVFGY0tZS2dwZ2x1VG1BOHRDTkpzNWkvTEw5V0MyOHdJeFV3TWsvY2loT3pFWldGYkJuQWdUNUVwSkxFblVTeXNDNmdmeS9xRnBZYzh2QUpXVFFFMU1vS3FSRlUwell4R2FBSDlwSHNnbEtickpHYVY1MmJxbUlBdkEwaERBQzJYTEliRlpJRll5L1ljYXhRb0w1dFM4OU13OFdLQ3c1aVFtcGNKU0VSL1F4MkFQNnhVVVplYkJxeENnYUxGZVNYNUpJa3dkVjNKK0Rrd0U3RGVHZndEZHlvcDdFUWdBQUE9PSJ9 -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["explanatory"],"name":[1],"type":["chr"],"align":["left"]},{"label":["richness_birdlife_estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["richness_birdlife_p"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["model"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"closed_forest","2":"3.69875731","3":"0.0000133","4":"full"},{"1":"cultivated","2":"11.80259094","3":"0.0000000","4":"full"},{"1":"elevation_delta_scaled","2":"-0.29910035","3":"0.6746048","4":"full"},{"1":"herbaceous_vegetation","2":"10.20443160","3":"0.0000000","4":"full"},{"1":"herbaceous_wetland","2":"9.98598128","3":"0.0080605","4":"full"},{"1":"mean_elevation_scaled","2":"-3.56611702","3":"0.0486133","4":"full"},{"1":"open_forest","2":"15.78206125","3":"0.0000000","4":"full"},{"1":"realmAfrotropic","2":"-1.67750194","3":"0.2364572","4":"full"},{"1":"realmAustralasia","2":"-3.01624390","3":"0.1486271","4":"full"},{"1":"realmIndomalayan","2":"-4.22694977","3":"0.0000008","4":"full"},{"1":"realmNearctic","2":"-1.73664269","3":"0.0612540","4":"full"},{"1":"realmNeotropic","2":"-4.13429866","3":"0.0000472","4":"full"},{"1":"shrubs","2":"9.29814450","3":"0.0000000","4":"full"},{"1":"permanent_water","2":"0.21092762","3":"0.7280129","4":"full"},{"1":"urban","2":"0.04880608","3":"0.8347719","4":"full"},{"1":"closed_forest","2":"3.69875731","3":"0.0000133","4":"subset"},{"1":"cultivated","2":"11.80259094","3":"0.0000000","4":"subset"},{"1":"elevation_delta_scaled","2":"-0.58922142","3":"0.5175142","4":"subset"},{"1":"herbaceous_vegetation","2":"10.20443160","3":"0.0000000","4":"subset"},{"1":"herbaceous_wetland","2":"9.98598128","3":"0.0080605","4":"subset"},{"1":"mean_elevation_scaled","2":"-3.56611702","3":"0.0486133","4":"subset"},{"1":"open_forest","2":"15.78206125","3":"0.0000000","4":"subset"},{"1":"realmAfrotropic","2":"-1.67750194","3":"0.2364572","4":"subset"},{"1":"realmAustralasia","2":"-3.01624390","3":"0.1486271","4":"subset"},{"1":"realmIndomalayan","2":"-4.22694977","3":"0.0000008","4":"subset"},{"1":"realmNearctic","2":"-1.73664269","3":"0.0612540","4":"subset"},{"1":"realmNeotropic","2":"-4.13429866","3":"0.0000472","4":"subset"},{"1":"shrubs","2":"9.29814450","3":"0.0000000","4":"subset"},{"1":"permanent_water","2":"0.45268015","3":"0.5830479","4":"subset"},{"1":"urban","2":"0.16886666","3":"0.6813791","4":"subset"}],"options":{"columns":{"min":{},"max":[10],"total":[4]},"rows":{"min":[10],"max":[10],"total":[30]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <table>
@@ -306,24 +429,34 @@ bl_richness_sum</code></pre>
 </table>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm90aF9yaWNobmVzc19yZXN1bHQgPC0gbW9kZWxfYXZlcmFnZV9yaWNobmVzcyhib3RoKVxuYGBgIn0= -->
-<pre class="r"><code>both_richness_result &lt;- model_average_richness(both)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm90aF9yaWNobmVzc19yZXN1bHQgPC0gbW9kZWxfYXZlcmFnZV9yaWNobmVzcyhib3RoKVxuYm90aF9yaWNobmVzc19yZXN1bHRcbmBgYCJ9 -->
+<pre class="r"><code>both_richness_result &lt;- model_average_richness(both)
+both_richness_result</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBpbiBkcmVkZ2UobW9kZWwpIDogY29tcGFyaW5nIG1vZGVscyBmaXR0ZWQgYnkgUkVNTFxuRml4ZWQgdGVybSBpcyBcIihJbnRlcmNlcHQpXCJcbiJ9 -->
-<pre><code>Warning in dredge(model) : comparing models fitted by REML
-Fixed term is &quot;(Intercept)&quot;</code></pre>
-<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGJvdGgpXG5yLnNxdWFyZWRHTE1NKG1peGVkX21vZGVsKVxuYGBgIn0= -->
+<pre class="r"><code>mixed_model &lt;- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), both)
+r.squaredGLMM(mixed_model)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZml4ZWRfbW9kZWwgPC0gbG0ocGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQgfiBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG0sIGJvdGgpXG5hbm92YShtaXhlZF9tb2RlbCwgZml4ZWRfbW9kZWwpXG5gYGAifQ== -->
+<pre class="r"><code>fixed_model &lt;- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, both)
+anova(mixed_model, fixed_model)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm90aF9yaWNobmVzc19zdW0gPC0gbW9kZWxfc3VtbWFyeSgnYm90aCcsICdyaWNobmVzcycsIGJvdGhfcmljaG5lc3NfcmVzdWx0KVxuYm90aF9yaWNobmVzc19zdW1cbmBgYCJ9 -->
 <pre class="r"><code>both_richness_sum &lt;- model_summary(&#39;both&#39;, &#39;richness&#39;, both_richness_result)
 both_richness_sum</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MzAsIm5jb2wiOjQsInN1bW1hcnkiOnsiRGVzY3JpcHRpb24iOlsiZGYgWzMwIMOXIDRdIl19fSwicmRmIjoiSDRzSUFBQUFBQUFBQXd0eWlURG1pdUJpWUdCZ1ptQmhCSktzUUNZRGEyaUltNjRGQXdNTEU1RER5TURDd0FtaUs0RFN3a0FHQ3hBTEFMRWNWSUkzT1NlL09EVWxQaTIvS0xXNEJDcklsVnlhVTVKWmxsaVNtZ0lWRWMxSUxVcEtURTdOTHkyT0wwdE5UeTFKTE1uTXo0TktDaUZKbHFlVzVDVG13YlhscGlibXhhZm1wSmFCMWNjWEp5Zm13TTNremk5SXpVTzFtTDhndFNnM01TODFyeVMrSEdoN0VVeTRLRFV4SjljeHJTaS9wQ2kvSURNWktpd0FFUzR0TGlsS3pFa3N6a3hFRWZmTVM4blBCWXBYSnNMY3lRc1c5MHROTEVvdWdSdkNCeFZFTlpxdE9LT29OS2tZeWhORCtDQWxOYWNrRWRVZnJLVkEzK2VOaGllVnd4Tm9GQ2lkT2doS1R0b3E0MzNZUVVlVXZmL3N4V1FITmI3ZlR3K1Z6bkRRVlpWUE9NWVhjVUJrODBmRGFBTTdCME9tK1BycjVpL3NiNjFxMzlpellvbjk5dy91N3Z1ZVhOLy9hSUxkNmE4TDJROXcvRmw2SXFYazJ3RlJQaG5uMnJDbEJ3Uk1iWXdtaEg5M1VMR05lM3JiYmVuK2c3c1B2VDdBT05kK3V0TGRPZmM0VkVpMjk4V0VENnAzcHRTUWJPL0ZKeGIxZXVLbjdEZTc3dG9RNWVvRjg3ZmRqZjNDeTVaK25NNkFCdXdkVWk0SmJ0QmVZejliMEk5Tk5xQVlMdjdvanBUN3lrZDc3ZTk0ZmVmY2J2SGMvclZCdG5sYlBiZDlpL1hCY2oyVDQvWnljdWQrS0ppdnN5LzZIRjR0S0JGbVYzWDkwNnc5Nnozc1g5dmxOSEZHeWRpL1Bjamd1a0RXa1dSN2IzWjhFdWMwWkNUWjNwZWFGdzhFVG5HM2YvMkFOMUF4NmdoYXVjU1NWcHFUTThUWWJNWEFKSjVhTWl4NHFOVUhhMTVpYm1veE5JcFlZT1ZOYWtVQnNHeEtMTWt2cW9SbDdLTE01SXk4MU9MaStLVDhrb3g0WUVHVW1Rc3NkK0RGRG9wc0FjenczSHhnS1lCbUkyZFJmcmtlekZaZUlHWnFnS1EzT1hTbkpRT0xLcGpUWUlKY0tZa2xpWHBwUlVEOVFONC9OQzNzK1FXZ3NnZW9pUWxVSmJLaWFXWXNRaFBnTDgwRHVTUkZOem1qTkM5YjF3eGtBVmdhQW5paGJEa2tOZ3ZFU3FiL1VLTllZY0dibXBlZW1RY0xFTmFjeEtSVVdPcmhBL29ZN0dHOWdxTE1QSGpWQVJRdDFpdkpMMG1FcWVOS3pzK0JpWUQ5eHZBUEFBcGJydWNKQ0FBQSJ9 -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["explanatory"],"name":[1],"type":["chr"],"align":["left"]},{"label":["richness_both_estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["richness_both_p"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["model"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"closed_forest","2":"4.27497371","3":"0.0000059","4":"full"},{"1":"cultivated","2":"14.04107332","3":"0.0000000","4":"full"},{"1":"herbaceous_vegetation","2":"11.02926558","3":"0.0000000","4":"full"},{"1":"herbaceous_wetland","2":"14.57250502","3":"0.0005003","4":"full"},{"1":"mean_elevation_scaled","2":"-5.17572477","3":"0.0264332","4":"full"},{"1":"open_forest","2":"17.00926970","3":"0.0000000","4":"full"},{"1":"permanent_water","2":"0.41665833","3":"0.5893680","4":"full"},{"1":"realmAfrotropic","2":"1.49616173","3":"0.4420755","4":"full"},{"1":"realmAustralasia","2":"-0.58010807","3":"0.8496605","4":"full"},{"1":"realmIndomalayan","2":"-3.12336308","3":"0.0098796","4":"full"},{"1":"realmNearctic","2":"-5.26377969","3":"0.0001149","4":"full"},{"1":"realmNeotropic","2":"-4.05198745","3":"0.0046266","4":"full"},{"1":"shrubs","2":"10.11986464","3":"0.0000001","4":"full"},{"1":"elevation_delta_scaled","2":"-0.13854252","3":"0.8513701","4":"full"},{"1":"urban","2":"0.02259394","3":"0.9298097","4":"full"},{"1":"closed_forest","2":"4.27497371","3":"0.0000059","4":"subset"},{"1":"cultivated","2":"14.04107332","3":"0.0000000","4":"subset"},{"1":"herbaceous_vegetation","2":"11.02926558","3":"0.0000000","4":"subset"},{"1":"herbaceous_wetland","2":"14.57250502","3":"0.0005003","4":"subset"},{"1":"mean_elevation_scaled","2":"-5.17572477","3":"0.0264332","4":"subset"},{"1":"open_forest","2":"17.00926970","3":"0.0000000","4":"subset"},{"1":"permanent_water","2":"0.76769264","3":"0.3989835","4":"subset"},{"1":"realmAfrotropic","2":"1.49616173","3":"0.4420755","4":"subset"},{"1":"realmAustralasia","2":"-0.58010807","3":"0.8496605","4":"subset"},{"1":"realmIndomalayan","2":"-3.12336308","3":"0.0098796","4":"subset"},{"1":"realmNearctic","2":"-5.26377969","3":"0.0001149","4":"subset"},{"1":"realmNeotropic","2":"-4.05198745","3":"0.0046266","4":"subset"},{"1":"shrubs","2":"10.11986464","3":"0.0000001","4":"subset"},{"1":"elevation_delta_scaled","2":"-0.27955449","3":"0.7863549","4":"subset"},{"1":"urban","2":"0.07528273","3":"0.8711001","4":"subset"}],"options":{"columns":{"min":{},"max":[10],"total":[4]},"rows":{"min":[10],"max":[10],"total":[30]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <table>
@@ -335,24 +468,34 @@ both_richness_sum</code></pre>
 </table>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWl0aGVyX3JpY2huZXNzX3Jlc3VsdCA8LSBtb2RlbF9hdmVyYWdlX3JpY2huZXNzKGVpdGhlcilcbmBgYCJ9 -->
-<pre class="r"><code>either_richness_result &lt;- model_average_richness(either)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWl0aGVyX3JpY2huZXNzX3Jlc3VsdCA8LSBtb2RlbF9hdmVyYWdlX3JpY2huZXNzKGVpdGhlcilcbmVpdGhlcl9yaWNobmVzc19yZXN1bHRcbmBgYCJ9 -->
+<pre class="r"><code>either_richness_result &lt;- model_average_richness(either)
+either_richness_result</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBpbiBkcmVkZ2UobW9kZWwpIDogY29tcGFyaW5nIG1vZGVscyBmaXR0ZWQgYnkgUkVNTFxuRml4ZWQgdGVybSBpcyBcIihJbnRlcmNlcHQpXCJcbiJ9 -->
-<pre><code>Warning in dredge(model) : comparing models fitted by REML
-Fixed term is &quot;(Intercept)&quot;</code></pre>
-<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGVpdGhlcilcbnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpXG5gYGAifQ== -->
+<pre class="r"><code>mixed_model &lt;- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), either)
+r.squaredGLMM(mixed_model)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZml4ZWRfbW9kZWwgPC0gbG0ocGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQgfiBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG0sIGVpdGhlcilcbmFub3ZhKG1peGVkX21vZGVsLCBmaXhlZF9tb2RlbClcbmBgYCJ9 -->
+<pre class="r"><code>fixed_model &lt;- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, either)
+anova(mixed_model, fixed_model)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWl0aGVyX3JpY2huZXNzX3N1bSA8LSBtb2RlbF9zdW1tYXJ5KCdlaXRoZXInLCAncmljaG5lc3MnLCBlaXRoZXJfcmljaG5lc3NfcmVzdWx0KVxuZWl0aGVyX3JpY2huZXNzX3N1bVxuYGBgIn0= -->
 <pre class="r"><code>either_richness_sum &lt;- model_summary(&#39;either&#39;, &#39;richness&#39;, either_richness_result)
 either_richness_sum</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MzAsIm5jb2wiOjQsInN1bW1hcnkiOnsiRGVzY3JpcHRpb24iOlsiZGYgWzMwIMOXIDRdIl19fSwicmRmIjoiSDRzSUFBQUFBQUFBQXd0eWlURG1pdUJpWUdCZ1ptQmhCSktzUUNZRGEyaUltNjRGQXdNTEU1RER5TURDd0FtaUs0RFN3a0FHQ3hBTEFMRWNWSUkzT1NlL09EVWxQaTIvS0xXNEJDcklsVnlhVTVKWmxsaVNtZ0lWRWMxSUxVcEtURTdOTHkyT0wwdE5UeTFKTE1uTXo0TktDaUZKbHFlVzVDVG13YlhscGlibXhhZm1wSmFCMWNjWEp5Zm13TTNremk5SXpVTzFtTDhndFNnM01TODFyeVMrSEdoN0VVeTRLRFV4SjljeHJTaS9wQ2kvSURNWktpd0FFUzR0TGlsS3pFa3N6a3hFRWZmTVM4blBCWXBYSnNMY3lRc1c5MHROTEVvdWdSdkNCeFZFTlpxdE9LT29OS2tZeWhORCtDQWxOYWNrRWRVZnJLVkEzK2VOaGllVnd4Tm9GQ2lkT3JCK1dqOTk1OExmRGlvOU5sTVNnbjg0eUd2YVdOMVRqbkZRZEU1ZEYvREU1UUIzOG5PZTRLM05EdXJkVXcrdCsrOWdmN2N4TzNqdThZdjdkK3c0cC9STFp1TCtiNmM2VjFpWGF4eGdrenV4ZC9uV0xRZVl3aHRDOXV3Tk9jQXFaMWh3OXJ5NGcyVDIybnErTS9uN0R5LytzSUN6eTlHK2lmZFoySDY5ZXlUYis0cC8wdDlqZkV0SnR2ZmFpZGUvZmhmY3NGLzBXdkJRek40cE1IL2JjMmRQQytUZnk4T0FCdXdMdzdsV1hNaHpzcC9lSlBEc2hzQTV1UGpkYnlVWGswMmE3ZDkrTVQyZXBIblEvdlphQS85Z2xTeDcxZDNCNmtjZG50c1hCVzNXdGhiWHRVLyt1dldYVWtHdTNTbEdZOVpuSjgvWnY2Z1FOaGZKZExGL3Q5eWxsbjNTYkpMdFBTMi9UdHJnN2p1UzdYMGlaUGo3ZDErai9Wc2JwYWk1dHozUXlpV1d0TktjbkNIR1ppc0dKdkhVa21IQlE2MCtXUE1TYzFPTG9WSEVBaXR2VWlzS2dHVlRZa2wrVVNWVVNLSW9NemtqTDdXNE9ENDFzd1JZaXNVRGk2TE1YR0RKQTVVWFJKY3ZnRm1RbXc4c0NkQnM1U3pLTDllRDJjd0x4RXdOa0RRbmgrNjhaR0J4QlhNZVRKQXJKYkVrVVMrdENLZ2Z5UHVIcG9VOXZ3QlUvZ0ExTVlHcVJWWTB6WXhGYUFMOHBYa2dsNlRvSm1lVTVtWHJtb01zQUV0REFDK1VMWWZFWm9GWXlmUWZhaFFyTEloVDg5SXo4MkJCd3BxVG1KUUtTMEY4UUIrRFBheFhVSlNaQjY4K2dLTEZlaVg1Sllrd2RWekorVGt3RWJEZkdQNEJBUFZWQ0drTkNBQUEifQ== -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["explanatory"],"name":[1],"type":["chr"],"align":["left"]},{"label":["richness_either_estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["richness_either_p"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["model"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"closed_forest","2":"2.743498979","3":"0.0000523","4":"full"},{"1":"cultivated","2":"10.273899686","3":"0.0000000","4":"full"},{"1":"herbaceous_vegetation","2":"7.790268822","3":"0.0000000","4":"full"},{"1":"herbaceous_wetland","2":"8.631635139","3":"0.0042334","4":"full"},{"1":"mean_elevation_scaled","2":"-3.423780533","3":"0.0229571","4":"full"},{"1":"open_forest","2":"11.772626957","3":"0.0000000","4":"full"},{"1":"permanent_water","2":"0.461024124","3":"0.4681675","4":"full"},{"1":"realmAfrotropic","2":"-0.096569904","3":"0.9360608","4":"full"},{"1":"realmAustralasia","2":"-1.424447686","3":"0.4324456","4":"full"},{"1":"realmIndomalayan","2":"-2.765031320","3":"0.0001658","4":"full"},{"1":"realmNearctic","2":"-2.292725241","3":"0.0044734","4":"full"},{"1":"realmNeotropic","2":"-2.639742738","3":"0.0024365","4":"full"},{"1":"shrubs","2":"6.355154023","3":"0.0000031","4":"full"},{"1":"elevation_delta_scaled","2":"-0.153440550","3":"0.7646576","4":"full"},{"1":"urban","2":"0.008815574","3":"0.9579184","4":"full"},{"1":"closed_forest","2":"2.743498979","3":"0.0000523","4":"subset"},{"1":"cultivated","2":"10.273899686","3":"0.0000000","4":"subset"},{"1":"herbaceous_vegetation","2":"7.790268822","3":"0.0000000","4":"subset"},{"1":"herbaceous_wetland","2":"8.631635139","3":"0.0042334","4":"subset"},{"1":"mean_elevation_scaled","2":"-3.423780533","3":"0.0229571","4":"subset"},{"1":"open_forest","2":"11.772626957","3":"0.0000000","4":"subset"},{"1":"permanent_water","2":"0.814401146","3":"0.2119043","4":"subset"},{"1":"realmAfrotropic","2":"-0.096569904","3":"0.9360608","4":"subset"},{"1":"realmAustralasia","2":"-1.424447686","3":"0.4324456","4":"subset"},{"1":"realmIndomalayan","2":"-2.765031320","3":"0.0001658","4":"subset"},{"1":"realmNearctic","2":"-2.292725241","3":"0.0044734","4":"subset"},{"1":"realmNeotropic","2":"-2.639742738","3":"0.0024365","4":"subset"},{"1":"shrubs","2":"6.355154023","3":"0.0000031","4":"subset"},{"1":"elevation_delta_scaled","2":"-0.356013293","3":"0.6272211","4":"subset"},{"1":"urban","2":"0.036949687","3":"0.9135906","4":"subset"}],"options":{"columns":{"min":{},"max":[10],"total":[4]},"rows":{"min":[10],"max":[10],"total":[30]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <table>
@@ -364,20 +507,34 @@ either_richness_sum</code></pre>
 </table>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmljaG5lc3NfYWxsIDwtIGZ1bGxfam9pbihmdWxsX2pvaW4obWVybGluX3JpY2huZXNzX3N1bSwgYmxfcmljaG5lc3Nfc3VtKSwgZnVsbF9qb2luKGJvdGhfcmljaG5lc3Nfc3VtLCBlaXRoZXJfcmljaG5lc3Nfc3VtKSlcbmBgYCJ9 -->
-<pre class="r"><code>richness_all &lt;- full_join(full_join(merlin_richness_sum, bl_richness_sum), full_join(both_richness_sum, either_richness_sum))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiSm9pbmluZywgYnkgPSBjKFwiZXhwbGFuYXRvcnlcIiwgXCJtb2RlbFwiKVxuSm9pbmluZywgYnkgPSBjKFwiZXhwbGFuYXRvcnlcIiwgXCJtb2RlbFwiKVxuSm9pbmluZywgYnkgPSBjKFwiZXhwbGFuYXRvcnlcIiwgXCJtb2RlbFwiKVxuIn0= -->
-<pre><code>Joining, by = c(&quot;explanatory&quot;, &quot;model&quot;)
-Joining, by = c(&quot;explanatory&quot;, &quot;model&quot;)
-Joining, by = c(&quot;explanatory&quot;, &quot;model&quot;)</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxud3JpdGVfY3N2KHJpY2huZXNzX2FsbCwgXCJyaWNobmVzc19yZXN1bHQuY3N2XCIpXG5gYGAifQ== -->
-<pre class="r"><code>write_csv(richness_all, &quot;richness_result.csv&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmljaG5lc3NfYWxsIDwtIGZ1bGxfam9pbihmdWxsX2pvaW4obWVybGluX3JpY2huZXNzX3N1bSwgYmxfcmljaG5lc3Nfc3VtKSwgZnVsbF9qb2luKGJvdGhfcmljaG5lc3Nfc3VtLCBlaXRoZXJfcmljaG5lc3Nfc3VtKSlcbndyaXRlX2NzdihyaWNobmVzc19hbGwsIFwicmljaG5lc3NfcmVzdWx0LmNzdlwiKVxuYGBgIn0= -->
+<pre class="r"><code>richness_all &lt;- full_join(full_join(merlin_richness_sum, bl_richness_sum), full_join(both_richness_sum, either_richness_sum))
+write_csv(richness_all, &quot;richness_result.csv&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KG1lcmxpbiwgYWVzKHggPSBoZXJiYWNlb3VzX3dldGxhbmQsIHkgPSBwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCwgY29sb3VyID0gcmVhbG0pKSArIGdlb21fc21vb3RoKG1ldGhvZCA9IFwibG1cIiwgc2UgPSBGKSArIGdlb21fcG9pbnQoYWxwaGEgPSAwLjEpICsgdGhlbWVfYncoKVxuYGBgIn0= -->
+<pre class="r"><code>ggplot(merlin, aes(x = herbaceous_wetland, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = &quot;lm&quot;, se = F) + geom_point(alpha = 0.1) + theme_bw()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KG1lcmxpbiwgYWVzKHggPSBvcGVuX2ZvcmVzdCwgeSA9IHBlcmNlbnRhZ2Vfb2ZfcmVnaW9uYWxfcG9vbF9wcmVzZW50LCBjb2xvdXIgPSByZWFsbSkpICsgZ2VvbV9zbW9vdGgobWV0aG9kID0gXCJsbVwiLCBzZSA9IEYpICsgZ2VvbV9wb2ludChhbHBoYSA9IDAuMSkgKyB0aGVtZV9idygpXG5gYGAifQ== -->
+<pre class="r"><code>ggplot(merlin, aes(x = open_forest, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = &quot;lm&quot;, se = F) + geom_point(alpha = 0.1) + theme_bw()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KG1lcmxpbiwgYWVzKHggPSBjdWx0aXZhdGVkLCB5ID0gcGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQsIGNvbG91ciA9IHJlYWxtKSkgKyBnZW9tX3Ntb290aChtZXRob2QgPSBcImxtXCIsIHNlID0gRikgKyBnZW9tX3BvaW50KGFscGhhID0gMC4xKSArIHRoZW1lX2J3KClcbmBgYCJ9 -->
+<pre class="r"><code>ggplot(merlin, aes(x = cultivated, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = &quot;lm&quot;, se = F) + geom_point(alpha = 0.1) + theme_bw()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUGVyY2VudGFnZSBvZiBSZWdpb25hbCBSaWNobmVzcyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKUnVuICdkb3dubG9hZF9kYXRhLlJtZGAgRmlyc3QhCgpgYGB7cn0Kb3B0aW9ucyhuYS5hY3Rpb24gPSAibmEuZmFpbCIpIApgYGAKCmBgYHtyfQpzb3VyY2UoIi4vZHJlZGdlX2Z1bmN0aW9ucy5SIikKYGBgCgpgYGB7cn0KbW9kZWxfYXZlcmFnZV9yaWNobmVzcyA8LSBmdW5jdGlvbihkYXRhKSB7CiAgbW9kZWxfYXZlcmFnZShwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGVsZXZhdGlvbl9kZWx0YV9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgdXJiYW4gKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGRhdGEsIDQpCn0KYGBgCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCk1lcmxpbjogRGlmZmVyZW5jZSBpbiByaWNobmVzcwotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCmBgYHtyfQptZXJsaW5fcmljaG5lc3NfcmVzdWx0IDwtIG1vZGVsX2F2ZXJhZ2VfcmljaG5lc3MobWVybGluKQptZXJsaW5fcmljaG5lc3Nfc3VtIDwtIG1vZGVsX3N1bW1hcnkoJ21lcmxpbicsICdyaWNobmVzcycsIG1lcmxpbl9yaWNobmVzc19yZXN1bHQpCm1lcmxpbl9yaWNobmVzc19zdW0KYGBgCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkJpcmRsaWZlOiBEaWZmZXJlbmNlIGluIHJpY2huZXNzCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KYGBge3J9CmJsX3JpY2huZXNzX3Jlc3VsdCA8LSBtb2RlbF9hdmVyYWdlX3JpY2huZXNzKGJpcmRsaWZlKQpibF9yaWNobmVzc19zdW0gPC0gbW9kZWxfc3VtbWFyeSgnYmlyZGxpZmUnLCAncmljaG5lc3MnLCBibF9yaWNobmVzc19yZXN1bHQpCmJsX3JpY2huZXNzX3N1bQpgYGAKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KQm90aDogRGlmZmVyZW5jZSBpbiByaWNobmVzcwotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCmBgYHtyfQpib3RoX3JpY2huZXNzX3Jlc3VsdCA8LSBtb2RlbF9hdmVyYWdlX3JpY2huZXNzKGJvdGgpCmJvdGhfcmljaG5lc3Nfc3VtIDwtIG1vZGVsX3N1bW1hcnkoJ2JvdGgnLCAncmljaG5lc3MnLCBib3RoX3JpY2huZXNzX3Jlc3VsdCkKYm90aF9yaWNobmVzc19zdW0KYGBgCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkVpdGhlcjogRGlmZmVyZW5jZSBpbiByaWNobmVzcwotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCmBgYHtyfQplaXRoZXJfcmljaG5lc3NfcmVzdWx0IDwtIG1vZGVsX2F2ZXJhZ2VfcmljaG5lc3MoZWl0aGVyKQplaXRoZXJfcmljaG5lc3Nfc3VtIDwtIG1vZGVsX3N1bW1hcnkoJ2VpdGhlcicsICdyaWNobmVzcycsIGVpdGhlcl9yaWNobmVzc19yZXN1bHQpCmVpdGhlcl9yaWNobmVzc19zdW0KYGBgCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkZ1bGwgcmVzdWx0Ci0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KYGBge3J9CnJpY2huZXNzX2FsbCA8LSBmdWxsX2pvaW4oZnVsbF9qb2luKG1lcmxpbl9yaWNobmVzc19zdW0sIGJsX3JpY2huZXNzX3N1bSksIGZ1bGxfam9pbihib3RoX3JpY2huZXNzX3N1bSwgZWl0aGVyX3JpY2huZXNzX3N1bSkpCndyaXRlX2NzdihyaWNobmVzc19hbGwsICJyaWNobmVzc19yZXN1bHQuY3N2IikKYGBg</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUGVyY2VudGFnZSBvZiBSZWdpb25hbCBSaWNobmVzcyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKUnVuICdkb3dubG9hZF9kYXRhLlJtZGAgRmlyc3QhCgpgYGB7cn0Kb3B0aW9ucyhuYS5hY3Rpb24gPSAibmEuZmFpbCIpIApgYGAKCmBgYHtyfQpzb3VyY2UoIi4vZHJlZGdlX2Z1bmN0aW9ucy5SIikKYGBgCgpgYGB7cn0KbW9kZWxfYXZlcmFnZV9yaWNobmVzcyA8LSBmdW5jdGlvbihkYXRhKSB7CiAgbW9kZWxfYXZlcmFnZShwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGVsZXZhdGlvbl9kZWx0YV9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgdXJiYW4gKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGRhdGEsIDQpCn0KYGBgCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCk1lcmxpbjogRGlmZmVyZW5jZSBpbiByaWNobmVzcwotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCmBgYHtyfQptZXJsaW5fcmljaG5lc3NfcmVzdWx0IDwtIG1vZGVsX2F2ZXJhZ2VfcmljaG5lc3MobWVybGluKQptZXJsaW5fcmljaG5lc3NfcmVzdWx0CmBgYAoKYGBge3J9Cm1peGVkX21vZGVsIDwtIGxtZXIocGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQgfiBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG0gKyAoMXxjaXR5X25hbWUpLCBtZXJsaW4pCnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpCmBgYAoKYGBge3J9CmZpeGVkX21vZGVsIDwtIGxtKHBlcmNlbnRhZ2Vfb2ZfcmVnaW9uYWxfcG9vbF9wcmVzZW50IH4gbWVhbl9lbGV2YXRpb25fc2NhbGVkICsgY2xvc2VkX2ZvcmVzdCArIGN1bHRpdmF0ZWQgKyBoZXJiYWNlb3VzX3ZlZ2V0YXRpb24gKyBoZXJiYWNlb3VzX3dldGxhbmQgKyBvcGVuX2ZvcmVzdCArIHBlcm1hbmVudF93YXRlciArIHNocnVicyArIHJlYWxtLCBtZXJsaW4pCmFub3ZhKG1peGVkX21vZGVsLCBmaXhlZF9tb2RlbCkKYGBgCmBgYHtyfQphbm92YShtaXhlZF9tb2RlbCwgbG0ocGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQgfiBjaXR5X25hbWUsIG1lcmxpbikpCmBgYAoKYGBge3J9Cm1lcmxpbl9yaWNobmVzc19zdW0gPC0gbW9kZWxfc3VtbWFyeSgnbWVybGluJywgJ3JpY2huZXNzJywgbWVybGluX3JpY2huZXNzX3Jlc3VsdCkKbWVybGluX3JpY2huZXNzX3N1bQpgYGAKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KQmlyZGxpZmU6IERpZmZlcmVuY2UgaW4gcmljaG5lc3MKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpgYGB7cn0KYmxfcmljaG5lc3NfcmVzdWx0IDwtIG1vZGVsX2F2ZXJhZ2VfcmljaG5lc3MoYmlyZGxpZmUpCmJsX3JpY2huZXNzX3Jlc3VsdApgYGAKCmBgYHtyfQptaXhlZF9tb2RlbCA8LSBsbWVyKHBlcmNlbnRhZ2Vfb2ZfcmVnaW9uYWxfcG9vbF9wcmVzZW50IH4gZWxldmF0aW9uX2RlbHRhX3NjYWxlZCArIG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGJpcmRsaWZlKQpyLnNxdWFyZWRHTE1NKG1peGVkX21vZGVsKQpgYGAKCmBgYHtyfQpmaXhlZF9tb2RlbCA8LSBsbShwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IGVsZXZhdGlvbl9kZWx0YV9zY2FsZWQgKyBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG0sIGJpcmRsaWZlKQphbm92YShtaXhlZF9tb2RlbCwgZml4ZWRfbW9kZWwpCmBgYAoKYGBge3J9CmJsX3JpY2huZXNzX3N1bSA8LSBtb2RlbF9zdW1tYXJ5KCdiaXJkbGlmZScsICdyaWNobmVzcycsIGJsX3JpY2huZXNzX3Jlc3VsdCkKYmxfcmljaG5lc3Nfc3VtCmBgYAoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpCb3RoOiBEaWZmZXJlbmNlIGluIHJpY2huZXNzCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KYGBge3J9CmJvdGhfcmljaG5lc3NfcmVzdWx0IDwtIG1vZGVsX2F2ZXJhZ2VfcmljaG5lc3MoYm90aCkKYm90aF9yaWNobmVzc19yZXN1bHQKYGBgCgpgYGB7cn0KbWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGJvdGgpCnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpCmBgYAoKYGBge3J9CmZpeGVkX21vZGVsIDwtIGxtKHBlcmNlbnRhZ2Vfb2ZfcmVnaW9uYWxfcG9vbF9wcmVzZW50IH4gbWVhbl9lbGV2YXRpb25fc2NhbGVkICsgY2xvc2VkX2ZvcmVzdCArIGN1bHRpdmF0ZWQgKyBoZXJiYWNlb3VzX3ZlZ2V0YXRpb24gKyBoZXJiYWNlb3VzX3dldGxhbmQgKyBvcGVuX2ZvcmVzdCArIHBlcm1hbmVudF93YXRlciArIHNocnVicyArIHJlYWxtLCBib3RoKQphbm92YShtaXhlZF9tb2RlbCwgZml4ZWRfbW9kZWwpCmBgYAoKYGBge3J9CmJvdGhfcmljaG5lc3Nfc3VtIDwtIG1vZGVsX3N1bW1hcnkoJ2JvdGgnLCAncmljaG5lc3MnLCBib3RoX3JpY2huZXNzX3Jlc3VsdCkKYm90aF9yaWNobmVzc19zdW0KYGBgCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkVpdGhlcjogRGlmZmVyZW5jZSBpbiByaWNobmVzcwotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCmBgYHtyfQplaXRoZXJfcmljaG5lc3NfcmVzdWx0IDwtIG1vZGVsX2F2ZXJhZ2VfcmljaG5lc3MoZWl0aGVyKQplaXRoZXJfcmljaG5lc3NfcmVzdWx0CmBgYAoKYGBge3J9Cm1peGVkX21vZGVsIDwtIGxtZXIocGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQgfiBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG0gKyAoMXxjaXR5X25hbWUpLCBlaXRoZXIpCnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpCmBgYAoKYGBge3J9CmZpeGVkX21vZGVsIDwtIGxtKHBlcmNlbnRhZ2Vfb2ZfcmVnaW9uYWxfcG9vbF9wcmVzZW50IH4gbWVhbl9lbGV2YXRpb25fc2NhbGVkICsgY2xvc2VkX2ZvcmVzdCArIGN1bHRpdmF0ZWQgKyBoZXJiYWNlb3VzX3ZlZ2V0YXRpb24gKyBoZXJiYWNlb3VzX3dldGxhbmQgKyBvcGVuX2ZvcmVzdCArIHBlcm1hbmVudF93YXRlciArIHNocnVicyArIHJlYWxtLCBlaXRoZXIpCmFub3ZhKG1peGVkX21vZGVsLCBmaXhlZF9tb2RlbCkKYGBgCgpgYGB7cn0KZWl0aGVyX3JpY2huZXNzX3N1bSA8LSBtb2RlbF9zdW1tYXJ5KCdlaXRoZXInLCAncmljaG5lc3MnLCBlaXRoZXJfcmljaG5lc3NfcmVzdWx0KQplaXRoZXJfcmljaG5lc3Nfc3VtCmBgYAoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpGdWxsIHJlc3VsdAotLS0tLS0tLS0tLS0tLS0tLS0tLS0tCmBgYHtyfQpyaWNobmVzc19hbGwgPC0gZnVsbF9qb2luKGZ1bGxfam9pbihtZXJsaW5fcmljaG5lc3Nfc3VtLCBibF9yaWNobmVzc19zdW0pLCBmdWxsX2pvaW4oYm90aF9yaWNobmVzc19zdW0sIGVpdGhlcl9yaWNobmVzc19zdW0pKQp3cml0ZV9jc3YocmljaG5lc3NfYWxsLCAicmljaG5lc3NfcmVzdWx0LmNzdiIpCmBgYAoKCmBgYHtyfQpnZ3Bsb3QobWVybGluLCBhZXMoeCA9IGhlcmJhY2VvdXNfd2V0bGFuZCwgeSA9IHBlcmNlbnRhZ2Vfb2ZfcmVnaW9uYWxfcG9vbF9wcmVzZW50LCBjb2xvdXIgPSByZWFsbSkpICsgZ2VvbV9zbW9vdGgobWV0aG9kID0gImxtIiwgc2UgPSBGKSArIGdlb21fcG9pbnQoYWxwaGEgPSAwLjEpICsgdGhlbWVfYncoKQpgYGAKCmBgYHtyfQpnZ3Bsb3QobWVybGluLCBhZXMoeCA9IG9wZW5fZm9yZXN0LCB5ID0gcGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQsIGNvbG91ciA9IHJlYWxtKSkgKyBnZW9tX3Ntb290aChtZXRob2QgPSAibG0iLCBzZSA9IEYpICsgZ2VvbV9wb2ludChhbHBoYSA9IDAuMSkgKyB0aGVtZV9idygpCmBgYApgYGB7cn0KZ2dwbG90KG1lcmxpbiwgYWVzKHggPSBjdWx0aXZhdGVkLCB5ID0gcGVyY2VudGFnZV9vZl9yZWdpb25hbF9wb29sX3ByZXNlbnQsIGNvbG91ciA9IHJlYWxtKSkgKyBnZW9tX3Ntb290aChtZXRob2QgPSAibG0iLCBzZSA9IEYpICsgZ2VvbV9wb2ludChhbHBoYSA9IDAuMSkgKyB0aGVtZV9idygpCmBgYAoKCgoK</div>
 
 
 

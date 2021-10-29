@@ -55,9 +55,13 @@ load_species_data <- function(poolname) {
               body_morphspace.pc4,
               trophic_niche,
               foraging_niche,
-              is_noctural
+              is_noctural,
+              ttc.cluster,
+              ttc.cluster_half,
+              ttc.cluster_double
           FROM species
-          JOIN model.taxonomy USING (scientific_name)", '##COL_SELECT##', column_name)
+          JOIN model.taxonomy USING (scientific_name)
+          JOIN datasci.taxonomic_trait_clusters ttc USING (scientific_name)", '##COL_SELECT##', column_name)
   
     tb <- bq_project_query(projectid, sql)
 

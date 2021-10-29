@@ -237,7 +237,10 @@ Full result
 ----------------------
 ```{r}
 niche_resiliance_all <- full_join(full_join(merlin_niche_resiliance_sum, bl_niche_resiliance_sum), full_join(both_niche_resiliance_sum, either_niche_resiliance_sum))
-write_csv(niche_resiliance_all, "niche_resiliance_result.csv")
+niche2_resiliance_all <- full_join(full_join(merlin_niche2_resiliance_sum, bl_niche2_resiliance_sum), full_join(both_niche2_resiliance_sum, either_niche2_resiliance_sum))
+niche3_resiliance_all <- full_join(full_join(merlin_niche3_resiliance_sum, bl_niche3_resiliance_sum), full_join(both_niche3_resiliance_sum, either_niche3_resiliance_sum))
+
+write_csv(full_join(full_join(niche_resiliance_all, niche2_resiliance_all), niche3_resiliance_all), "niche_resiliance_result.csv")
 ```
 
 

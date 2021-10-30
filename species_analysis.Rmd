@@ -145,4 +145,27 @@ ggplot(plot_data, aes(x = pc1, y = pc2, alpha = presence_ratio, color = as.facto
 ```{r}
 ggplot(plot_data, aes(x = pc3, y = pc4, alpha = presence_ratio, color = as.factor(foraging_niche))) + geom_point() + theme(legend.position = "none") + facet_wrap(~ source)
 ```
+```{r}
+library(ggpubr)
+```
 
+```{r}
+merlin_data$niche <- paste(merlin_data$trophic_niche, ' ', merlin_data$foraging_niche, ' ', merlin_data$is_noctural, ' ', merlin_data$cluster)
+```
+
+```{r}
+myplot <- ggarrange(
+  ncol = 2,
+  nrow = 2,
+  ggplot(merlin_data, aes(x = pc1, y = pc3, alpha = presence_ratio, colour = niche)) + geom_point() + theme_bw() +  theme(legend.position="none", axis.title.x=element_blank()) + ylab("ST + PB -> LT + SB"),
+  ggplot(merlin_data, aes(x = pc2, y = pc3, alpha = presence_ratio, colour = niche)) + geom_point() + theme_bw() + theme(legend.position="none", axis.title.x=element_blank(), axis.title.y=element_blank()),
+  ggplot(merlin_data, aes(x = pc1, y = pc4, alpha = presence_ratio, colour = niche)) + geom_point() + theme_bw() + theme(legend.position="none") + ylab("LT + PB -> ST + SB") + xlab("Body Size"),
+  ggplot(merlin_data, aes(x = pc2, y = pc4, alpha = presence_ratio, colour = niche)) + geom_point() + theme_bw() + theme(legend.position="none", axis.title.y=element_blank()) + xlab("Beak Size")
+)
+myplot
+```
+```{r}
+jpeg(width = 1024, height = 1024)
+myplot
+dev.off()
+```

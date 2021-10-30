@@ -3,6 +3,11 @@ title: "R Notebook"
 output: html_notebook
 ---
 ```{r}
+library(stringr)
+library(tidyverse)
+```
+
+```{r}
 response <- try(system('~/google-cloud-sdk/bin/gcloud projects list --quiet', intern = T))
 projectid <- strsplit(response[2], " ")[[1]][1]
 ```

@@ -5,6 +5,10 @@ output: html_notebook
 Run 'download_data.Rmd` First!
 
 ```{r}
+library(tidyverse)
+```
+
+```{r}
 options(na.action = "na.fail") 
 ```
 
@@ -148,14 +152,57 @@ model_average_niche_3_resiliance <- function(data) {
 }
 ```
 
+----------------------
+Find city predictors
+----------------------
+
+```{r}
+create_city_dataset <- function(mixed_model) {
+  city_coeefs <- ranef(mixed_model)$city_name
+  city_coeefs <- cbind(city_name = rownames(city_coeefs), city_coeefs)
+  rownames(city_coeefs) <- NULL
+  names(city_coeefs) <- c('name', 'response')
+  
+  left_join(city_coeefs, city_data)
+}
+```
+
+```{r}
+model_average_niche_resiliance_for_city <- function(data) {
+  model_dredge(
+    lm(response ~ population_scaled + area_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm, data), data, 4)
+}
+```
 
 ----------------------
 Merlin: Niche Resiliance
 ----------------------
 ```{r}
 merlin_niche_resiliance_result <- model_average_niche_resiliance(merlin)
+merlin_niche_resiliance_result
+```
+
+```{r}
+mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + shrubs + urban + realm + (1|city_name), merlin)
+r.squaredGLMM(mixed_model)
+```
+
+```{r}
+fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + shrubs + urban + realm, merlin)
+anova(mixed_model, fixed_model)
+```
+
+```{r}
 merlin_niche_resiliance_sum <- model_summary('merlin', 'niche_resiliance', merlin_niche_resiliance_result)
 merlin_niche_resiliance_sum
+```
+
+```{r}
+merlin_city_response <- create_city_dataset(mixed_model)
+
+merlin_niche_resiliance_city_result <- model_average_niche_resiliance_for_city(merlin_city_response)
+merlin_niche_resiliance_city_sum <- model_summary('merlin', 'niche_resiliance', merlin_niche_resiliance_city_result)
+merlin_niche_resiliance_city_sum
 ```
 
 ```{r}

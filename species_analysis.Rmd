@@ -132,5 +132,17 @@ all_species_results <- full_join(full_join(merlin_summ, birdlife_summ), full_joi
 write_csv(all_species_results, "species_result.csv")
 ```
 
+```{r}
+merlin_data$source <- 'Merlin'
+birdlife_data$source <- 'Birdlife'
+both_data$source <- 'Both'
+either_data$source <- 'Either'
 
+plot_data <- rbind(merlin_data, birdlife_data, both_data, either_data)
+
+ggplot(plot_data, aes(x = pc1, y = pc2, alpha = presence_ratio, color = as.factor(foraging_niche))) + geom_point() + theme(legend.position = "none") + facet_wrap(~ source)
+```
+```{r}
+ggplot(plot_data, aes(x = pc3, y = pc4, alpha = presence_ratio, color = as.factor(foraging_niche))) + geom_point() + theme(legend.position = "none") + facet_wrap(~ source)
+```
 

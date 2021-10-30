@@ -127,3 +127,11 @@ Either
 either <- load_dataset('either')
 either
 ```
+
+```{r}
+city_data <- read_csv('city_data.csv')
+city_data$population_scaled = rescale(city_data$population, to = c(0, 1), from = range(city_data$population, na.rm = TRUE, finite = TRUE))
+city_data$area_scaled = rescale(city_data$total_area, to = c(0, 1), from = range(city_data$total_area, na.rm = TRUE, finite = TRUE))
+city_data$realm <- as.factor(city_data$realm)
+city_data
+```

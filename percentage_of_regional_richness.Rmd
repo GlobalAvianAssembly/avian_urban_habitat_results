@@ -20,6 +20,28 @@ model_average_richness <- function(data) {
 ```
 
 ----------------------
+Find city predictors
+----------------------
+
+```{r}
+create_city_dataset <- function(mixed_model) {
+  city_coeefs <- ranef(mixed_model)$city_name
+  city_coeefs <- cbind(city_name = rownames(city_coeefs), city_coeefs)
+  rownames(city_coeefs) <- NULL
+  names(city_coeefs) <- c('name', 'response')
+  
+  left_join(city_coeefs, city_data)
+}
+```
+
+```{r}
+model_average_for_city <- function(data) {
+  model_dredge(
+    lm(response ~ population_scaled + area_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm, data), data, 4)
+}
+```
+
+----------------------
 Merlin: Difference in richness
 ----------------------
 ```{r}
@@ -43,6 +65,18 @@ anova(mixed_model, lm(percentage_of_regional_pool_present ~ city_name, merlin))
 ```{r}
 merlin_richness_sum <- model_summary('merlin', 'richness', merlin_richness_result)
 merlin_richness_sum
+```
+
+```{r}
+merlin_city_response <- create_city_dataset(mixed_model)
+merlin_city_response[order(merlin_city_response$response), c('name', 'response')]
+```
+
+
+```{r}
+merlin_niche_resiliance_city_result <- model_average_for_city(merlin_city_response)
+merlin_niche_resiliance_city_sum <- model_summary('merlin', 'richness', merlin_niche_resiliance_city_result)
+merlin_niche_resiliance_city_sum
 ```
 
 ----------------------

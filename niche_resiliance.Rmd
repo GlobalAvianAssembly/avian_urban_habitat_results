@@ -199,7 +199,10 @@ merlin_niche_resiliance_sum
 
 ```{r}
 merlin_city_response <- create_city_dataset(mixed_model)
+merlin_city_response
+```
 
+```{r}
 merlin_niche_resiliance_city_result <- model_average_niche_resiliance_for_city(merlin_city_response)
 merlin_niche_resiliance_city_sum <- model_summary('merlin', 'niche_resiliance', merlin_niche_resiliance_city_result)
 merlin_niche_resiliance_city_sum

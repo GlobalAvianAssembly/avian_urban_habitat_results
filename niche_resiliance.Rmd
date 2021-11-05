@@ -224,10 +224,27 @@ merlin_niche3_resiliance_sum
 Birdlife: Niche Resiliance
 ----------------------
 ```{r}
-bl_niche_resiliance_result <- model_average_niche_resiliance(birdlife)
+bl_niche_resiliance_result <- model_average_niche_resiliance(birdlife)]
+bl_niche_resiliance_result
+```
+
+
+```{r}
+mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm + (1|city_name), birdlife)
+r.squaredGLMM(mixed_model)
+```
+
+```{r}
+fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm, birdlife)
+anova(mixed_model, fixed_model)
+```
+
+```{r}
 bl_niche_resiliance_sum <- model_summary('birdlife', 'niche_resiliance', bl_niche_resiliance_result)
 bl_niche_resiliance_sum
 ```
+
+
 ```{r}
 bl_niche2_resiliance_result <- model_average_niche_2_resiliance(birdlife)
 bl_niche2_resiliance_sum <- model_summary('birdlife', 'niche_2_resiliance', bl_niche2_resiliance_result)
@@ -245,6 +262,20 @@ Both: Niche Resiliance
 ----------------------
 ```{r}
 both_niche_resiliance_result <- model_average_niche_resiliance(both)
+both_niche_resiliance_result
+```
+
+```{r}
+mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm + (1|city_name), both)
+r.squaredGLMM(mixed_model)
+```
+
+```{r}
+fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm, both)
+anova(mixed_model, fixed_model)
+```
+
+```{r}
 both_niche_resiliance_sum <- model_summary('both', 'niche_resiliance', both_niche_resiliance_result)
 both_niche_resiliance_sum
 ```
@@ -266,6 +297,20 @@ Either: Niche Resiliance
 ----------------------
 ```{r}
 either_niche_resiliance_result <- model_average_niche_resiliance(either)
+either_niche_resiliance_result
+```
+
+```{r}
+mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm + (1|city_name), either)
+r.squaredGLMM(mixed_model)
+```
+
+```{r}
+fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm, either)
+anova(mixed_model, fixed_model)
+```
+
+```{r}
 either_niche_resiliance_sum <- model_summary('either', 'niche_resiliance', either_niche_resiliance_result)
 either_niche_resiliance_sum
 ```

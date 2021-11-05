@@ -154,18 +154,25 @@ merlin_data$niche <- paste(merlin_data$trophic_niche, ' ', merlin_data$foraging_
 ```
 
 ```{r}
+gg <- function(gg) {
+  gg + geom_point() + theme_bw() + labs(alpha="Presence Ratio", colour="Niche")
+}
+
 myplot <- ggarrange(
   ncol = 2,
   nrow = 2,
-  ggplot(merlin_data, aes(x = pc1, y = pc3, alpha = presence_ratio, colour = niche)) + geom_point() + theme_bw() +  theme(legend.position="none", axis.title.x=element_blank()) + ylab("ST + PB -> LT + SB"),
-  ggplot(merlin_data, aes(x = pc2, y = pc3, alpha = presence_ratio, colour = niche)) + geom_point() + theme_bw() + theme(legend.position="none", axis.title.x=element_blank(), axis.title.y=element_blank()),
-  ggplot(merlin_data, aes(x = pc1, y = pc4, alpha = presence_ratio, colour = niche)) + geom_point() + theme_bw() + theme(legend.position="none") + ylab("LT + PB -> ST + SB") + xlab("Body Size"),
-  ggplot(merlin_data, aes(x = pc2, y = pc4, alpha = presence_ratio, colour = niche)) + geom_point() + theme_bw() + theme(legend.position="none", axis.title.y=element_blank()) + xlab("Beak Size")
+  gg(ggplot(merlin_data, aes(x = pc1, y = pc3, alpha = presence_ratio, colour = niche)) + ylab("Short Tail + Pointy Beak -> Long Tail + Stubby Beak")) + theme(legend.position="none", axis.title.x=element_blank()) ,
+  gg(ggplot(merlin_data, aes(x = pc2, y = pc3, alpha = presence_ratio, colour = niche))) + theme(legend.position="none", axis.title.x=element_blank(), axis.title.y=element_blank()),
+  gg(ggplot(merlin_data, aes(x = pc1, y = pc4, alpha = presence_ratio, colour = niche)) + ylab("Long Tail + Pointy Beak -> Short Tail + Stubby Beak") + xlab("Body Size")) + theme(legend.position="none"),
+  gg(ggplot(merlin_data, aes(x = pc2, y = pc4, alpha = presence_ratio, colour = niche)) + xlab("Beak Size"))  + theme(legend.position="none", axis.title.y=element_blank())
 )
+myplot <- annotate_figure(myplot, top = text_grob("Species Presence based on Morphology", face = "bold", size = 14),
+                          bottom = text_grob("Colour: Niche, Alpha: Presence Ratio", hjust = 1, size = 10))
 myplot
 ```
+
 ```{r}
-jpeg(width = 1024, height = 1024)
+jpeg("species.jpg", width = 1024, height = 1024)
 myplot
 dev.off()
 ```

@@ -248,10 +248,26 @@ pre code {
 </table>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY3JlYXRlX2NpdHlfZGF0YXNldCA8LSBmdW5jdGlvbihtaXhlZF9tb2RlbCkge1xuICBjaXR5X2NvZWVmcyA8LSByYW5lZihtaXhlZF9tb2RlbCkkY2l0eV9uYW1lXG4gIGNpdHlfY29lZWZzIDwtIGNiaW5kKGNpdHlfbmFtZSA9IHJvd25hbWVzKGNpdHlfY29lZWZzKSwgY2l0eV9jb2VlZnMpXG4gIHJvd25hbWVzKGNpdHlfY29lZWZzKSA8LSBOVUxMXG4gIG5hbWVzKGNpdHlfY29lZWZzKSA8LSBjKCduYW1lJywgJ3Jlc3BvbnNlJylcbiAgXG4gIGxlZnRfam9pbihjaXR5X2NvZWVmcywgY2l0eV9kYXRhKVxufVxuYGBgIn0= -->
+<pre class="r"><code>create_city_dataset &lt;- function(mixed_model) {
+  city_coeefs &lt;- ranef(mixed_model)$city_name
+  city_coeefs &lt;- cbind(city_name = rownames(city_coeefs), city_coeefs)
+  rownames(city_coeefs) &lt;- NULL
+  names(city_coeefs) &lt;- c(&#39;name&#39;, &#39;response&#39;)
+  
+  left_join(city_coeefs, city_data)
+}</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9kZWxfYXZlcmFnZV9mb3JfY2l0eSA8LSBmdW5jdGlvbihkYXRhKSB7XG4gIG1vZGVsX2RyZWRnZShcbiAgICBsbShyZXNwb25zZSB+IHBvcHVsYXRpb25fc2NhbGVkICsgYXJlYV9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfd2V0bGFuZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgdXJiYW4gKyByZWFsbSwgZGF0YSksIGRhdGEsIDQpXG59XG5gYGAifQ== -->
+<pre class="r"><code>model_average_for_city &lt;- function(data) {
+  model_dredge(
+    lm(response ~ population_scaled + area_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm, data), data, 4)
+}</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <table>
@@ -451,10 +467,18 @@ bl_richness_result</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IGVsZXZhdGlvbl9kZWx0YV9zY2FsZWQgKyBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG0gKyAoMXxjaXR5X25hbWUpLCBiaXJkbGlmZSlcbnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IGVsZXZhdGlvbl9kZWx0YV9zY2FsZWQgKyBtZWFuX2VsZXZhdGlvbl9zY2FsZWQgKyBjbG9zZWRfZm9yZXN0ICsgY3VsdGl2YXRlZCArIGhlcmJhY2VvdXNfdmVnZXRhdGlvbiArIGhlcmJhY2VvdXNfd2V0bGFuZCArIG9wZW5fZm9yZXN0ICsgcGVybWFuZW50X3dhdGVyICsgc2hydWJzICsgcmVhbG0gKyAoMXxjaXR5X25hbWUpLCBiaXJkbGlmZSlcbnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpXG5cbmBgYCJ9 -->
 <pre class="r"><code>mixed_model &lt;- lmer(percentage_of_regional_pool_present ~ elevation_delta_scaled + mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), birdlife)
-r.squaredGLMM(mixed_model)</code></pre>
+r.squaredGLMM(mixed_model)
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogJ3Iuc3F1YXJlZEdMTU0nIG5vdyBjYWxjdWxhdGVzIGEgcmV2aXNlZCBzdGF0aXN0aWMuIFNlZSB0aGUgaGVscCBwYWdlLlxuIn0= -->
+<pre><code>Warning: &#39;r.squaredGLMM&#39; now calculates a revised statistic. See the help page.</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICBSMm0gICAgICAgUjJjXG5bMSxdIDAuMTA2ODQ4NyAwLjMzMTY5NDZcbiJ9 -->
+<pre><code>           R2m       R2c
+[1,] 0.1068487 0.3316946</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -490,10 +514,15 @@ both_richness_result</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGJvdGgpXG5yLnNxdWFyZWRHTE1NKG1peGVkX21vZGVsKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGJvdGgpXG5yLnNxdWFyZWRHTE1NKG1peGVkX21vZGVsKVxuXG5gYGAifQ== -->
 <pre class="r"><code>mixed_model &lt;- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), both)
-r.squaredGLMM(mixed_model)</code></pre>
+r.squaredGLMM(mixed_model)
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICBSMm0gICAgICAgUjJjXG5bMSxdIDAuMTA1Mzc0NCAwLjQ1MzY1MjJcbiJ9 -->
+<pre><code>           R2m       R2c
+[1,] 0.1053744 0.4536522</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -529,10 +558,15 @@ either_richness_result</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGVpdGhlcilcbnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWl4ZWRfbW9kZWwgPC0gbG1lcihwZXJjZW50YWdlX29mX3JlZ2lvbmFsX3Bvb2xfcHJlc2VudCB+IG1lYW5fZWxldmF0aW9uX3NjYWxlZCArIGNsb3NlZF9mb3Jlc3QgKyBjdWx0aXZhdGVkICsgaGVyYmFjZW91c192ZWdldGF0aW9uICsgaGVyYmFjZW91c193ZXRsYW5kICsgb3Blbl9mb3Jlc3QgKyBwZXJtYW5lbnRfd2F0ZXIgKyBzaHJ1YnMgKyByZWFsbSArICgxfGNpdHlfbmFtZSksIGVpdGhlcilcbnIuc3F1YXJlZEdMTU0obWl4ZWRfbW9kZWwpXG5cbmBgYCJ9 -->
 <pre class="r"><code>mixed_model &lt;- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), either)
-r.squaredGLMM(mixed_model)</code></pre>
+r.squaredGLMM(mixed_model)
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgUjJtICAgICAgIFIyY1xuWzEsXSAwLjA4MzAxMzQ5IDAuMzQ4MzkyN1xuIn0= -->
+<pre><code>            R2m       R2c
+[1,] 0.08301349 0.3483927</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->

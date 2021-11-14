@@ -37,7 +37,7 @@ create_city_dataset <- function(mixed_model) {
 ```{r}
 model_average_for_city <- function(data) {
   model_dredge(
-    lm(response ~ population_scaled + area_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm, data), data, 4)
+    lm(response ~ population_scaled + area_scaled + urban + biome_name + city_includes_estuary + region_includes_estuary + city_mean_elevation_scaled + city_elevation_delta_scaled + region_mean_elevation_scaled + region_elevation_delta_scaled + population_growth_scaled, data), data, 4)
 }
 ```
 
@@ -50,16 +50,16 @@ merlin_richness_result
 ```
 
 ```{r}
-mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), merlin)
-r.squaredGLMM(mixed_model)
+merlin_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), merlin)
+r.squaredGLMM(merlin_mixed_model)
 ```
 
 ```{r}
-fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, merlin)
-anova(mixed_model, fixed_model)
+merlin_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, merlin)
+anova(merlin_mixed_model, merlin_fixed_model)
 ```
 ```{r}
-anova(mixed_model, lm(percentage_of_regional_pool_present ~ city_name, merlin))
+anova(merlin_mixed_model, lm(percentage_of_regional_pool_present ~ city_name, merlin))
 ```
 
 ```{r}
@@ -68,10 +68,12 @@ merlin_richness_sum
 ```
 
 ```{r}
-merlin_city_response <- create_city_dataset(mixed_model)
+merlin_city_response <- create_city_dataset(merlin_mixed_model)
 merlin_city_response[order(merlin_city_response$response), c('name', 'response')]
 ```
-
+```{r}
+write_csv(merlin_city_response[, c('name', 'response', 'latitude', 'longitude')], 'merlin_city_richness_intercept.csv')
+```
 
 ```{r}
 merlin_niche_resiliance_city_result <- model_average_for_city(merlin_city_response)
@@ -88,18 +90,42 @@ bl_richness_result
 ```
 
 ```{r}
-mixed_model <- lmer(percentage_of_regional_pool_present ~ elevation_delta_scaled + mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), birdlife)
-r.squaredGLMM(mixed_model)
+birdlife_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + shrubs + realm + (1|city_name), birdlife)
+r.squaredGLMM(birdlife_mixed_model)
 ```
 
 ```{r}
-fixed_model <- lm(percentage_of_regional_pool_present ~ elevation_delta_scaled + mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, birdlife)
-anova(mixed_model, fixed_model)
+summary(birdlife_mixed_model)
 ```
+
+```{r}
+birdlife_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + shrubs + realm, birdlife)
+anova(birdlife_mixed_model, birdlife_fixed_model)
+```
+
+```{r}
+summary(birdlife_fixed_model)
+```
+
+```{r}
+birdlife_city_response <- create_city_dataset(birdlife_mixed_model)
+birdlife_city_response[order(birdlife_city_response$response), c('name', 'response', 'latitude', 'longitude')]
+```
+
+```{r}
+write_csv(birdlife_city_response[, c('name', 'response', 'latitude', 'longitude')], 'birdlife_city_richness_intercept.csv')
+```
+
 
 ```{r}
 bl_richness_sum <- model_summary('birdlife', 'richness', bl_richness_result)
 bl_richness_sum
+```
+
+```{r}
+birdlife_niche_resiliance_city_result <- model_average_for_city(birdlife_city_response)
+birdlife_niche_resiliance_city_sum <- model_summary('birdlife', 'richness', birdlife_niche_resiliance_city_result)
+birdlife_niche_resiliance_city_sum
 ```
 
 ----------------------
@@ -111,18 +137,28 @@ both_richness_result
 ```
 
 ```{r}
-mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), both)
-r.squaredGLMM(mixed_model)
+both_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), both)
+r.squaredGLMM(both_mixed_model)
 ```
 
 ```{r}
-fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, both)
-anova(mixed_model, fixed_model)
+both_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, both)
+anova(both_mixed_model, both_fixed_model)
 ```
 
 ```{r}
 both_richness_sum <- model_summary('both', 'richness', both_richness_result)
 both_richness_sum
+```
+```{r}
+both_city_response <- create_city_dataset(both_mixed_model)
+both_city_response[order(both_city_response$response), c('name', 'response', 'latitude', 'longitude')]
+```
+
+```{r}
+both_niche_resiliance_city_result <- model_average_for_city(both_city_response)
+both_niche_resiliance_city_sum <- model_summary('both', 'richness', both_niche_resiliance_city_result)
+both_niche_resiliance_city_sum
 ```
 
 ----------------------
@@ -134,18 +170,29 @@ either_richness_result
 ```
 
 ```{r}
-mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), either)
-r.squaredGLMM(mixed_model)
+either_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), either)
+r.squaredGLMM(either_mixed_model)
 ```
 
 ```{r}
-fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, either)
-anova(mixed_model, fixed_model)
+either_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, either)
+anova(either_mixed_model, either_fixed_model)
 ```
 
 ```{r}
 either_richness_sum <- model_summary('either', 'richness', either_richness_result)
 either_richness_sum
+```
+
+```{r}
+either_city_response <- create_city_dataset(either_mixed_model)
+either_city_response[order(either_city_response$response), c('name', 'response', 'latitude', 'longitude')]
+```
+
+```{r}
+either_niche_resiliance_city_result <- model_average_for_city(either_city_response)
+either_niche_resiliance_city_sum <- model_summary('either', 'richness', either_niche_resiliance_city_result)
+either_niche_resiliance_city_sum
 ```
 
 ----------------------
@@ -156,7 +203,6 @@ richness_all <- full_join(full_join(merlin_richness_sum, bl_richness_sum), full_
 write_csv(richness_all, "richness_result.csv")
 ```
 
-
 ```{r}
 ggplot(merlin, aes(x = herbaceous_wetland, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = "lm", se = F) + geom_point(alpha = 0.1) + theme_bw()
 ```
@@ -164,6 +210,7 @@ ggplot(merlin, aes(x = herbaceous_wetland, y = percentage_of_regional_pool_prese
 ```{r}
 ggplot(merlin, aes(x = open_forest, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = "lm", se = F) + geom_point(alpha = 0.1) + theme_bw()
 ```
+
 ```{r}
 ggplot(merlin, aes(x = cultivated, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = "lm", se = F) + geom_point(alpha = 0.1) + theme_bw()
 ```

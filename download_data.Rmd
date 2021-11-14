@@ -102,7 +102,6 @@ merlin <- load_dataset('merlin')
 merlin
 ```
 
-
 Birdlife
 ----------------------
 
@@ -129,9 +128,38 @@ either
 ```
 
 ```{r}
+population_growth <- function(city_row) {
+  population <- c(city_row$pop1950, city_row$pop1955, city_row$pop1960, city_row$pop1965, city_row$pop1970, city_row$pop1975, city_row$pop1980, city_row$pop1985, city_row$pop1990, city_row$pop1995, city_row$pop2000, city_row$pop2005, city_row$pop2010, city_row$pop2015, city_row$pop2020)
+  years <- c(1950, 1955, 1960, 1965, 1970, 1975, 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015, 2020)
+  
+  model <- lm(population ~ years)
+  model$coefficients[2]
+}
+```
+
+
+```{r}
 city_data <- read_csv('city_data.csv')
 city_data$population_scaled = rescale(city_data$population, to = c(0, 1), from = range(city_data$population, na.rm = TRUE, finite = TRUE))
 city_data$area_scaled = rescale(city_data$total_area, to = c(0, 1), from = range(city_data$total_area, na.rm = TRUE, finite = TRUE))
+city_data$city_mean_elevation_scaled = rescale(city_data$city_mean_elevation, to = c(0, 1), from = range(city_data$city_mean_elevation, na.rm = TRUE, finite = TRUE))
+city_data$city_elevation_delta_scaled = rescale(city_data$city_elevation_delta, to = c(0, 1), from = range(city_data$city_elevation_delta, na.rm = TRUE, finite = TRUE))
+city_data$region_mean_elevation_scaled = rescale(city_data$region_mean_elevation, to = c(0, 1), from = range(city_data$region_mean_elevation, na.rm = TRUE, finite = TRUE))
+city_data$region_elevation_delta_scaled = rescale(city_data$region_elevation_delta, to = c(0, 1), from = range(city_data$region_elevation_delta, na.rm = TRUE, finite = TRUE))
 city_data$realm <- as.factor(city_data$realm)
+city_data$country_code <- as.factor(city_data$country_code)
+city_data$city_includes_estuary <- as.factor(city_data$city_includes_estuary)
+city_data$region_includes_estuary <- as.factor(city_data$region_includes_estuary)
+city_data$biome_name <- as.factor(city_data$biome_name)
+
+city_data$population_growth = 0
+
+for(i in 1:nrow(city_data)) {
+    city_data[i,]$population_growth = population_growth(city_data[i,])
+}
+
+city_data$population_growth_scaled = rescale(city_data$population_growth, to = c(0, 1), from = range(city_data$population_growth, na.rm = TRUE, finite = TRUE))
+
 city_data
 ```
+

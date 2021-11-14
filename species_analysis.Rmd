@@ -5,6 +5,7 @@ output: html_notebook
 ```{r}
 library(stringr)
 library(tidyverse)
+library(bigrquery)
 ```
 
 ```{r}
@@ -23,7 +24,7 @@ source("./dredge_functions.R")
 ```{r}
 dredge_and_subset <- function(data) {
   model <- lm(
-    presence_ratio ~ foraging_niche + trophic_niche + is_noctural + pc1 + pc2 + pc3 + pc4,
+    presence_ratio ~ foraging_niche + trophic_niche + is_noctural + pc1 + pc2 + pc3 + pc4 + iucn_red_list_2020 + realm,
     data=data
   )
   dredge_result <- dredge(model)
@@ -61,6 +62,8 @@ load_species_data <- function(poolname) {
               trophic_niche,
               foraging_niche,
               is_noctural,
+              iucn_red_list_2020,
+              realm,
               ttc.cluster,
               ttc.cluster_half,
               ttc.cluster_double
@@ -82,6 +85,8 @@ load_species_data <- function(poolname) {
   data$trophic_niche = as.factor(data$trophic_niche)
   data$is_noctural = as.factor(data$is_noctural)
   data$presence_ratio = data$city_count / data$regional_pool_count
+  data$iucn_red_list_2020 = as.factor(data$iucn_red_list_2020)
+  data$realm = as.factor(data$realm)
   
   data
 }

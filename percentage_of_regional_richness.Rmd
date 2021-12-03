@@ -34,13 +34,6 @@ create_city_dataset <- function(mixed_model) {
 }
 ```
 
-```{r}
-model_average_for_city <- function(data) {
-  model_dredge(
-    lm(response ~ population_scaled + area_scaled + urban + biome_name + city_includes_estuary + region_includes_estuary + city_mean_elevation_scaled + city_elevation_delta_scaled + region_mean_elevation_scaled + region_elevation_delta_scaled + population_growth_scaled, data), data, 4)
-}
-```
-
 ----------------------
 Merlin: Difference in richness
 ----------------------
@@ -58,6 +51,7 @@ r.squaredGLMM(merlin_mixed_model)
 merlin_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, merlin)
 anova(merlin_mixed_model, merlin_fixed_model)
 ```
+
 ```{r}
 anova(merlin_mixed_model, lm(percentage_of_regional_pool_present ~ city_name, merlin))
 ```
@@ -71,8 +65,9 @@ merlin_richness_sum
 merlin_city_response <- create_city_dataset(merlin_mixed_model)
 merlin_city_response[order(merlin_city_response$response), c('name', 'response')]
 ```
+
 ```{r}
-write_csv(merlin_city_response[, c('name', 'response', 'latitude', 'longitude')], 'merlin_city_richness_intercept.csv')
+write_csv(merlin_city_response[, c('name', 'response')], 'merlin_city_richness_intercept.csv')
 ```
 
 ```{r}
@@ -109,11 +104,11 @@ summary(birdlife_fixed_model)
 
 ```{r}
 birdlife_city_response <- create_city_dataset(birdlife_mixed_model)
-birdlife_city_response[order(birdlife_city_response$response), c('name', 'response', 'latitude', 'longitude')]
+birdlife_city_response[order(birdlife_city_response$response), c('name', 'response')]
 ```
 
 ```{r}
-write_csv(birdlife_city_response[, c('name', 'response', 'latitude', 'longitude')], 'birdlife_city_richness_intercept.csv')
+write_csv(birdlife_city_response[, c('name', 'response')], 'birdlife_city_richness_intercept.csv')
 ```
 
 
@@ -152,7 +147,11 @@ both_richness_sum
 ```
 ```{r}
 both_city_response <- create_city_dataset(both_mixed_model)
-both_city_response[order(both_city_response$response), c('name', 'response', 'latitude', 'longitude')]
+both_city_response[order(both_city_response$response), c('name', 'response')]
+```
+
+```{r}
+write_csv(both_city_response[, c('name', 'response')], 'both_city_richness_intercept.csv')
 ```
 
 ```{r}
@@ -186,7 +185,11 @@ either_richness_sum
 
 ```{r}
 either_city_response <- create_city_dataset(either_mixed_model)
-either_city_response[order(either_city_response$response), c('name', 'response', 'latitude', 'longitude')]
+either_city_response[order(either_city_response$response), c('name', 'response')]
+```
+
+```{r}
+write_csv(either_city_response[, c('name', 'response')], 'either_city_richness_intercept.csv')
 ```
 
 ```{r}

@@ -140,16 +140,11 @@ population_growth <- function(city_row) {
 
 ```{r}
 city_data <- read_csv('city_data.csv')
-city_data$population_scaled = rescale(city_data$population, to = c(0, 1), from = range(city_data$population, na.rm = TRUE, finite = TRUE))
-city_data$area_scaled = rescale(city_data$total_area, to = c(0, 1), from = range(city_data$total_area, na.rm = TRUE, finite = TRUE))
-city_data$city_mean_elevation_scaled = rescale(city_data$city_mean_elevation, to = c(0, 1), from = range(city_data$city_mean_elevation, na.rm = TRUE, finite = TRUE))
-city_data$city_elevation_delta_scaled = rescale(city_data$city_elevation_delta, to = c(0, 1), from = range(city_data$city_elevation_delta, na.rm = TRUE, finite = TRUE))
-city_data$region_mean_elevation_scaled = rescale(city_data$region_mean_elevation, to = c(0, 1), from = range(city_data$region_mean_elevation, na.rm = TRUE, finite = TRUE))
-city_data$region_elevation_delta_scaled = rescale(city_data$region_elevation_delta, to = c(0, 1), from = range(city_data$region_elevation_delta, na.rm = TRUE, finite = TRUE))
 city_data$realm <- as.factor(city_data$realm)
-city_data$country_code <- as.factor(city_data$country_code)
 city_data$city_includes_estuary <- as.factor(city_data$city_includes_estuary)
-city_data$region_includes_estuary <- as.factor(city_data$region_includes_estuary)
+city_data$region_100km_includes_estuary <- as.factor(city_data$region_100km_includes_estuary)
+city_data$region_50km_includes_estuary <- as.factor(city_data$region_50km_includes_estuary)
+city_data$region_20km_includes_estuary <- as.factor(city_data$region_20km_includes_estuary)
 city_data$biome_name <- as.factor(city_data$biome_name)
 
 city_data$population_growth = 0
@@ -158,8 +153,8 @@ for(i in 1:nrow(city_data)) {
     city_data[i,]$population_growth = population_growth(city_data[i,])
 }
 
-city_data$population_growth_scaled = rescale(city_data$population_growth, to = c(0, 1), from = range(city_data$population_growth, na.rm = TRUE, finite = TRUE))
-
 city_data
 ```
+
+
 

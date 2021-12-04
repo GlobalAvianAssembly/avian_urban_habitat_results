@@ -1,0 +1,223 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+Run `download_data.Rmd` and `percentage_of_regional_richness.Rmd` First!
+
+```{r}
+city_data
+```
+
+```{r}
+fetch_city_data_for <- function(pool_name) {
+  results_filename <- paste(paste(pool_name, 'city', 'richness', 'intercept', sep = "_"), "csv", sep = ".")
+  results <- read_csv(results_filename)
+  
+  joined <- left_join(city_data, results)
+  
+  pool_size_col_name <- paste(pool_name, 'pool', 'size', sep = "_")
+  
+  joined[,c("response", pool_size_col_name, "population_growth", "rainfall_monthly_min", "rainfall_annual_average", "rainfall_monthly_max", "temperature_annual_average", "temperature_monthly_min", "temperature_monthly_max", "happiness_negative_effect", "happiness_positive_effect", "happiness_future_life", "number_of_biomes", "realm", "biome_name", "region_20km_includes_estuary", "region_50km_includes_estuary", "region_100km_includes_estuary", "city_includes_estuary", "region_20km_average_pop_density", "region_50km_average_pop_density", "region_100km_average_pop_density", "city_max_pop_density", "city_average_pop_density", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "region_20km_urban", "region_50km_cultivated", "region_50km_urban", "region_100km_cultivated", "region_100km_urban", "region_20km_elevation_delta", "region_20km_mean_elevation", "region_50km_elevation_delta", "region_50km_mean_elevation", "region_100km_elevation_delta", "region_100km_mean_elevation", "city_elevation_delta", "city_mean_elevation", "urban", "shrubs", "permanent_water", "open_forest", "herbaceous_wetland", "herbaceous_vegetation", "cultivated", "closed_forest", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_streets", "percentage_urban_area_as_open_public_spaces_and_streets", "percentage_urban_area_as_open_public_spaces", "city_gdp_per_population")]
+}
+```
+
+
+```{r}
+merlin_city_data <- fetch_city_data_for('merlin')
+merlin_city_data
+```
+
+```{r}
+library(randomForest)
+library(reshape2)
+library(rpart)
+```
+
+```{r}
+merlin_city_data_fixed <- rfImpute(response ~ ., merlin_city_data)
+merlin_city_data_fixed
+```
+
+
+```{r}
+create_fifty_rows_of_importance <- function(data) {
+  generate_importance <- function(data) {
+    rf <- randomForest(
+      response ~ .,
+      data=data,
+      ntree = 2000,
+      replace = FALSE,
+      importance = TRUE
+    )
+    t(randomForest::importance(rf, type = 1, scale = F))
+  }
+  
+  nextimportance <- function(df, data) {
+    rbind(df, generate_importance(data))
+  }
+  
+  data.frame()  %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data) %>% nextimportance(data)
+}
+
+select_variables_from_random_forest <- function(data) {
+  test <- create_fifty_rows_of_importance(data)
+  sorted.test <- test[,order(colMeans(-test),colMeans(-test))]
+  
+  sd.test <- data.frame(sapply(sorted.test, sd))
+  d <- sd.test
+  names <- rownames(d)
+  rownames(d) <- NULL
+  variable_selection_output <- cbind(names,d)
+  
+  sd.test$x <- c(1:(ncol(data) - 1))
+  sd.test$y <- sd.test$sapply.sorted.test..sd.
+  sd.model <- rpart(y ~ x, data=sd.test)
+  sd.predict <- predict(sd.model)
+  cutoff <- min(sd.predict)
+  
+  ggplot(data = sd.test, aes(x=x, y=y)) + 
+    geom_line() +
+    ylab("Standard Deviation of VI") +
+    xlab("Predictor Name") + scale_x_discrete(limits=names) + 
+    geom_hline(yintercept = cutoff, linetype="dashed", color = "red") +
+    theme_bw()  + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  
+  sd.test$keep <- sd.test$sapply.sorted.test..sd. > cutoff
+  rownames(sd.test[sd.test$keep == T,])
+}
+
+create_fifty_rows_of_oob <- function(data) {
+  generate_oob <- function(data) {
+    rf <- randomForest(
+      response ~ .,
+      data=data,
+      replace = FALSE,
+      importance = TRUE
+    )
+    mean(rf$mse)
+  }
+  
+  result <- c(generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data), generate_oob(data))
+  
+  m <- mean(result)
+  sd <- sd(result)
+  sum <- m + sd
+  paste("Mean ", m, ", SD: ", sd, ", Mean + SD: ", sum)
+}
+```
+
+```{r}
+select_variables_from_random_forest(merlin_city_data_fixed)
+```
+
+
+```{r}
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life", "region_50km_elevation_delta")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life", "region_50km_elevation_delta", "shrubs")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life", "region_50km_elevation_delta", "shrubs", "permanent_water")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life", "region_50km_elevation_delta", "shrubs", "permanent_water", "city_gdp_per_population")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life", "region_50km_elevation_delta", "shrubs", "permanent_water", "city_gdp_per_population", "region_100km_cultivated")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life", "region_50km_elevation_delta", "shrubs", "permanent_water", "city_gdp_per_population", "region_100km_cultivated", "region_50km_cultivated")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life", "region_50km_elevation_delta", "shrubs", "permanent_water", "city_gdp_per_population", "region_100km_cultivated", "region_50km_cultivated", "region_50km_average_pop_density")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life", "region_50km_elevation_delta", "shrubs", "permanent_water", "city_gdp_per_population", "region_100km_cultivated", "region_50km_cultivated", "region_50km_average_pop_density", "happiness_negative_effect")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life", "region_50km_elevation_delta", "shrubs", "permanent_water", "city_gdp_per_population", "region_100km_cultivated", "region_50km_cultivated", "region_50km_average_pop_density", "happiness_negative_effect", "region_100km_urban")])
+```
+
+"merlin_pool_size", "realm", "biome_name", "happiness_positive_effect", "rainfall_monthly_min", "region_20km_urban", "temperature_monthly_min", "region_50km_urban", "happiness_future_life"
+
+
+```{r}
+birdlife_city_data <- fetch_city_data_for('birdlife')
+birdlife_city_data
+```
+
+```{r}
+birdlife_city_data_fixed <- rfImpute(response ~ ., birdlife_city_data)
+birdlife_city_data_fixed
+```
+
+```{r}
+select_variables_from_random_forest(birdlife_city_data_fixed)
+```
+
+```{r}
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water", "region_50km_average_pop_density")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water", "region_50km_average_pop_density", "rainfall_monthly_max")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water", "region_50km_average_pop_density", "rainfall_monthly_max", "percentage_urban_area_as_open_public_spaces")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water", "region_50km_average_pop_density", "rainfall_monthly_max", "percentage_urban_area_as_open_public_spaces", "temperature_monthly_min")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water", "region_50km_average_pop_density", "rainfall_monthly_max", "percentage_urban_area_as_open_public_spaces", "temperature_monthly_min", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water", "region_50km_average_pop_density", "rainfall_monthly_max", "percentage_urban_area_as_open_public_spaces", "temperature_monthly_min", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "shrubs")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water", "region_50km_average_pop_density", "rainfall_monthly_max", "percentage_urban_area_as_open_public_spaces", "temperature_monthly_min", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "shrubs", "region_100km_average_pop_density")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water", "region_50km_average_pop_density", "rainfall_monthly_max", "percentage_urban_area_as_open_public_spaces", "temperature_monthly_min", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "shrubs", "region_100km_average_pop_density", "region_100km_urban")])
+create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min", "region_50km_cultivated", "permanent_water", "region_50km_average_pop_density", "rainfall_monthly_max", "percentage_urban_area_as_open_public_spaces", "temperature_monthly_min", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "shrubs", "region_100km_average_pop_density", "region_100km_urban", "temperature_annual_average")])
+```
+
+"population_growth", "birdlife_pool_size", "region_100km_cultivated", "biome_name", "region_20km_average_pop_density", "rainfall_monthly_min"
+
+
+```{r}
+ggplot(merlin_city_data_fixed, aes(x = merlin_pool_size, y = response)) + geom_point()
+```
+```{r}
+ggplot(birdlife_city_data_fixed, aes(x = birdlife_pool_size, y = response)) + geom_point()
+```
+
+
+```{r}
+ggplot(merlin_city_data_fixed, aes(x = rainfall_monthly_min, y = response)) + geom_point()
+```
+```{r}
+ggplot(birdlife_city_data_fixed, aes(x = rainfall_monthly_min, y = response)) + geom_point()
+```
+
+```{r}
+ggplot(merlin_city_data_fixed, aes(x = response, y = biome_name)) + geom_boxplot()
+```
+```{r}
+ggplot(birdlife_city_data_fixed, aes(x = response, y = biome_name)) + geom_boxplot()
+```
+
+```{r}
+ggplot(merlin_city_data_fixed, aes(x = merlin_pool_size, y = biome_name)) + geom_boxplot()
+```
+
+
+```{r}
+ggplot(birdlife_city_data_fixed, aes(x = region_20km_average_pop_density, y = response)) + geom_point()
+```
+```{r}
+ggplot(merlin_city_data_fixed, aes(x = region_20km_average_pop_density, y = response)) + geom_point()
+```
+
+```{r}
+ggplot(birdlife_city_data_fixed, aes(x = region_20km_urban, y = response)) + geom_point()
+```
+```{r}
+ggplot(merlin_city_data_fixed, aes(x = region_20km_urban, y = response)) + geom_point()
+```
+
+```{r}
+ggplot(merlin_city_data_fixed, aes(x = region_20km_urban, y = merlin_pool_size)) + geom_point()
+```
+
+```{r}
+ggplot(birdlife_city_data_fixed, aes(x = region_20km_urban, y = birdlife_pool_size)) + geom_point()
+```
+

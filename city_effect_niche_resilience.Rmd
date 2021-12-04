@@ -1,0 +1,152 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+Run `download_data.Rmd` and `niche_resiliance.Rmd` First!
+
+```{r}
+library(randomForest)
+library(reshape2)
+library(rpart)
+```
+
+```{r}
+city_data
+```
+
+```{r}
+fetch_city_niche_data_for <- function(pool_name) {
+  results_filename <- paste(paste(pool_name, 'city', 'niche', 'resilience', 'intercept', sep = "_"), "csv", sep = ".")
+  results <- read_csv(results_filename)
+  
+  joined <- left_join(city_data, results)
+  
+  pool_size_col_name <- paste(pool_name, 'pool', 'size', sep = "_")
+  
+  joined[,c("response", pool_size_col_name, "population_growth", "rainfall_monthly_min", "rainfall_annual_average", "rainfall_monthly_max", "temperature_annual_average", "temperature_monthly_min", "temperature_monthly_max", "happiness_negative_effect", "happiness_positive_effect", "happiness_future_life", "number_of_biomes", "realm", "biome_name", "region_20km_includes_estuary", "region_50km_includes_estuary", "region_100km_includes_estuary", "city_includes_estuary", "region_20km_average_pop_density", "region_50km_average_pop_density", "region_100km_average_pop_density", "city_max_pop_density", "city_average_pop_density", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "region_20km_urban", "region_50km_cultivated", "region_50km_urban", "region_100km_cultivated", "region_100km_urban", "region_20km_elevation_delta", "region_20km_mean_elevation", "region_50km_elevation_delta", "region_50km_mean_elevation", "region_100km_elevation_delta", "region_100km_mean_elevation", "city_elevation_delta", "city_mean_elevation", "urban", "shrubs", "permanent_water", "open_forest", "herbaceous_wetland", "herbaceous_vegetation", "cultivated", "closed_forest", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_streets", "percentage_urban_area_as_open_public_spaces_and_streets", "percentage_urban_area_as_open_public_spaces", "city_gdp_per_population")]
+}
+```
+
+
+```{r}
+merlin_city_niche_data <- fetch_city_niche_data_for('merlin')
+merlin_city_niche_data
+```
+
+
+
+```{r}
+merlin_city_niche_data_fixed <- rfImpute(response ~ ., merlin_city_niche_data)
+merlin_city_niche_data_fixed
+```
+
+
+```{r}
+source('./random_forest_selection_functions.R')
+```
+
+```{r}
+select_variables_from_random_forest(merlin_city_niche_data_fixed)
+```
+
+
+```{r}
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average", "herbaceous_vegetation")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average", "herbaceous_vegetation", "rainfall_monthly_max")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average", "herbaceous_vegetation", "rainfall_monthly_max", "region_100km_urban")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average", "herbaceous_vegetation", "rainfall_monthly_max", "region_100km_urban", "temperature_annual_average")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average", "herbaceous_vegetation", "rainfall_monthly_max", "region_100km_urban", "temperature_annual_average", "region_50km_urban")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average", "herbaceous_vegetation", "rainfall_monthly_max", "region_100km_urban", "temperature_annual_average", "region_50km_urban", "region_100km_elevation_delta")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average", "herbaceous_vegetation", "rainfall_monthly_max", "region_100km_urban", "temperature_annual_average", "region_50km_urban", "region_100km_elevation_delta", "shrubs")])
+create_fifty_rows_of_oob(merlin_city_niche_data_fixed[,c("response", "merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average", "herbaceous_vegetation", "rainfall_monthly_max", "region_100km_urban", "temperature_annual_average", "region_50km_urban", "region_100km_elevation_delta", "shrubs", "population_growth")])
+```
+
+"merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta"
+
+"merlin_pool_size", "region_100km_cultivated", "region_20km_elevation_delta", "region_50km_cultivated", "region_50km_elevation_delta", "city_mean_elevation", "temperature_monthly_min", "region_20km_cultivated", "city_elevation_delta", "rainfall_annual_average", "herbaceous_vegetation", "rainfall_monthly_max", "region_100km_urban"
+
+```{r}
+birdlife_city_niche_data <- fetch_city_niche_data_for('birdlife')
+birdlife_city_niche_data
+```
+
+```{r}
+birdlife_city_niche_data_fixed <- rfImpute(response ~ ., birdlife_city_niche_data)
+birdlife_city_niche_data_fixed
+```
+
+```{r}
+select_variables_from_random_forest(birdlife_city_niche_data_fixed)
+```
+
+```{r}
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average", "temperature_monthly_min")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average", "temperature_monthly_min", "shrubs")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average", "temperature_monthly_min", "shrubs", "region_20km_cultivated")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average", "temperature_monthly_min", "shrubs", "region_20km_cultivated", "region_100km_elevation_delta")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average", "temperature_monthly_min", "shrubs", "region_20km_cultivated", "region_100km_elevation_delta", "rainfall_monthly_max")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average", "temperature_monthly_min", "shrubs", "region_20km_cultivated", "region_100km_elevation_delta", "rainfall_monthly_max", "city_mean_elevation")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average", "temperature_monthly_min", "shrubs", "region_20km_cultivated", "region_100km_elevation_delta", "rainfall_monthly_max", "city_mean_elevation", "temperature_monthly_max")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average", "temperature_monthly_min", "shrubs", "region_20km_cultivated", "region_100km_elevation_delta", "rainfall_monthly_max", "city_mean_elevation", "temperature_monthly_max", "shrubs")])
+create_fifty_rows_of_oob(birdlife_city_niche_data_fixed[,c("response", "region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland", "region_50km_elevation_delta", "temperature_annual_average", "temperature_monthly_min", "shrubs", "region_20km_cultivated", "region_100km_elevation_delta", "rainfall_monthly_max", "city_mean_elevation", "temperature_monthly_max", "shrubs", "region_20km_cultivated")])
+```
+
+"region_100km_cultivated", "region_20km_elevation_delta", "happiness_future_life", "birdlife_pool_size", "biome_name", "region_50km_cultivated", "herbaceous_wetland"
+
+
+```{r}
+ggplot(merlin_city_niche_data_fixed, aes(x = merlin_pool_size, y = response)) + geom_point()
+```
+
+```{r}
+ggplot(birdlife_city_niche_data_fixed, aes(x = birdlife_pool_size, y = response)) + geom_point()
+```
+
+```{r}
+ggplot(merlin_city_niche_data_fixed, aes(x = region_100km_cultivated, y = response)) + geom_point()
+```
+```{r}
+ggplot(birdlife_city_niche_data_fixed, aes(x = region_100km_cultivated, y = response)) + geom_point()
+```
+```{r}
+ggplot(merlin_city_niche_data_fixed, aes(x = region_100km_cultivated, y = merlin_pool_size)) + geom_point()
+```
+```{r}
+ggplot(birdlife_city_niche_data_fixed, aes(x = region_100km_cultivated, y = birdlife_pool_size)) + geom_point()
+```
+
+```{r}
+ggplot(merlin_city_niche_data_fixed, aes(x = region_20km_elevation_delta, y = response)) + geom_point()
+```
+
+```{r}
+ggplot(birdlife_city_niche_data_fixed, aes(x = region_20km_elevation_delta, y = response)) + geom_point()
+```
+```{r}
+ggplot(merlin_city_niche_data_fixed, aes(x = region_20km_elevation_delta, y = merlin_pool_size)) + geom_point()
+```
+
+
+```{r}
+ggplot(birdlife_city_niche_data_fixed, aes(x = region_20km_elevation_delta, y = birdlife_pool_size)) + geom_point()
+```
+

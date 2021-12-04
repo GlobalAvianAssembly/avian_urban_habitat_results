@@ -76,6 +76,7 @@ model_selection_by_anova(either)
 model_selection_by_aic(either)
 ```
 
+
 ---------------------------------------------------------------------
 Create niche reseliance score
 ---------------------------------------------------------------------
@@ -135,6 +136,21 @@ cor(either[,c("percentage_of_regional_pool_present", "niche_resiliance", "percen
 ```
 
 ----------------------
+Find city predictors
+----------------------
+
+```{r}
+create_city_dataset <- function(mixed_model) {
+  city_coeefs <- ranef(mixed_model)$city_name
+  city_coeefs <- cbind(city_name = rownames(city_coeefs), city_coeefs)
+  rownames(city_coeefs) <- NULL
+  names(city_coeefs) <- c('name', 'response')
+  
+  left_join(city_coeefs, city_data)
+}
+```
+
+----------------------
 Find predictors
 ----------------------
 
@@ -183,13 +199,13 @@ merlin_niche_resiliance_result
 ```
 
 ```{r}
-mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + shrubs + urban + realm + (1|city_name), merlin)
-r.squaredGLMM(mixed_model)
+merlin_niche_mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + shrubs + urban + realm + (1|city_name), merlin)
+r.squaredGLMM(merlin_niche_mixed_model)
 ```
 
 ```{r}
-fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + shrubs + urban + realm, merlin)
-anova(mixed_model, fixed_model)
+merlin_niche_fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + shrubs + urban + realm, merlin)
+anova(merlin_niche_mixed_model, merlin_niche_fixed_model)
 ```
 
 ```{r}
@@ -198,14 +214,22 @@ merlin_niche_resiliance_sum
 ```
 
 ```{r}
-merlin_city_response <- create_city_dataset(mixed_model)
-merlin_city_response
+merlin_niche_city_response <- create_city_dataset(merlin_niche_mixed_model)
+merlin_niche_city_response[order(merlin_niche_city_response$response), c('name', 'response')]
+```
+```{r}
+write_csv(merlin_niche_city_response[, c('name', 'response')], 'merlin_city_niche_resilience_intercept.csv')
 ```
 
 ```{r}
 merlin_niche_resiliance_city_result <- model_average_niche_resiliance_for_city(merlin_city_response)
 merlin_niche_resiliance_city_sum <- model_summary('merlin', 'niche_resiliance', merlin_niche_resiliance_city_result)
 merlin_niche_resiliance_city_sum
+```
+
+```{r}
+merlin_city_response <- create_city_dataset(merlin_mixed_model)
+merlin_city_response[order(merlin_city_response$response), c('name', 'response')]
 ```
 
 ```{r}
@@ -230,13 +254,22 @@ bl_niche_resiliance_result
 
 
 ```{r}
-mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm + (1|city_name), birdlife)
-r.squaredGLMM(mixed_model)
+birdlife_niche_mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm + (1|city_name), birdlife)
+r.squaredGLMM(birdlife_niche_mixed_model)
 ```
 
 ```{r}
-fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm, birdlife)
-anova(mixed_model, fixed_model)
+birdlife_niche_fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm, birdlife)
+anova(birdlife_niche_mixed_model, birdlife_niche_fixed_model)
+```
+
+```{r}
+birdlife_niche_city_response <- create_city_dataset(birdlife_niche_mixed_model)
+birdlife_niche_city_response[order(birdlife_niche_city_response$response), c('name', 'response')]
+```
+
+```{r}
+write_csv(birdlife_niche_city_response[, c('name', 'response')], 'birdlife_city_niche_resilience_intercept.csv')
 ```
 
 ```{r}

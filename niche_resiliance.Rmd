@@ -299,13 +299,22 @@ both_niche_resiliance_result
 ```
 
 ```{r}
-mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm + (1|city_name), both)
-r.squaredGLMM(mixed_model)
+both_niche_mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm + (1|city_name), both)
+r.squaredGLMM(both_niche_mixed_model)
 ```
 
 ```{r}
-fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm, both)
-anova(mixed_model, fixed_model)
+both_niche_fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm, both)
+anova(both_niche_mixed_model, both_niche_fixed_model)
+```
+
+```{r}
+both_niche_city_response <- create_city_dataset(both_niche_mixed_model)
+both_niche_city_response[order(both_niche_city_response$response), c('name', 'response')]
+```
+
+```{r}
+write_csv(both_niche_city_response[, c('name', 'response')], 'both_city_niche_resilience_intercept.csv')
 ```
 
 ```{r}
@@ -334,13 +343,22 @@ either_niche_resiliance_result
 ```
 
 ```{r}
-mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm + (1|city_name), either)
-r.squaredGLMM(mixed_model)
+either_niche_mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm + (1|city_name), either)
+r.squaredGLMM(either_niche_mixed_model)
 ```
 
 ```{r}
-fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm, either)
-anova(mixed_model, fixed_model)
+either_niche_fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm, either)
+anova(either_niche_mixed_model, either_niche_fixed_model)
+```
+
+```{r}
+either_niche_city_response <- create_city_dataset(either_niche_mixed_model)
+either_niche_city_response[order(either_niche_city_response$response), c('name', 'response')]
+```
+
+```{r}
+write_csv(either_niche_city_response[, c('name', 'response')], 'either_city_niche_resilience_intercept.csv')
 ```
 
 ```{r}

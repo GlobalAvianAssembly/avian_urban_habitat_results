@@ -24,7 +24,7 @@ source("./dredge_functions.R")
 ```{r}
 dredge_and_subset <- function(data) {
   model <- lm(
-    presence_ratio ~ foraging_niche + trophic_niche + is_noctural + pc1 + pc2 + pc3 + pc4 + iucn_red_list_2020 + realm,
+    response ~ foraging_niche + trophic_niche + is_nocturnal + pc1 + pc2 + pc3 + pc4,
     data=data
   )
   dredge_result <- dredge(model)
@@ -33,43 +33,30 @@ dredge_and_subset <- function(data) {
 ```
 
 ```{r}
-load_species_data <- function(poolname) {
-  filename <- str_replace('species_metrics_##POOL_NAME##.csv', '##POOL_NAME##', poolname)
+load_niche_data <- function() {
+  filename <- 'species_analysis_cache.csv'
   
   if (!file.exists(filename)) {
-    column_name = str_replace_all('present_in_##POOL_NAME##_pool', '##POOL_NAME##', poolname)
-    if (poolname == 'both') {
-      column_name = 'present_in_both_pools'
-    }
     
-    sql <- str_replace_all("
-         WITH species AS (
-              SELECT 
-                  scientific_name,
-                  count(*) AS regional_pool_count,
-                  countif(present_in_city = true) AS city_count
-              FROM model.regional_species_filtered
-              JOIN model.taxonomy USING (scientific_name)
-              WHERE ##COL_SELECT## = true
-              GROUP BY scientific_name
-          )
-          SELECT 
-              species.*,
-              body_morphspace.pc1,
-              body_morphspace.pc2,
-              body_morphspace.pc3,
-              body_morphspace.pc4,
-              trophic_niche,
-              foraging_niche,
-              is_noctural,
-              iucn_red_list_2020,
-              realm,
-              ttc.cluster,
-              ttc.cluster_half,
-              ttc.cluster_double
-          FROM species
-          JOIN model.taxonomy USING (scientific_name)
-          JOIN datasci.taxonomic_trait_clusters ttc USING (scientific_name)", '##COL_SELECT##', column_name)
+    sql <- "
+        SELECT 
+          foraging_niche, 
+          trophic_niche, 
+          is_noctural, 
+          merlin_10_perc_ratio, 
+          merlin_20_perc_ratio, 
+          birdlife_10_perc_ratio, 
+          birdlife_20_perc_ratio, 
+          either_10_perc_ratio, 
+          either_20_perc_ratio, 
+          both_10_perc_ratio, 
+          both_20_perc_ratio, 
+          body_morphspace.pc1.mean AS pc1, 
+          body_morphspace.pc2.mean AS pc2, 
+          body_morphspace.pc3.mean AS pc3, 
+          body_morphspace.pc4.mean AS pc4
+        FROM `endless-matter-297214.model2.niche_analysis_model` LIMIT 1000 
+    "
   
     tb <- bq_project_query(projectid, sql)
 
@@ -83,101 +70,59 @@ load_species_data <- function(poolname) {
   
   data$foraging_niche = as.factor(data$foraging_niche)
   data$trophic_niche = as.factor(data$trophic_niche)
-  data$is_noctural = as.factor(data$is_noctural)
-  data$presence_ratio = data$city_count / data$regional_pool_count
-  data$iucn_red_list_2020 = as.factor(data$iucn_red_list_2020)
-  data$realm = as.factor(data$realm)
+  data$is_nocturnal = as.factor(data$is_noctural)
   
   data
+}
+
+data_for_response <- function(column_name_for_response) {
+  data <- load_niche_data()
+  names(data)[names(data) == column_name_for_response] <- "response"
+  
+  data[,c("response", "foraging_niche", "trophic_niche", "is_nocturnal", "pc1", "pc2", "pc3", "pc4")]
 }
 ```
 
 
 ```{r}
-merlin_data <- load_species_data('merlin')
-merlin_data
-```
-
-
-
-```{r}
-merlin_result <- dredge_and_subset(merlin_data)
-merlin_summ <- model_summary('merlin', 'species', merlin_result)
-merlin_summ
-```
-
-```{r}
-birdlife_data <- load_species_data('birdlife')
-birdlife_result <- dredge_and_subset(birdlife_data)
-birdlife_summ <- model_summary('birdlife', 'species', birdlife_result)
-birdlife_summ
+merlin_10_data <- data_for_response('merlin_10_perc_ratio')
+merlin_10_data
 ```
 
 
 ```{r}
-both_data <- load_species_data('both')
-both_result <- dredge_and_subset(both_data)
-both_summ <- model_summary('both', 'species', both_result)
-both_summ
+merlin_10_result <- dredge_and_subset(merlin_10_data)
+merlin_10_summ <- model_summary('merlin_10', 'species', merlin_10_result)
+merlin_10_summ
+```
+
+```{r}
+birdlife_10_data <- data_for_response('birdlife_10_perc_ratio')
+birdlife_10_result <- dredge_and_subset(birdlife_10_data)
+birdlife_10_summ <- model_summary('birdlife_10', 'species', birdlife_10_result)
+birdlife_10_summ
 ```
 
 
 ```{r}
-either_data <- load_species_data('either')
-either_result <- dredge_and_subset(either_data)
-either_summ <- model_summary('either', 'species', either_result)
-either_summ
+both_10_data <- data_for_response('both_10_perc_ratio')
+both_10_result <- dredge_and_subset(both_10_data)
+both_10_summ <- model_summary('both_10', 'species', both_10_result)
+both_10_summ
+```
+
+
+```{r}
+either_10_data <- data_for_response('either_10_perc_ratio')
+either_10_result <- dredge_and_subset(either_10_data)
+either_10_summ <- model_summary('either_10', 'species', either_10_result)
+either_10_summ
 ```
 
 ----------------------
 Full result
 ----------------------
 ```{r}
-all_species_results <- full_join(full_join(merlin_summ, birdlife_summ), full_join(both_summ, either_summ))
-write_csv(all_species_results, "species_result.csv")
-```
-
-```{r}
-merlin_data$source <- 'Merlin'
-birdlife_data$source <- 'Birdlife'
-both_data$source <- 'Both'
-either_data$source <- 'Either'
-
-plot_data <- rbind(merlin_data, birdlife_data, both_data, either_data)
-
-ggplot(plot_data, aes(x = pc1, y = pc2, alpha = presence_ratio, color = as.factor(foraging_niche))) + geom_point() + theme(legend.position = "none") + facet_wrap(~ source)
-```
-```{r}
-ggplot(plot_data, aes(x = pc3, y = pc4, alpha = presence_ratio, color = as.factor(foraging_niche))) + geom_point() + theme(legend.position = "none") + facet_wrap(~ source)
-```
-```{r}
-library(ggpubr)
-```
-
-```{r}
-merlin_data$niche <- paste(merlin_data$trophic_niche, ' ', merlin_data$foraging_niche, ' ', merlin_data$is_noctural, ' ', merlin_data$cluster)
-```
-
-```{r}
-gg <- function(gg) {
-  gg + geom_point() + theme_bw() + labs(alpha="Presence Ratio", colour="Niche")
-}
-
-myplot <- ggarrange(
-  ncol = 2,
-  nrow = 2,
-  gg(ggplot(merlin_data, aes(x = pc1, y = pc3, alpha = presence_ratio, colour = niche)) + ylab("Short Tail + Pointy Beak -> Long Tail + Stubby Beak")) + theme(legend.position="none", axis.title.x=element_blank()) ,
-  gg(ggplot(merlin_data, aes(x = pc2, y = pc3, alpha = presence_ratio, colour = niche))) + theme(legend.position="none", axis.title.x=element_blank(), axis.title.y=element_blank()),
-  gg(ggplot(merlin_data, aes(x = pc1, y = pc4, alpha = presence_ratio, colour = niche)) + ylab("Long Tail + Pointy Beak -> Short Tail + Stubby Beak") + xlab("Body Size")) + theme(legend.position="none"),
-  gg(ggplot(merlin_data, aes(x = pc2, y = pc4, alpha = presence_ratio, colour = niche)) + xlab("Beak Size"))  + theme(legend.position="none", axis.title.y=element_blank())
-)
-myplot <- annotate_figure(myplot, top = text_grob("Species Presence based on Morphology", face = "bold", size = 14),
-                          bottom = text_grob("Colour: Niche, Alpha: Presence Ratio", hjust = 1, size = 10))
-myplot
-```
-
-```{r}
-jpeg("species.jpg", width = 1024, height = 1024)
-myplot
-dev.off()
+all_species_results <- full_join(full_join(merlin_10_summ, birdlife_10_summ), full_join(both_10_summ, either_10_summ))
+write_csv(all_species_results, "species_analysis_result_10_perc.csv")
 ```

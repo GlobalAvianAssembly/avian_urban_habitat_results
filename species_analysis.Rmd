@@ -6,6 +6,7 @@ output: html_notebook
 library(stringr)
 library(tidyverse)
 library(bigrquery)
+library(MuMIn)
 ```
 
 ```{r}
@@ -24,7 +25,7 @@ source("./dredge_functions.R")
 ```{r}
 dredge_and_subset <- function(data) {
   model <- lm(
-    response ~ foraging_niche + trophic_niche + is_nocturnal + pc1 + pc2 + pc3 + pc4,
+    response ~ foraging_niche + trophic_niche + is_nocturnal + pc1 + pc2 + pc3 + pc4 + total_species,
     data=data
   )
   dredge_result <- dredge(model)
@@ -40,9 +41,11 @@ load_niche_data <- function() {
     
     sql <- "
         SELECT 
+          niche_name,
           foraging_niche, 
           trophic_niche, 
           is_noctural, 
+          total_species,
           merlin_10_perc_ratio, 
           merlin_20_perc_ratio, 
           birdlife_10_perc_ratio, 
@@ -79,10 +82,13 @@ data_for_response <- function(column_name_for_response) {
   data <- load_niche_data()
   names(data)[names(data) == column_name_for_response] <- "response"
   
-  data[,c("response", "foraging_niche", "trophic_niche", "is_nocturnal", "pc1", "pc2", "pc3", "pc4")]
+  data[,c("niche_name", "response", "foraging_niche", "trophic_niche", "is_nocturnal", "pc1", "pc2", "pc3", "pc4", "total_species")]
 }
 ```
 
+---------------------------------
+0.25 Percentile - 10% of species
+---------------------------------
 
 ```{r}
 merlin_10_data <- data_for_response('merlin_10_perc_ratio')
@@ -119,10 +125,358 @@ either_10_summ <- model_summary('either_10', 'species', either_10_result)
 either_10_summ
 ```
 
-----------------------
-Full result
-----------------------
+------------------------------
+Full result for 10% of species
+------------------------------
 ```{r}
 all_species_results <- full_join(full_join(merlin_10_summ, birdlife_10_summ), full_join(both_10_summ, either_10_summ))
 write_csv(all_species_results, "species_analysis_result_10_perc.csv")
 ```
+
+---------------------------------
+0.75 Percentile - 20% of species
+---------------------------------
+
+```{r}
+merlin_20_data <- data_for_response('merlin_20_perc_ratio')
+merlin_20_result <- dredge_and_subset(merlin_20_data)
+merlin_20_summ <- model_summary('merlin_20', 'species', merlin_20_result)
+merlin_20_summ
+```
+
+```{r}
+birdlife_20_data <- data_for_response('birdlife_20_perc_ratio')
+birdlife_20_result <- dredge_and_subset(birdlife_20_data)
+birdlife_20_summ <- model_summary('birdlife_20', 'species', birdlife_20_result)
+birdlife_20_summ
+```
+
+```{r}
+both_20_data <- data_for_response('both_20_perc_ratio')
+both_20_result <- dredge_and_subset(both_20_data)
+both_20_summ <- model_summary('both_20', 'species', both_20_result)
+both_20_summ
+```
+
+```{r}
+either_20_data <- data_for_response('either_20_perc_ratio')
+either_20_result <- dredge_and_subset(either_20_data)
+either_20_summ <- model_summary('either_20', 'species', either_20_result)
+either_20_summ
+```
+
+------------------------------
+Full result for 10% of species
+------------------------------
+```{r}
+all_species_results <- full_join(full_join(merlin_20_summ, birdlife_20_summ), full_join(both_20_summ, either_20_summ))
+write_csv(all_species_results, "species_analysis_result_20_perc.csv")
+```
+
+------------------------------
+Comparing the 2 percentiles
+------------------------------
+
+```{r}
+ggplot(merlin_10_data, aes(x = response)) + geom_bar(width = 0.1)
+```
+
+```{r}
+bind_sets <- function(first_percentile, second_percentile) {
+  first_percentile$percentile <- "0.25"
+  second_percentile$percentile <- "0.75"
+  rbind(first_percentile, second_percentile)
+}
+
+merlin_species_data <- bind_sets(merlin_10_data,  merlin_20_data)
+birdlife_species_data <- bind_sets(birdlife_10_data,  birdlife_20_data)
+either_species_data <- bind_sets(either_10_data,  either_20_data)
+both_species_data <- bind_sets(both_10_data,  both_20_data)
+```
+
+```{r}
+diff_set <- function(first_percentile, second_percentile) {
+  second_percentile$response_20 <- second_percentile$response
+  
+  result <- right_join(first_percentile, second_percentile[,c("niche_name", "response_20")], by = c("niche_name"))
+  result$diff <- result$response_20 - result$response
+  result$increase <- result$diff / result$response_20
+  result$increase[is.na(result$increase)] = 0
+  result$response_10 <- result$response
+  result[,c("response_10", "response_20", "diff", "increase", "foraging_niche", "trophic_niche", "is_nocturnal", "pc1", "pc2", "pc3", "pc4", "total_species")]
+}
+
+merlin_diff_data <- diff_set(merlin_10_data,  merlin_20_data)
+birdlife_diff_data <- diff_set(birdlife_10_data,  birdlife_20_data)
+either_diff_data <- diff_set(either_10_data,  either_20_data)
+both_diff_data <- diff_set(both_10_data,  both_20_data)
+
+merlin_diff_data
+```
+
+```{r}
+ggplot(merlin_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+merlin_trophic_niche_niche_anova <- aov(response~trophic_niche + percentile + Error(niche_name), data=merlin_species_data)
+summary(merlin_trophic_niche_niche_anova)
+
+merlin_trophic_niche_niche_anova_i <- aov(response~trophic_niche * percentile + Error(niche_name), data=merlin_species_data)
+summary(merlin_trophic_niche_niche_anova_i)
+```
+
+```{r}
+pairwise.wilcox.test(merlin_diff_data$increase, merlin_diff_data$trophic_niche)
+```
+```{r}
+library(multcomp)
+merlin_increase_tropic_niche_anova <-aov(increase~trophic_niche, data=merlin_diff_data)
+summary(merlin_increase_tropic_niche_anova)
+
+merlin_increase_tropic_niche_tukey <- cld(glht(merlin_increase_tropic_niche_anova, linfct=mcp(trophic_niche="Tukey")))
+
+merlin_increase_tropic_niche_tukey
+```
+
+```{r}
+plot(merlin_increase_tropic_niche_tukey)
+```
+```{r}
+with.tukey.label.as.group <- function(tukey, dataset, join_by) {
+  labels <- data.frame(tukey$mcletters$Letters)
+  labels$category <- rownames(labels)
+  colnames(labels) <- c("group", "category")
+  
+  
+  left_join(dataset, labels, by = join_by)
+}
+```
+
+```{r}
+merlin_diff_data1 <- with.tukey.label.as.group(merlin_increase_tropic_niche_tukey, merlin_diff_data, c("trophic_niche" = "category"))
+merlin_diff_data1
+```
+
+```{r}
+ggplot(merlin_diff_data1, aes(x = increase, y = trophic_niche, color = group)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+ggplot(birdlife_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+birdlife_trophic_niche_niche_anova <- aov(response~trophic_niche + percentile + Error(niche_name), data=birdlife_species_data)
+summary(birdlife_trophic_niche_niche_anova)
+
+birdlife_trophic_niche_niche_anova_i <- aov(response~trophic_niche * percentile + Error(niche_name), data=birdlife_species_data)
+summary(birdlife_trophic_niche_niche_anova_i)
+```
+
+```{r}
+birdlife_increase_tropic_niche_anova <-aov(increase~trophic_niche, data=birdlife_diff_data)
+summary(birdlife_increase_tropic_niche_anova)
+
+birdlife_increase_tropic_niche_tukey <- cld(glht(birdlife_increase_tropic_niche_anova, linfct=mcp(trophic_niche="Tukey")))
+
+birdlife_increase_tropic_niche_tukey
+```
+
+```{r}
+birdlife_diff_data1 <- with.tukey.label.as.group(birdlife_increase_tropic_niche_tukey, birdlife_diff_data, c("trophic_niche" = "category"))
+ggplot(birdlife_diff_data1, aes(x = increase, y = trophic_niche, color = group)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+ggplot(either_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+ggplot(both_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+nrow(merlin_10_data[merlin_10_data$response > 0,])
+nrow(merlin_20_data[merlin_20_data$response > 0,])
+```
+
+```{r}
+nrow(birdlife_10_data[birdlife_10_data$response > 0,])
+nrow(birdlife_20_data[birdlife_20_data$response > 0,])
+```
+
+```{r}
+nrow(either_10_data[either_10_data$response > 0,])
+nrow(either_20_data[either_20_data$response > 0,])
+```
+
+```{r}
+nrow(both_10_data[both_10_data$response > 0,])
+nrow(both_20_data[both_20_data$response > 0,])
+```
+
+```{r}
+ggplot(merlin_species_data, aes(x = response, y = foraging_niche, color = percentile)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+interaction.plot(merlin_species_data$foraging_niche, merlin_species_data$percentile, merlin_species_data$response)
+```
+
+```{r}
+merlin_foraging_niche_anova <- aov(response~foraging_niche + percentile + Error(niche_name), data=merlin_species_data)
+summary(merlin_foraging_niche_anova)
+
+merlin_foraging_niche_anova_i <- aov(response~foraging_niche * percentile + Error(niche_name), data=merlin_species_data)
+summary(merlin_foraging_niche_anova_i)
+```
+
+```{r}
+merlin_increase_foraging_niche_anova <-aov(increase~foraging_niche, data=merlin_diff_data)
+summary(merlin_increase_foraging_niche_anova)
+
+merlin_increase_foraging_niche_tukey <- cld(glht(merlin_increase_foraging_niche_anova, linfct=mcp(foraging_niche="Tukey")))
+
+merlin_increase_foraging_niche_tukey
+```
+
+```{r}
+merlin_diff_data2 <- with.tukey.label.as.group(merlin_increase_foraging_niche_tukey, merlin_diff_data, c("foraging_niche" = "category"))
+ggplot(merlin_diff_data2, aes(x = increase, y = foraging_niche, color = group)) + geom_boxplot() + theme_bw()
+```
+
+
+```{r}
+ggplot(birdlife_species_data, aes(x = response, y = foraging_niche, color = percentile)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+birdlife_foraging_niche_anova <- aov(response~foraging_niche + percentile + Error(niche_name), data=birdlife_species_data)
+summary(birdlife_foraging_niche_anova)
+
+birdlife_foraging_niche_anova_i <- aov(response~foraging_niche * percentile + Error(niche_name), data=birdlife_species_data)
+summary(birdlife_foraging_niche_anova_i)
+```
+
+```{r}
+birdlife_increase_foraging_niche_anova <-aov(increase~foraging_niche, data=birdlife_diff_data)
+summary(birdlife_increase_foraging_niche_anova)
+
+birdlife_increase_foraging_niche_tukey <- cld(glht(birdlife_increase_foraging_niche_anova, linfct=mcp(foraging_niche="Tukey")))
+
+birdlife_increase_foraging_niche_tukey
+```
+
+```{r}
+birdlife_diff_data2 <- with.tukey.label.as.group(birdlife_increase_foraging_niche_tukey, birdlife_diff_data, c("foraging_niche" = "category"))
+ggplot(birdlife_diff_data2, aes(x = increase, y = foraging_niche, color = group)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+library(ggpubr)
+```
+
+```{r}
+pc_axis_figure <- function(dataset) {
+  annotate_figure(
+ggarrange(
+  ggplot(dataset, aes(x = pc1, y = log(response), color = percentile)) + geom_point(alpha = 0.5) + geom_smooth(method = "lm", se = FALSE) + theme_bw() + rremove("ylab"),
+  ggplot(dataset, aes(x = pc2, y = log(response), color = percentile)) + geom_point(alpha = 0.5) + geom_smooth(method = "lm", se = FALSE) + theme_bw() + rremove("ylab"),
+  ggplot(dataset, aes(x = pc3, y = log(response), color = percentile)) + geom_point(alpha = 0.5) + geom_smooth(method = "lm", se = FALSE) + theme_bw() + rremove("ylab"),
+  ggplot(dataset, aes(x = pc4, y = log(response), color = percentile)) + geom_point(alpha = 0.5) + geom_smooth(method = "lm", se = FALSE) + theme_bw() + rremove("ylab"),
+  nrow = 2, ncol = 2, common.legend = T, label.x = 0),
+left = text_grob("log(response)", rot = 90))
+}
+```
+
+```{r}
+pc_axis_figure(merlin_species_data)
+```
+
+```{r}
+library(lme4)
+merlin_pc1_model = lmer(response ~ pc1 * percentile + (1|niche_name), data=merlin_species_data)
+anova(merlin_pc1_model)
+summary(merlin_pc1_model)
+```
+
+```{r}
+merlin_pc2_model = lmer(response ~ pc2 * percentile + (1|niche_name), data=merlin_species_data)
+anova(merlin_pc2_model)
+summary(merlin_pc2_model)
+```
+
+```{r}
+merlin_pc3_model = lmer(response ~ pc3 * percentile + (1|niche_name), data=merlin_species_data)
+anova(merlin_pc3_model)
+summary(merlin_pc3_model)
+```
+
+```{r}
+merlin_pc4_model = lmer(response ~ pc4 * percentile + (1|niche_name), data=merlin_species_data)
+anova(merlin_pc4_model)
+summary(merlin_pc4_model)
+```
+
+```{r}
+pc_axis_figure(birdlife_species_data)
+```
+
+```{r}
+ggplot(merlin_species_data, aes(x = response, y = is_nocturnal, color = percentile)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+merlin_nocturnal_anova <- aov(response~is_nocturnal + percentile + Error(niche_name), data=merlin_species_data)
+summary(merlin_nocturnal_anova)
+
+merlin_nocturnal_anova_i <- aov(response~is_nocturnal * percentile + Error(niche_name), data=merlin_species_data)
+summary(merlin_nocturnal_anova_i)
+```
+
+```{r}
+ggplot(birdlife_species_data, aes(x = response, y = is_nocturnal, color = percentile)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+birdlife_nocturnal_anova <- aov(response~is_nocturnal + percentile + Error(niche_name), data=birdlife_species_data)
+summary(birdlife_nocturnal_anova)
+
+birdlife_nocturnal_anova_i <- aov(response~is_nocturnal * percentile + Error(niche_name), data=birdlife_species_data)
+summary(birdlife_nocturnal_anova_i)
+```
+
+```{r}
+ggplot(merlin_species_data, aes(x = total_species, y = log(response), color = percentile)) + geom_point(alpha = 0.5) + geom_smooth(method = "lm", se = FALSE) + theme_bw()
+```
+
+```{r}
+merlin_species_count_model = lmer(response ~ total_species * percentile + (1|niche_name), data=merlin_species_data)
+anova(merlin_species_count_model)
+summary(merlin_species_count_model)
+```
+
+```{r}
+birdlife_species_count_model = lmer(response ~ total_species * percentile + (1|niche_name), data=birdlife_species_data)
+anova(birdlife_species_count_model)
+summary(birdlife_species_count_model)
+```
+
+```{r}
+merlin_species_data$present <- merlin_species_data$response > 0
+```
+
+```{r}
+ggplot(merlin_species_data, aes(x = log(total_species), y = present, color = percentile)) + geom_boxplot() + theme_bw()
+```
+
+```{r}
+merlin_present_model = lmer(present ~ log(total_species) * percentile + (1|niche_name), data=merlin_species_data)
+anova(merlin_present_model)
+summary(merlin_present_model)
+```
+
+
+
+

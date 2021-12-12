@@ -7,6 +7,7 @@ library(stringr)
 library(tidyverse)
 library(bigrquery)
 library(MuMIn)
+library(ggplot2)
 ```
 
 ```{r}
@@ -47,13 +48,17 @@ load_niche_data <- function() {
           is_noctural, 
           total_species,
           merlin_10_perc_ratio, 
-          merlin_20_perc_ratio, 
+          merlin_20_perc_ratio,
+          merlin_ever_perc_ratio,
           birdlife_10_perc_ratio, 
-          birdlife_20_perc_ratio, 
+          birdlife_20_perc_ratio,
+          birdlife_ever_perc_ratio,
           either_10_perc_ratio, 
           either_20_perc_ratio, 
+          either_ever_perc_ratio,
           both_10_perc_ratio, 
-          both_20_perc_ratio, 
+          both_20_perc_ratio,
+          both_ever_perc_ratio,
           body_morphspace.pc1.mean AS pc1, 
           body_morphspace.pc2.mean AS pc2, 
           body_morphspace.pc3.mean AS pc3, 
@@ -183,8 +188,8 @@ ggplot(merlin_10_data, aes(x = response)) + geom_bar(width = 0.1)
 
 ```{r}
 bind_sets <- function(first_percentile, second_percentile) {
-  first_percentile$percentile <- "0.25"
-  second_percentile$percentile <- "0.75"
+  first_percentile$percentile <- "Top 10%"
+  second_percentile$percentile <- "Top 20%"
   rbind(first_percentile, second_percentile)
 }
 
@@ -256,6 +261,9 @@ with.tukey.label.as.group <- function(tukey, dataset, join_by) {
 ```{r}
 merlin_diff_data1 <- with.tukey.label.as.group(merlin_increase_tropic_niche_tukey, merlin_diff_data, c("trophic_niche" = "category"))
 merlin_diff_data1
+```
+```{r}
+table(merlin_diff_data1$trophic_niche)
 ```
 
 ```{r}
@@ -332,19 +340,6 @@ merlin_foraging_niche_anova_i <- aov(response~foraging_niche * percentile + Erro
 summary(merlin_foraging_niche_anova_i)
 ```
 
-```{r}
-merlin_increase_foraging_niche_anova <-aov(increase~foraging_niche, data=merlin_diff_data)
-summary(merlin_increase_foraging_niche_anova)
-
-merlin_increase_foraging_niche_tukey <- cld(glht(merlin_increase_foraging_niche_anova, linfct=mcp(foraging_niche="Tukey")))
-
-merlin_increase_foraging_niche_tukey
-```
-
-```{r}
-merlin_diff_data2 <- with.tukey.label.as.group(merlin_increase_foraging_niche_tukey, merlin_diff_data, c("foraging_niche" = "category"))
-ggplot(merlin_diff_data2, aes(x = increase, y = foraging_niche, color = group)) + geom_boxplot() + theme_bw()
-```
 
 
 ```{r}
@@ -359,19 +354,6 @@ birdlife_foraging_niche_anova_i <- aov(response~foraging_niche * percentile + Er
 summary(birdlife_foraging_niche_anova_i)
 ```
 
-```{r}
-birdlife_increase_foraging_niche_anova <-aov(increase~foraging_niche, data=birdlife_diff_data)
-summary(birdlife_increase_foraging_niche_anova)
-
-birdlife_increase_foraging_niche_tukey <- cld(glht(birdlife_increase_foraging_niche_anova, linfct=mcp(foraging_niche="Tukey")))
-
-birdlife_increase_foraging_niche_tukey
-```
-
-```{r}
-birdlife_diff_data2 <- with.tukey.label.as.group(birdlife_increase_foraging_niche_tukey, birdlife_diff_data, c("foraging_niche" = "category"))
-ggplot(birdlife_diff_data2, aes(x = increase, y = foraging_niche, color = group)) + geom_boxplot() + theme_bw()
-```
 
 ```{r}
 library(ggpubr)
@@ -389,6 +371,7 @@ ggarrange(
 left = text_grob("log(response)", rot = 90))
 }
 ```
+
 
 ```{r}
 pc_axis_figure(merlin_species_data)
@@ -477,6 +460,129 @@ anova(merlin_present_model)
 summary(merlin_present_model)
 ```
 
+```{r}
+assign_niche_appearance_factor <- function(dataset) {
+  dataset$niche_appearance = '> 20%'
+  dataset$niche_appearance[dataset$response_20 > 0] = '10% - 20%'
+  dataset$niche_appearance[dataset$response_10 > 0] = '< 10%'
+  
+  dataset$niche_appearance <- factor(dataset$niche_appearance, levels = c("< 10%", "10% - 20%", "> 20%"))
+  dataset
+}
+```
+
+```{r}
+merlin_diff_data <- assign_niche_appearance_factor(merlin_diff_data)
+```
 
 
+```{r}
+ggplot(merlin_diff_data, aes(fill=niche_appearance, y=trophic_niche)) + 
+    geom_bar()
+```
 
+```{r}
+load_ever_data <- function(pool) {
+  response_name <- paste(pool, 'ever', 'perc', 'ratio', sep = '_')
+  dataset <- data_for_response(response_name)
+  dataset$present <- 'Yes'
+  dataset$present[dataset$response == 0] <- 'No'
+  dataset$present <- factor(dataset$present, levels = c("Yes", "No"))
+  dataset
+}
+```
+
+```{r}
+merlin_ever_data <- load_ever_data('merlin')
+merlin_ever_data
+```
+
+```{r}
+ggplot(merlin_ever_data, aes(fill=present, y=trophic_niche)) + 
+    geom_bar()
+```
+```{r}
+birdlife_diff_data <- assign_niche_appearance_factor(birdlife_diff_data)
+```
+
+
+```{r}
+ggplot(birdlife_diff_data, aes(fill=niche_appearance, y=trophic_niche)) + 
+    geom_bar()
+```
+
+
+```{r}
+birdlife_ever_data <- load_ever_data('birdlife')
+```
+
+```{r}
+ggplot(merlin_ever_data, aes(fill=present, y=trophic_niche)) + 
+    geom_bar()
+```
+```{r}
+ggplot(merlin_ever_data, aes(color = present, x = pc1, y = trophic_niche)) + 
+    geom_boxplot()
+```
+```{r}
+ggplot(merlin_ever_data, aes(color = present, x = pc2, y = trophic_niche)) + 
+    geom_boxplot()
+```
+```{r}
+ggplot(merlin_ever_data, aes(color = present, x = pc3, y = trophic_niche)) + 
+    geom_boxplot()
+```
+```{r}
+ggplot(merlin_ever_data, aes(color = present, x = pc4, y = trophic_niche)) + 
+    geom_boxplot()
+```
+
+
+```{r}
+theme <-  theme_bw() + theme(legend.position="bottom", legend.title=element_text(size=9), legend.text=element_text(size=8), legend.key.size = unit(0.5,"line"))
+guide_ever <- guides(fill=guide_legend(title="Present in any city?"))
+guide_percentile <- guides(fill=guide_legend(title="Top X% of ranked species", nrow = 3))
+
+species_plot1 <- annotate_figure(
+  ggarrange(
+    ggplot(merlin_ever_data, aes(fill=present, y=trophic_niche)) + geom_bar() + theme + guide_ever + rremove("xlab") + rremove("ylab") + labs(title = "Merlin"),
+    ggplot(birdlife_ever_data, aes(fill=present, y=trophic_niche)) + geom_bar() + theme + guide_ever + rremove("xlab") + rremove("ylab") + labs(title = "Birdlife"),
+    ggplot(merlin_diff_data, aes(fill=niche_appearance, y=trophic_niche)) +  geom_bar()+ theme + guide_percentile + rremove("xlab") + rremove("ylab"),
+    ggplot(birdlife_diff_data, aes(fill=niche_appearance, y=trophic_niche)) + geom_bar() + theme + guide_percentile + rremove("xlab") + rremove("ylab"),
+    nrow = 2, ncol = 2, common.legend = F, label.x = 0, labels = c("a)", "", "b)", "")),
+left = text_grob("Trophic Niche", rot = 90),
+bottom = text_grob("Niche Count"))
+
+species_plot1
+```
+a) Niches recorded present in at least one city.
+b) Given species ranked by percentage of cities populated given they are present in regional pool; This shows niches present with the top 10% of the most urbanised species (red), the top 20% of the most urbanised species (red + green), and then the remaining niches (blue). This approximates to the niches that would be present in the bottom 25% performing hotspots (red), the bottom 75% performing hotspots (red + green), and then the niches at the highest performing hotspots or niches that are never present (blue).
+
+```{r}
+guide_percentile_2 <- guides(color=guide_legend(title="Percentile"))
+guide_increase <- guides(color=guide_legend(title="Tukey response group", nrow = 2))
+
+species_plot2 <- annotate_figure(
+  ggarrange(
+    ggplot(merlin_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme  + guide_percentile_2 + xlab("Fullness") + rremove("ylab") + labs(title = "Merlin"),
+    ggplot(birdlife_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme + guide_percentile_2 + xlab("Fullness") + rremove("ylab") + labs(title = "Birdlife"),
+    ggplot(merlin_diff_data1, aes(x = increase, y = trophic_niche, color = group)) + geom_boxplot() + theme + guide_increase + xlab("Increase in fullness") + rremove("ylab"),
+    ggplot(birdlife_diff_data1, aes(x = increase, y = trophic_niche, color = group)) + geom_boxplot() + theme + guide_increase + xlab("Increase in fullness") + rremove("ylab"), 
+    nrow = 2, ncol = 2, common.legend = F, label.x = 0, labels = c("c)", "", "d)", "")),
+left = text_grob("Trophic Niche", rot = 90))
+
+species_plot2
+```
+c) The redundancy/fullness of the niches that are present in cities with 10% of the most urbanised species, and the redundancy/fullness of the niches that are present in cities with 20% of the most urbanised species.
+d) The percentage increase in redundancy/fullness of niches between the top 10% of most urbanised species and the top 20% of most urbanised species, grouped using Tukey based on an anova of the percentage increase given the tropic niche. This shows the amount of redundancy that is increased from the bottom 25% performing hotspots (hotspots with 10% of regional pool) and the bottom 75% of performing hotspots (hotspots with 20% of regional pool).
+
+
+```{r}
+jpeg("species_plot1.jpg", width = 800, height = 600)
+species_plot1
+dev.off()
+
+jpeg("species_plot2.jpg", width = 800, height = 600)
+species_plot2
+dev.off()
+```

@@ -522,21 +522,40 @@ ggplot(merlin_ever_data, aes(fill=present, y=trophic_niche)) +
 ```
 ```{r}
 ggplot(merlin_ever_data, aes(color = present, x = pc1, y = trophic_niche)) + 
-    geom_boxplot()
+    geom_violin() + geom_jitter(aes(group=present, size = total_species), position=position_jitterdodge()) + theme_bw() +
+    theme(legend.position="bottom", legend.title=element_text(size=9), legend.text=element_text(size=8), legend.key.size = unit(1,"line")) +
+    guides(color=guide_legend(title="Present in any city?"), size=guide_legend(title="Niche size")) +
+    ylab("Trophic Niche") + xlab("PC1: Body size") + labs(title = "Merlin Regional Pool")
+ggsave("species_analysis_pc1_merlin.jpg")
 ```
 ```{r}
+ggplot(merlin_diff_data, aes(color = niche_appearance, x = pc1, y = trophic_niche)) + 
+    geom_violin()
+```
+
+
+```{r}
 ggplot(merlin_ever_data, aes(color = present, x = pc2, y = trophic_niche)) + 
-    geom_boxplot()
+    geom_violin()
 ```
 ```{r}
 ggplot(merlin_ever_data, aes(color = present, x = pc3, y = trophic_niche)) + 
-    geom_boxplot()
+    geom_violin()
 ```
 ```{r}
 ggplot(merlin_ever_data, aes(color = present, x = pc4, y = trophic_niche)) + 
-    geom_boxplot()
+    geom_violin()
 ```
 
+
+```{r}
+ggplot(birdlife_ever_data, aes(color = present, x = pc1, y = trophic_niche)) + 
+    geom_violin() + geom_jitter(aes(group=present, size = total_species), position=position_jitterdodge()) + theme_bw() +
+    theme(legend.position="bottom", legend.title=element_text(size=9), legend.text=element_text(size=8), legend.key.size = unit(1,"line")) +
+    guides(color=guide_legend(title="Present in any city?"), size=guide_legend(title="Niche size")) +
+    ylab("Trophic Niche") + xlab("PC1: Body size") + labs(title = "Birdlife Regional Pool")
+ggsave("species_analysis_pc1_birdlife.jpg")
+```
 
 ```{r}
 theme <-  theme_bw() + theme(legend.position="bottom", legend.title=element_text(size=9), legend.text=element_text(size=8), legend.key.size = unit(0.5,"line"))

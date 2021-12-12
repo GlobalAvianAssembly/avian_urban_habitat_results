@@ -1,0 +1,138 @@
+ranked_performance,merlin_base_response,birdlife_base_response,merlin_model_pool_size_residuals,birdlife_model_pool_size_residuals,merlin_model_selected_residuals,birdlife_model_selected_residuals,merlin_model_all_residuals,birdlife_model_all_residuals,merlin_model_preferred_residuals,birdlife_model_preferred_residuals
+1,Casablanca,Birmingham,Casablanca,Birmingham,Casablanca,Birmingham,Casablanca,Birmingham,Casablanca,Birmingham
+2,Fukuoka,Hyderabad,Curitiba,Hyderabad,Fukuoka,Hyderabad,Fukuoka,Hyderabad,Curitiba,Hyderabad
+3,Colombo,Lima,Colombo,Nagpur,Colombo,Colombo,Colombo,Colombo,Belo Horizonte,Colombo
+4,Dakar,Nagpur,Belo Horizonte,Buenos Aires,Curitiba,Lima,Curitiba,Belo Horizonte,Colombo,London
+5,Surat,Buenos Aires,Surat,Colombo,Surat,Buenos Aires,Belo Horizonte,Nagpur,Fukuoka,Buenos Aires
+6,Curitiba,Colombo,Fukuoka,Lima,Dakar,Belo Horizonte,Fuzhou,Curitiba,Dhaka,Lima
+7,Dhaka,London,Mexico City,London,Dhaka,Nagpur,Dhaka,Barcelona,Mexico City,Nagpur
+8,Puebla,Dortmund,Dakar,Puebla,Nagpur,Casablanca,Nagpur,Casablanca,Fuzhou,Curitiba
+9,Fuzhou,Puebla,Puebla,Chennai,Belo Horizonte,Curitiba,Dakar,Johannesburg,Nagpur,Belo Horizonte
+10,Jakarta,Chennai,Dhaka,Curitiba,Mexico City,Dortmund,Mexico City,Dhaka,Dakar,Dortmund
+11,Belo Horizonte,Casablanca,Nagpur,Dortmund,Birmingham,Barcelona,Xi'an,Fuzhou,Birmingham,Casablanca
+12,Nagpur,Barcelona,Fuzhou,Belo Horizonte,Fuzhou,London,Birmingham,Guadalajara,Hyderabad,Bangkok
+13,Birmingham,Mexico City,Hyderabad,Bangkok,Hyderabad,Dakar,Hyderabad,Chennai,Jakarta,Barcelona
+14,Patna,Bangkok,Jakarta,Mexico City,Puebla,Chennai,Durban,Buenos Aires,Kathmandu,Dhaka
+15,Mexico City,Paris,Buenos Aires,Dhaka,Jakarta,Dhaka,Jakarta,Xi'an,Patna,Mexico City
+16,Khartoum,Dhaka,Birmingham,Casablanca,Jaipur,Bangkok,Jaipur,Puebla,Los Angeles,Dakar
+17,Santo Domingo,Guadalajara,Jaipur,Barcelona,Accra,Kathmandu,Kathmandu,Dortmund,Medellín,Chennai
+18,Fortaleza,Manchester,Fortaleza,Guadalajara,Dortmund,Mexico City,Surat,Dakar,San Jose,Paris
+19,Lima,Chicago,Accra,Dakar,Xi'an,Guayaquil,Melbourne,Kathmandu,Jaipur,Kolkata
+20,Buenos Aires,Berlin,Guadalajara,Surat,Buenos Aires,Johannesburg,Puebla,Lima,Xi'an,Guayaquil
+21,Accra,Jaipur,Patna,Guayaquil,Melbourne,Durban,Cali,Dubai,Dortmund,San Jose
+22,Hyderabad,Surat,Recife,Kolkata,Cali,Kolkata,Medellín,Kolkata,Fortaleza,Cape Town
+23,Dortmund,Antananarivo,Medellín,Johannesburg,Kathmandu,Cape Town,Guadalajara,London,Buenos Aires,Puebla
+24,Jaipur,Guayaquil,Lima,Jaipur,Nanjing,Guadalajara,Patna,Bangkok,Guadalajara,Durban
+25,Recife,Dubai,Maracaibo,Paris,Medellín,Puebla,Dortmund,Mexico City,Puebla,Berlin
+26,Xi'an,Dakar,Dortmund,Bengaluru,Patna,Paris,Nanjing,Xiamen,Surat,Kathmandu
+27,Guadalajara,Vancouver,Monterrey,Chicago,Guadalajara,Maracaibo,Johannesburg,Durban,Durban,Kampala
+28,Osaka [Kyoto],Bengaluru,Khartoum,Fortaleza,Durban,San Jose,Fortaleza,Athens,Bangkok,Miami
+29,Berlin,Kolkata,Durban,Maracaibo,Fortaleza,Fuzhou,Sydney,Surat,Toronto,Maracaibo
+30,Maracaibo,Belo Horizonte,Santo Domingo,Durban,Sydney,Miami,Osaka [Kyoto],Fukuoka,Bogota,Fuzhou
+31,Nanjing,San Jose,Los Angeles,San Jose,Berlin,Sydney,Accra,Washington D.C.,Nanjing,Manchester
+32,Durban,Curitiba,San Jose,Cape Town,Osaka [Kyoto],Xi'an,Buenos Aires,Kuwait City,Tijuana,Guadalajara
+33,Agra,Cape Town,Kathmandu,Berlin,London,Mumbai,Los Angeles,Guayaquil,Melbourne,Nairobi
+34,Yangon,Fortaleza,Guatemala City,Vancouver,Bangkok,Dubai,Agra,Boston,Monterrey,Johannesburg
+35,Melbourne,Santo Domingo,Xi'an,Fuzhou,Khartoum,Kampala,Monterrey,Agra,Washington D.C.,Mumbai
+36,London,Johannesburg,Chicago,Dubai,Monterrey,Fortaleza,Bogota,San Jose,Accra,Agra
+37,Varanasi,Seattle,Cali,Recife,Los Angeles,Melbourne,Nairobi,Phoenix,Santo Domingo,Delhi [New Delhi]
+38,Tehran,Madrid,Phoenix,Manchester,Recife,Manchester,Bangkok,Los Angeles,Maracaibo,Toronto
+39,Quezon City [Manila],Athens,Bangkok,Kampala,Bogota,Berlin,Kolkata,Kunming,Agra,Melbourne
+40,Paris,Toronto,Philadelphia,Agra,Tehran,Fukuoka,Cairo,Toronto,Lima,Surat
+41,Chennai,Maracaibo,Denver,Mumbai,San Jose,Ankara,Khartoum,Guangzhou,Kolkata,Chandigarh
+42,Guangzhou,Ankara,Toronto,Delhi [New Delhi],Nairobi,Nairobi,Phoenix,Tel Aviv,Cali,Madrid
+43,Salvador,Makassar,Agra,Chandigarh,Chennai,Accra,San Jose,Nagoya,Berlin,Dubai
+44,Philadelphia,Denver,Bogota,Guatemala City,Ankara,Washington D.C.,London,Miami,Phoenix,Chicago
+45,Toronto,Agra,Nanjing,Toronto,Kolkata,Toronto,Berlin,New York,New York,Ankara
+46,Chicago,Fukuoka,Washington D.C.,Seattle,Johannesburg,Los Angeles,Guangzhou,Sydney,Detroit,Patna
+47,Bangkok,Fuzhou,Chennai,Santo Domingo,Kunming,Makassar,Kunming,Ankara,Guayaquil,Jaipur
+48,Nagoya,Durban,Melbourne,Kathmandu,Agra,Athens,Barcelona,Vancouver,London,Accra
+49,Guatemala City,Kuwait City,Kolkata,Nairobi,Barcelona,Medellín,Tehran,Mumbai,Osaka [Kyoto],Los Angeles
+50,Ho Chi Minh City,Recife,Dallas,Patna,Chicago,Surat,Maputo,Jaipur,Johannesburg,Vancouver
+51,Phoenix,Xi'an,Tijuana,Vadodara,Maracaibo,Santo Domingo,Tel Aviv,Osaka [Kyoto],Quito,Washington D.C.
+52,Beirut,Kyiv,Berlin,Antananarivo,Phoenix,Salvador,Santo Domingo,Khartoum,Yangon,Xi'an
+53,Vadodara,Delhi [New Delhi],Osaka [Kyoto],Accra,Guatemala City,Maputo,Quito,Kampala,Sydney,Athens
+54,Washington D.C.,Khartoum,New York,Melbourne,Denver,Vancouver,Chennai,Medellín,Nairobi,Yangon
+55,Monterrey,Patna,Guayaquil,Madrid,Paris,Bengaluru,Ankara,Makassar,Cairo,Bengaluru
+56,San Jose,Washington D.C.,Vancouver,Khartoum,Philadelphia,Xiamen,Tijuana,Denver,Ankara,Santo Domingo
+57,Indore,Mumbai,Seattle,Yangon,Quito,Antananarivo,Xiamen,Seoul,Boston,Maputo
+58,Seattle,Melbourne,Johannesburg,Makassar,Tel Aviv,Boston,Washington D.C.,Maputo,Chennai,Fukuoka
+59,Kanpur,Chandigarh,London,Denver,Toronto,Hong Kong,Beirut,Izmir,Seattle,Sydney
+60,Moscow,Montreal,Yangon,Ankara,Chandigarh,Saint Petersburg,Denver,Fortaleza,Varanasi,Khartoum
+61,Guayaquil,Guatemala City,Detroit,Athens,Lima,Khartoum,Vancouver,Manaus,Khartoum,Saint Petersburg
+62,Vancouver,Phoenix,Guangzhou,Maputo,Beirut,Patna,Hangzhou,São Paulo,Saint Petersburg,Makassar
+63,Kolkata,Philadelphia,Caracas,Addis Ababa,Washington D.C.,Quezon City [Manila],Toronto,Saint Petersburg,Guangzhou,Fortaleza
+64,Dallas,Los Angeles,Vadodara,Washington D.C.,Tijuana,Agra,Saint Petersburg,Delhi [New Delhi],Montreal,Kyiv
+65,Ankara,Nanjing,Boston,Xi'an,Izmir,Tel Aviv,Hong Kong,Chicago,Vancouver,Xiamen
+66,Cairo,Miami,Varanasi,Los Angeles,Yangon,New York,Izmir,Berlin,Quezon City [Manila],Antananarivo
+67,Detroit,Vadodara,Tehran,Indore,Hangzhou,Tijuana,Seattle,Hong Kong,Chicago,Medellín
+68,Denver,Izmir,Quezon City [Manila],Xiamen,Dallas,Manaus,Maracaibo,Tijuana,Barcelona,Manaus
+69,Izmir,Yangon,Sydney,Fukuoka,Vadodara,Osaka [Kyoto],Guayaquil,Montreal,Denver,Nanjing
+70,Los Angeles,Varanasi,Quito,Salvador,New York,Seattle,New York,Patna,Miami,Salvador
+71,Sydney,Indore,Nairobi,Medellín,Dubai,Coimbatore,Moscow,Rio de Janeiro,São Paulo,Montreal
+72,Prayagraj,Osaka [Kyoto],Indore,Pune,Moscow,Yangon,Varanasi,Santo Domingo,Paris,Varanasi
+73,Minsk,Detroit,Ho Chi Minh City,Philadelphia,Guangzhou,Nagoya,Boston,Nanjing,Caracas,Seattle
+74,Kyiv,Tel Aviv,Chandigarh,Phoenix,Santo Domingo,Jakarta,Yangon,Seattle,Mumbai,Jakarta
+75,Makassar,Naples,Montreal,Varanasi,Bengaluru,São Paulo,Philadelphia,Paris,Beirut,Tel Aviv
+76,Montreal,Boston,Houston,Miami,Kyiv,Chicago,Chandigarh,Cairo,Xiamen,Coimbatore
+77,Naples,Prayagraj,Las Vegas,Kyiv,Kampala,Recife,Dallas,Kaohsiung,Delhi [New Delhi],Tijuana
+78,Rome,Minsk,Ankara,Prayagraj,Vancouver,Delhi [New Delhi],Montreal,Nairobi,Tel Aviv,Prayagraj
+79,New York,Nagoya,Bengaluru,Sydney,Caracas,Caracas,Athens,Varanasi,Kunming,New York
+80,Barcelona,Santiago,São Paulo,Nanjing,Xiamen,Nanjing,Chicago,Madrid,Addis Ababa,Detroit
+81,Athens,Sydney,Xiamen,Montreal,Mumbai,Guangzhou,Dubai,Bengaluru,Izmir,São Paulo
+82,Johannesburg,Tijuana,Paris,Coimbatore,Varanasi,Kuwait City,Nagoya,Melbourne,Philadelphia,Izmir
+83,Amman,New York,Barcelona,Jakarta,Seattle,Jaipur,Seoul,Hangzhou,Maputo,Recife
+84,Dubai,Salvador,Delhi [New Delhi],Quezon City [Manila],Quezon City [Manila],Kaohsiung,Lima,Salvador,Chandigarh,Singapore
+85,Maputo,Xiamen,Singapore,Kuwait City,Indore,Denver,Vadodara,Amman,Tehran,Quezon City [Manila]
+86,Port-au-Prince,Pune,Mumbai,Manaus,Addis Ababa,Phoenix,Caracas,Accra,Moscow,Boston
+87,Boston,Beirut,Addis Ababa,Kanpur,Delhi [New Delhi],Chandigarh,Detroit,Vadodara,Vadodara,Kanpur
+88,Tijuana,Accra,Kunming,Singapore,Singapore,Izmir,Miami,Cape Town,Dallas,Kuala Lumpur
+89,Las Vegas,Moscow,Maputo,Tel Aviv,Seoul,Rio de Janeiro,Quezon City [Manila],Las Vegas,Las Vegas,Phoenix
+90,Hangzhou,Quezon City [Manila],Beirut,Detroit,Athens,Madrid,Kyiv,Manchester,Hangzhou,Caracas
+91,Kathmandu,Port-au-Prince,Kampala,New York,Ho Chi Minh City,Kyiv,Singapore,Moscow,Kanpur,Bogota
+92,Houston,Kanpur,Salvador,Kuala Lumpur,Detroit,Kuala Lumpur,Beijing,Chandigarh,Kyiv,Osaka [Kyoto]
+93,Xiamen,Maputo,Kanpur,Tijuana,Guayaquil,Varanasi,Las Vegas,Kuala Lumpur,Indore,Guangzhou
+94,Seoul,Milan,Izmir,Caracas,Maputo,Detroit,Kaohsiung,Hanoi,Athens,Addis Ababa
+95,Milan,Kaohsiung,Pune,Izmir,Nagoya,Hanoi,Mumbai,Yangon,Ho Chi Minh City,Denver
+96,Bengaluru,Monterrey,Moscow,Ahmedabad,Boston,Seoul,Minsk,Jakarta,Bengaluru,Nagoya
+97,Chengdu,Medellín,Tel Aviv,Boston,Minsk,Bogota,Kuala Lumpur,Prayagraj,Seoul,Vadodara
+98,Lucknow,Coimbatore,Hangzhou,Ho Chi Minh City,São Paulo,Naples,São Paulo,Detroit,Manaus,Minsk
+99,Addis Ababa,Dallas,Dubai,Cali,Kuala Lumpur,Cairo,Ho Chi Minh City,Beijing,Salvador,Rio de Janeiro
+100,Tel Aviv,Kathmandu,Kuala Lumpur,Guangzhou,Pune,Milan,Indore,Naples,Nagoya,Naples
+101,Singapore,Ahmedabad,Kyiv,Bogota,Beijing,Beirut,Delhi [New Delhi],Monterrey,Minsk,Cairo
+102,Delhi [New Delhi],Amman,Manaus,São Paulo,Madrid,Montreal,Rome,Philadelphia,Rio de Janeiro,Kuwait City
+103,Madrid,Kampala,Rio de Janeiro,Osaka [Kyoto],Chengdu,Vadodara,Manaus,Kyiv,Chengdu,Moscow
+104,Pune,Las Vegas,Nagoya,Monterrey,Houston,Amman,Addis Ababa,New Taipei [Taipei],Coimbatore,Philadelphia
+105,Kunming,Addis Ababa,Athens,Kaohsiung,Las Vegas,Kochi,Naples,Coimbatore,Prayagraj,Hanoi
+106,Santiago,Jakarta,Prayagraj,Nagoya,Montreal,Hangzhou,Paris,Tianjin,Singapore,Kaohsiung
+107,Cape Town,Tehran,Minsk,Dallas,Cairo,Prayagraj,Madrid,Recife,Recife,Beirut
+108,Medellín,Ho Chi Minh City,Seoul,Minsk,Naples,Philadelphia,Bengaluru,Maracaibo,Beijing,Monterrey
+109,Saint Petersburg,Singapore,Coimbatore,Hanoi,Kanpur,Monterrey,Kanpur,Beirut,Madrid,Guatemala City
+110,Kaohsiung,Cali,Lucknow,Naples,Coimbatore,New Taipei [Taipei],Pune,Pune,Kuala Lumpur,Lucknow
+111,Chandigarh,Seoul,Kaohsiung,Moscow,Rome,Guatemala City,Chengdu,Dallas,Guatemala City,Milan
+112,Tokyo,New Taipei [Taipei],Chengdu,Lucknow,Manaus,Pune,Kochi,Quezon City [Manila],Pune,Indore
+113,Kampala,Guangzhou,Cairo,Rio de Janeiro,Milan,Santiago,Cape Town,Bogota,Lucknow,Pune
+114,Tianjin,Istanbul,Madrid,Port-au-Prince,Tianjin,Istanbul,Coimbatore,Kanpur,Kaohsiung,Amman
+115,Caracas,Lucknow,Naples,Beirut,Kuwait City,Moscow,Rio de Janeiro,Milan,Dubai,Kunming
+116,Hanoi,Nairobi,Kochi,Milan,Prayagraj,Singapore,Guatemala City,Tehran,Naples,Santiago
+117,Mumbai,Tianjin,Ahmedabad,New Taipei [Taipei],Tokyo,Addis Ababa,Prayagraj,Caracas,Cape Town,Seoul
+118,Ahmedabad,Hanoi,Rome,Kunming,Kaohsiung,Kunming,Tianjin,Houston,Rome,New Taipei [Taipei]
+119,Rio de Janeiro,Rome,Cape Town,Las Vegas,Lucknow,Cali,Kuwait City,Antananarivo,Kochi,Kochi
+120,Manchester,Kuala Lumpur,Miami,Amman,Kochi,Kanpur,Hanoi,Singapore,Houston,Tianjin
+121,Kochi,Bogota,Hanoi,Kochi,Amman,Ho Chi Minh City,Recife,Indore,Hanoi,Hangzhou
+122,Antananarivo,Cairo,Beijing,Santiago,Rio de Janeiro,Tianjin,Milan,Guatemala City,Tianjin,Istanbul
+123,Coimbatore,Saint Petersburg,Milan,Tehran,Ahmedabad,Dallas,Salvador,Cali,Milan,Ho Chi Minh City
+124,Miami,Kochi,Amman,Seoul,Istanbul,Las Vegas,Amman,Rome,Amman,Cali
+125,Nairobi,Kunming,Tianjin,Tianjin,Cape Town,Indore,Kampala,Kochi,Kampala,Ahmedabad
+126,Beijing,Beijing,New Taipei [Taipei],Istanbul,Salvador,Beijing,Lucknow,Lucknow,Tokyo,Dallas
+127,Istanbul,Hangzhou,Tokyo,Hangzhou,Hanoi,Chengdu,New Taipei [Taipei],Minsk,Hong Kong,Las Vegas
+128,Bogota,Chengdu,Hong Kong,Cairo,New Taipei [Taipei],Quito,Houston,Ahmedabad,Ahmedabad,Chengdu
+129,Kuala Lumpur,Tokyo,Port-au-Prince,Quito,Hong Kong,Port-au-Prince,Tokyo,Istanbul,Istanbul,Tehran
+130,São Paulo,Quito,Kuwait City,Chengdu,Manchester,Minsk,Makassar,Quito,Santiago,Beijing
+131,Kuwait City,Hong Kong,Istanbul,Hong Kong,Makassar,Lucknow,Ahmedabad,Ho Chi Minh City,New Taipei [Taipei],Rome
+132,Manaus,Manaus,Makassar,Beijing,Saint Petersburg,Ahmedabad,Istanbul,Addis Ababa,Manchester,Quito
+133,New Taipei [Taipei],Caracas,Santiago,Rome,Miami,Rome,Manchester,Port-au-Prince,Makassar,Hong Kong
+134,Hong Kong,São Paulo,Manchester,Saint Petersburg,Port-au-Prince,Tokyo,Port-au-Prince,Chengdu,Kuwait City,Port-au-Prince
+135,Cali,Rio de Janeiro,Saint Petersburg,Tokyo,Santiago,Tehran,Santiago,Tokyo,Port-au-Prince,Tokyo
+136,Quito,Houston,Antananarivo,Houston,Taichung,Taichung,Antananarivo,Santiago,Antananarivo,Houston
+137,Taichung,Taichung,Taichung,Taichung,Antananarivo,Houston,Taichung,Taichung,Taichung,Taichung

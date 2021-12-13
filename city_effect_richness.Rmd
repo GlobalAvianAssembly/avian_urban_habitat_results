@@ -524,3 +524,134 @@ plot_residuals
 dev.off()
 ```
 
+```{r}
+merlin_city_data_200 <- merlin_city_data[merlin_city_data$merlin_pool_size > 190 & merlin_city_data$merlin_pool_size < 210,]
+merlin_city_data_200[order(merlin_city_data_200$response), c("name", "response")]
+```
+
+
+```{r}
+birdlife_city_data_200 <- birdlife_city_data[birdlife_city_data$birdlife_pool_size > 190 & birdlife_city_data$birdlife_pool_size < 210,]
+birdlife_city_data_200[order(birdlife_city_data_200$response), c("name", "response")]
+```
+
+```{r}
+birdlife_city_data_300 <- birdlife_city_data[birdlife_city_data$birdlife_pool_size > 290 & birdlife_city_data$birdlife_pool_size < 310,]
+birdlife_city_data_300[order(birdlife_city_data_300$response), c("name", "response")]
+```
+```{r}
+merlin_city_data_300 <- merlin_city_data[merlin_city_data$merlin_pool_size > 290 & merlin_city_data$merlin_pool_size < 310,]
+merlin_city_data_300[order(merlin_city_data_300$response), c("name", "response")]
+```
+
+```{r}
+merlin_city_data_200$label = "200 (Merlin)"
+merlin_city_data_200$pool_size = merlin_city_data_200$merlin_pool_size
+merlin_city_data_300$label = "300 (Merlin)"
+merlin_city_data_300$pool_size = merlin_city_data_300$merlin_pool_size
+birdlife_city_data_200$label = "200 (Birdlife)"
+birdlife_city_data_200$pool_size = birdlife_city_data_200$birdlife_pool_size
+birdlife_city_data_300$label = "300 (Birdlife)"
+birdlife_city_data_300$pool_size = birdlife_city_data_300$birdlife_pool_size
+city_data_subset <- rbind(merlin_city_data_200[,c("name", "response", "pool_size", "label", "biome_name")], merlin_city_data_300[,c("name", "response", "pool_size", "label", "biome_name")], birdlife_city_data_200[,c("name", "response", "pool_size", "label", "biome_name")], birdlife_city_data_300[,c("name", "response", "pool_size", "label", "biome_name")])
+
+
+ggplot(city_data_subset, aes(x = label, y = response, color = label)) + 
+  geom_label_repel(aes(label = name), size = 3) + geom_point() +
+  theme_bw() + theme(legend.position = "none") + xlab("Pool size (Pool)") + ylab("Random Effect Response")
+```
+```{r}
+ggplot(city_data_subset, aes(x = label, y = response, color = label)) + 
+  geom_label_repel(aes(label = biome_name), size = 3) + geom_point() +
+  theme_bw() + theme(legend.position = "none") + xlab("Pool size (Pool)") + ylab("Random Effect Response")
+```
+```{r}
+table(city_data$biome_name)
+```
+
+```{r}
+summary(glm(response ~ relevel(biome_name, ref = "Temperate Broadleaf & Mixed Forests") + merlin_pool_size, merlin_city_data, family = "gaussian"))
+```
+
+```{r}
+summary(glm(response ~ relevel(biome_name, ref = "Temperate Broadleaf & Mixed Forests") + birdlife_pool_size, birdlife_city_data, family = "gaussian"))
+```
+
+```{r}
+unique(city_data$biome_name)
+```
+
+```{r}
+split_biome <- function(dataset) {
+  dataset$biome_vegetation <- 'Forests'
+  dataset$biome_vegetation[dataset$biome_name == 'Tropical & Subtropical Grasslands, Savannas & Shrublands'] <- 'Grassland & Shrublands'
+  dataset$biome_vegetation[dataset$biome_name == 'Montane Grasslands & Shrublands'] <- 'Grassland & Shrublands'
+  dataset$biome_vegetation[dataset$biome_name == 'Temperate Grasslands, Savannas & Shrublands'] <- 'Grassland & Shrublands'
+  dataset$biome_vegetation[dataset$biome_name == 'Flooded Grasslands & Savannas'] <- 'Grassland & Shrublands'
+  dataset$biome_vegetation[dataset$biome_name == 'Deserts & Xeric Shrublands'] <- 'Grassland & Shrublands'
+  
+  dataset$biome_vegetation <- as.factor(dataset$biome_vegetation)
+  
+  dataset$biome_location <- 'Tropical & Subtropical'
+  dataset$biome_location[dataset$biome_name == 'Montane Grasslands & Shrublands'] <- 'Montane'
+  dataset$biome_location[dataset$biome_name == 'Mediterranean Forests, Woodlands & Scrub'] <- 'Mediterranean'
+  dataset$biome_location[dataset$biome_name == 'Temperate Broadleaf & Mixed Forests'] <- 'Temperate'
+  dataset$biome_location[dataset$biome_name == 'Temperate Grasslands, Savannas & Shrublands'] <- 'Temperate'
+  dataset$biome_location[dataset$biome_name == 'Temperate Conifer Forests'] <- 'Temperate'
+  dataset$biome_location[dataset$biome_name == 'Deserts & Xeric Shrublands'] <- 'Desert'
+  dataset$biome_location[dataset$biome_name == 'Boreal Forests/Taiga'] <- 'Boreal'
+  dataset$biome_location[dataset$biome_name == 'Flooded Grasslands & Savannas'] <- 'Global'
+  
+  dataset$biome_location <- as.factor(dataset$biome_location)
+  
+  dataset$biome_climate <- 'Normal'
+  dataset$biome_climate[dataset$biome_name == 'Tropical & Subtropical Moist Broadleaf Forests'] <- 'Wet'
+  dataset$biome_climate[dataset$biome_name == 'Flooded Grasslands & Savannas'] <- 'Wet'
+  dataset$biome_climate[dataset$biome_name == 'Tropical & Subtropical Dry Broadleaf Forests'] <- 'Dry'
+  dataset$biome_climate[dataset$biome_name == 'Deserts & Xeric Shrublands'] <- 'Dry'
+  
+  dataset$biome_climate <- as.factor(dataset$biome_climate)
+  
+  dataset
+}
+```
+
+
+```{r}
+tmp <- split_biome(merlin_city_data)
+summary(glm(response ~ biome_vegetation + biome_location + biome_climate + merlin_pool_size, tmp, family = "gaussian"))
+```
+
+```{r}
+summary(glm(response ~ biome_name + rainfall_monthly_min * merlin_pool_size, tmp, family = "gaussian"))
+```
+
+```{r}
+library(boot)
+```
+
+
+```{r}
+rsq <- function(formula, data, indices) {
+  d <- data[indices,] # allows boot to select sample
+  fit <- glm(formula, data=d)
+  with(summary(fit), 1 - deviance/null.deviance)
+} 
+
+results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + merlin_pool_size)
+boot.ci(results, type="bca")
+results
+```
+
+```{r}
+results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + rainfall_monthly_min * merlin_pool_size)
+boot.ci(results, type="bca")
+results
+```
+
+```{r}
+results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ merlin_pool_size)
+boot.ci(results, type="bca")
+results
+```
+

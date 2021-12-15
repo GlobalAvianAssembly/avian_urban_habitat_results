@@ -397,6 +397,12 @@ Response is also lower in wet biomes and areas of the world, this is seen throug
 
 Finally cities with a higher proportion of green public space are less likely to have a low response.
 
+
+
+----------------------------------------------------------------------------------------------------
+But can we order cities based on how good they are for biodiversity?
+----------------------------------------------------------------------------------------------------
+
 ```{r}
 merlin_city_data_2 <- fetch_city_data_for('merlin', T)
 birdlife_city_data_2 <- fetch_city_data_for('birdlife', T)
@@ -455,6 +461,9 @@ ordered_cities
 write_csv(ordered_cities, "city_effect_residuals.csv")
 ```
 
+-------------------------------------------
+What is going on with the response?
+-------------------------------------------
 ```{r}
 library(ggrepel)
 ```
@@ -524,6 +533,10 @@ plot_residuals
 dev.off()
 ```
 
+----------------------------------------------------------------
+Is it more obvious if we look at pools with 200 and 300 species?
+----------------------------------------------------------------
+
 ```{r}
 merlin_city_data_200 <- merlin_city_data[merlin_city_data$merlin_pool_size > 190 & merlin_city_data$merlin_pool_size < 210,]
 merlin_city_data_200[order(merlin_city_data_200$response), c("name", "response")]
@@ -565,6 +578,10 @@ ggplot(city_data_subset, aes(x = label, y = response, color = label)) +
   geom_label_repel(aes(label = biome_name), size = 3) + geom_point() +
   theme_bw() + theme(legend.position = "none") + xlab("Pool size (Pool)") + ylab("Random Effect Response")
 ```
+----------------------------------------------------------------
+So can we split biome?
+----------------------------------------------------------------
+
 ```{r}
 table(city_data$biome_name)
 ```
@@ -626,6 +643,9 @@ summary(glm(response ~ biome_vegetation + biome_location + biome_climate + merli
 summary(glm(response ~ biome_name + rainfall_monthly_min * merlin_pool_size, tmp, family = "gaussian"))
 ```
 
+----------------------------------------------------------------
+Try bootstrapping some models
+----------------------------------------------------------------
 ```{r}
 library(boot)
 ```
@@ -637,21 +657,68 @@ rsq <- function(formula, data, indices) {
   fit <- glm(formula, data=d)
   with(summary(fit), 1 - deviance/null.deviance)
 } 
+```
 
+-- Merlin
+```{r}
+results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ merlin_pool_size)
+results
+```
+
+```{r}
+results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ I(merlin_pool_size^2))
+results
+```
+
+```{r}
 results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + merlin_pool_size)
-boot.ci(results, type="bca")
+results
+```
+
+```{r}
+results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + I(merlin_pool_size^2))
 results
 ```
 
 ```{r}
 results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + rainfall_monthly_min * merlin_pool_size)
-boot.ci(results, type="bca")
 results
 ```
 
 ```{r}
-results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ merlin_pool_size)
-boot.ci(results, type="bca")
+results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + rainfall_monthly_min + I(merlin_pool_size^2))
+results
+```
+
+
+-- Birdlife
+```{r}
+results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ birdlife_pool_size)
+results
+```
+
+```{r}
+results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ I(birdlife_pool_size^2))
+results
+```
+
+```{r}
+results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + birdlife_pool_size)
+results
+```
+
+```{r}
+results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + I(birdlife_pool_size^2))
+results
+```
+
+```{r}
+results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + rainfall_monthly_min * birdlife_pool_size)
+results
+```
+
+```{r}
+results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + rainfall_monthly_min + I(birdlife_pool_size^2))
 results
 ```
 

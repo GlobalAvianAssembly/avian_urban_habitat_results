@@ -8,6 +8,8 @@ library(tidyverse)
 library(bigrquery)
 library(MuMIn)
 library(ggplot2)
+
+library(ggpubr)
 ```
 
 ```{r}
@@ -356,10 +358,6 @@ summary(birdlife_foraging_niche_anova_i)
 
 
 ```{r}
-library(ggpubr)
-```
-
-```{r}
 pc_axis_figure <- function(dataset) {
   annotate_figure(
 ggarrange(
@@ -430,6 +428,10 @@ birdlife_nocturnal_anova_i <- aov(response~is_nocturnal * percentile + Error(nic
 summary(birdlife_nocturnal_anova_i)
 ```
 
+-----------------------------------------
+Investigation of percentiles and presence
+-----------------------------------------
+
 ```{r}
 ggplot(merlin_species_data, aes(x = total_species, y = log(response), color = percentile)) + geom_point(alpha = 0.5) + geom_smooth(method = "lm", se = FALSE) + theme_bw()
 ```
@@ -453,6 +455,7 @@ merlin_species_data$present <- merlin_species_data$response > 0
 ```{r}
 ggplot(merlin_species_data, aes(x = log(total_species), y = present, color = percentile)) + geom_boxplot() + theme_bw()
 ```
+
 
 ```{r}
 merlin_present_model = lmer(present ~ log(total_species) * percentile + (1|niche_name), data=merlin_species_data)
@@ -520,6 +523,12 @@ birdlife_ever_data <- load_ever_data('birdlife')
 ggplot(merlin_ever_data, aes(fill=present, y=trophic_niche)) + 
     geom_bar()
 ```
+
+----------------------------------
+PCA Variation with presence
+----------------------------------
+
+
 ```{r}
 ggplot(merlin_ever_data, aes(color = present, x = pc1, y = trophic_niche)) + 
     geom_violin() + geom_jitter(aes(group=present, size = total_species), position=position_jitterdodge()) + theme_bw() +
@@ -556,6 +565,9 @@ ggplot(birdlife_ever_data, aes(color = present, x = pc1, y = trophic_niche)) +
     ylab("Trophic Niche") + xlab("PC1: Body size") + labs(title = "Birdlife Regional Pool")
 ggsave("species_analysis_pc1_birdlife.jpg")
 ```
+----------------------------------
+First attempt figures
+----------------------------------
 
 ```{r}
 theme <-  theme_bw() + theme(legend.position="bottom", legend.title=element_text(size=9), legend.text=element_text(size=8), legend.key.size = unit(0.5,"line"))
@@ -605,3 +617,51 @@ jpeg("species_plot2.jpg", width = 800, height = 600)
 species_plot2
 dev.off()
 ```
+
+----------------------------------
+Trophic Niche Accumulation
+----------------------------------
+
+```{r}
+accumulation <- read_csv('trophic_niche_accumulation.csv')
+accumulation
+```
+```{r}
+merlin_accumulation = ggplot(accumulation, aes(x = percent, y = merlin_niche_count)) + 
+  geom_line(linetype = "dotted") + 
+  geom_line(aes(linetype = merlin_remaining_species), na.value = "dash") +
+  scale_linetype_manual(values=c("blank", "solid"), guide = "none") +
+  geom_hline(data = . %>% group_by(trophic_niche) %>% filter(merlin_niche_count == max(merlin_niche_count)), aes(yintercept = merlin_niche_count), color = "blue", size = 0.25, linetype = "dashed") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  facet_wrap (~ trophic_niche) +
+  xlab("Percentage of all Species") + 
+  ylab("Number of Niches") +
+  labs(title = "Merlin Niche Accumulation")
+
+merlin_accumulation
+```
+
+
+```{r}
+birdlife_accumulation = ggplot(accumulation, aes(x = percent, y = birdlife_niche_count)) + 
+  geom_line(linetype = "dotted") + 
+  geom_line(aes(linetype = birdlife_remaining_species), na.value = "dash") +
+  scale_linetype_manual(values=c("blank", "solid"), guide = "none") +
+  geom_hline(data = . %>% group_by(trophic_niche) %>% filter(birdlife_niche_count == max(birdlife_niche_count)), aes(yintercept = birdlife_niche_count), color = "blue", size = 0.25, linetype = "dashed") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  facet_wrap (~ trophic_niche) +
+  xlab("Percentage of all Species") + 
+  ylab("Number of Niches") +
+  labs(title = "Birdlife Niche Accumulation")
+
+birdlife_accumulation
+```
+```{r}
+ggarrange(merlin_accumulation, birdlife_accumulation)
+ggsave("trophic_niche_accumlation.jpg")
+```
+
+
+

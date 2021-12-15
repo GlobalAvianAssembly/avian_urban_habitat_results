@@ -659,66 +659,72 @@ rsq <- function(formula, data, indices) {
 } 
 ```
 
+```{r}
+test_model <- function(data, formula) {
+  fit <- glm(formula, data = data)
+  
+  cv.glm(data, fit)$delta
+
+  print(paste("R2", with(summary(fit), 1 - deviance/null.deviance)))
+  print(paste("CV Delta", cv.glm(data, fit)$delta))
+  
+  print(boot(data=data, statistic=rsq, R=1000, formula=formula))
+  
+  plot(fit)
+}
+```
+
 -- Merlin
 ```{r}
-results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ merlin_pool_size)
-results
+test_model(merlin_city_data, response ~ merlin_pool_size)
 ```
 
 ```{r}
-results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ I(merlin_pool_size^2))
-results
+test_model(data=merlin_city_data, formula=response ~ I(merlin_pool_size^2))
 ```
 
 ```{r}
-results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + merlin_pool_size)
-results
+merlin_city_data_exclude_taiga <- merlin_city_data[merlin_city_data$biome_name != "Boreal Forests/Taiga",]
+test_model(data=merlin_city_data_exclude_taiga, formula=response ~ biome_name + merlin_pool_size)
 ```
 
 ```{r}
-results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + I(merlin_pool_size^2))
-results
+test_model(data=merlin_city_data_exclude_taiga, formula=response ~ biome_name + I(merlin_pool_size^2))
 ```
 
 ```{r}
-results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + rainfall_monthly_min * merlin_pool_size)
-results
+test_model(data=merlin_city_data_exclude_taiga, formula=response ~ biome_name + rainfall_monthly_min * merlin_pool_size)
 ```
 
 ```{r}
-results <- boot(data=merlin_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + rainfall_monthly_min + I(merlin_pool_size^2))
-results
+test_model(data=merlin_city_data_exclude_taiga, formula=response ~ biome_name + rainfall_monthly_min + I(merlin_pool_size^2))
 ```
 
 
 -- Birdlife
 ```{r}
-results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ birdlife_pool_size)
-results
+test_model(data=birdlife_city_data, formula=response ~ birdlife_pool_size)
 ```
 
 ```{r}
-results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ I(birdlife_pool_size^2))
-results
+test_model(data=birdlife_city_data, formula=response ~ I(birdlife_pool_size^2))
 ```
 
 ```{r}
-results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + birdlife_pool_size)
-results
+birdlife_pool_size_exclude_taiga <- birdlife_city_data[birdlife_city_data$biome_name != "Boreal Forests/Taiga",]
+test_model(data=birdlife_pool_size_exclude_taiga, formula=response ~ biome_name + birdlife_pool_size)
 ```
 
 ```{r}
-results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + I(birdlife_pool_size^2))
-results
+test_model(data=birdlife_pool_size_exclude_taiga, formula=response ~ biome_name + I(birdlife_pool_size^2))
 ```
 
 ```{r}
-results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + rainfall_monthly_min * birdlife_pool_size)
-results
+test_model(data=birdlife_pool_size_exclude_taiga, formula=response ~ biome_name + rainfall_monthly_min * birdlife_pool_size)
 ```
 
 ```{r}
-results <- boot(data=birdlife_city_data, statistic=rsq, R=1000, formula=response ~ biome_name + rainfall_monthly_min + I(birdlife_pool_size^2))
-results
+test_model(data=birdlife_pool_size_exclude_taiga, formula=response ~ biome_name + rainfall_monthly_min + I(birdlife_pool_size^2))
 ```
+
 

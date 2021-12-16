@@ -17,7 +17,7 @@ fetch_city_data_for <- function(pool_name, include_city_name = F) {
   
   pool_size_col_name <- paste(pool_name, 'pool', 'size', sep = "_")
   
-  required_columns <- c("response", pool_size_col_name, "population_growth", "rainfall_monthly_min", "rainfall_annual_average", "rainfall_monthly_max", "temperature_annual_average", "temperature_monthly_min", "temperature_monthly_max", "happiness_negative_effect", "happiness_positive_effect", "happiness_future_life", "number_of_biomes", "realm", "biome_name", "region_20km_includes_estuary", "region_50km_includes_estuary", "region_100km_includes_estuary", "city_includes_estuary", "region_20km_average_pop_density", "region_50km_average_pop_density", "region_100km_average_pop_density", "city_max_pop_density", "city_average_pop_density", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "region_20km_urban", "region_50km_cultivated", "region_50km_urban", "region_100km_cultivated", "region_100km_urban", "region_20km_elevation_delta", "region_20km_mean_elevation", "region_50km_elevation_delta", "region_50km_mean_elevation", "region_100km_elevation_delta", "region_100km_mean_elevation", "city_elevation_delta", "city_mean_elevation", "urban", "shrubs", "permanent_water", "open_forest", "herbaceous_wetland", "herbaceous_vegetation", "cultivated", "closed_forest", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_streets", "percentage_urban_area_as_open_public_spaces_and_streets", "percentage_urban_area_as_open_public_spaces", "city_gdp_per_population")
+  required_columns <- c("response", pool_size_col_name, "population_growth", "rainfall_monthly_min", "rainfall_annual_average", "rainfall_monthly_max", "temperature_annual_average", "temperature_monthly_min", "temperature_monthly_max", "happiness_negative_effect", "happiness_positive_effect", "happiness_future_life", "number_of_biomes", "realm", "biome_name", "region_20km_includes_estuary", "region_50km_includes_estuary", "region_100km_includes_estuary", "city_includes_estuary", "region_20km_average_pop_density", "region_50km_average_pop_density", "region_100km_average_pop_density", "city_max_pop_density", "city_average_pop_density", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "region_20km_urban", "region_50km_cultivated", "region_50km_urban", "region_100km_cultivated", "region_100km_urban", "region_20km_elevation_delta", "region_20km_mean_elevation", "region_50km_elevation_delta", "region_50km_mean_elevation", "region_100km_elevation_delta", "region_100km_mean_elevation", "city_elevation_delta", "city_mean_elevation", "urban", "shrubs", "permanent_water", "open_forest", "herbaceous_wetland", "herbaceous_vegetation", "cultivated", "closed_forest", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_streets", "percentage_urban_area_as_open_public_spaces_and_streets", "percentage_urban_area_as_open_public_spaces", "city_gdp_per_population", "city_ndvi", "city_ssm", "city_susm", "region_20km_ndvi", "region_20km_ssm", "region_20km_susm", "region_50km_ndvi", "region_50km_ssm", "region_50km_susm", "region_100km_ndvi", "region_100km_ssm", "region_100km_susm")
   
   if (include_city_name) {
     required_columns <- append(c("name"), required_columns)
@@ -52,17 +52,60 @@ source('./random_forest_selection_functions.R')
 ```
 
 ```{r}
+scale_parameter_name <- function(scale, postscript) {
+  paste('region', paste(scale, 'km', sep = ''), postscript, sep = '_')  
+}
+
+scale_parameters <- function(postscript) {
+  c(scale_parameter_name(20, postscript), scale_parameter_name(50, postscript), scale_parameter_name(100, postscript))
+}
+
+scales_parameters_without <- function(scale_to_exclude, postscript) {
+  scales <- scale_parameters(postscript)
+  scales[scales != scale_parameter_name(scale_to_exclude, postscript)]
+}
+
+select_scales <- function(urban, cultivated, elevation_delta, mean_elevation, average_pop_density, includes_estuary, ssm, susm, ndvi) {
+  append(
+    append(
+      append(
+        append(
+          scales_parameters_without(scale_to_exclude = urban, postscript = 'urban'),
+          scales_parameters_without(scale_to_exclude = cultivated, postscript = 'cultivated')
+        ),
+        append(
+          scales_parameters_without(scale_to_exclude = elevation_delta, postscript = 'elevation_delta'),
+          scales_parameters_without(scale_to_exclude = mean_elevation, postscript = 'mean_elevation')
+        )
+      ),
+      append(
+        append(
+          scales_parameters_without(scale_to_exclude = average_pop_density, postscript = 'average_pop_density'),
+          scales_parameters_without(scale_to_exclude = includes_estuary, postscript = 'includes_estuary')
+        ),
+        append(
+          scales_parameters_without(scale_to_exclude = ssm, postscript = 'ssm'),
+          scales_parameters_without(scale_to_exclude = susm, postscript = 'susm')
+        )
+      )
+    ),
+    scales_parameters_without(scale_to_exclude = ndvi, postscript = 'ndvi')
+  )
+}
+```
+
+```{r}
+select_scales(urban = 20, cultivated = 100, elevation_delta = 20, mean_elevation = 100, average_pop_density = NA, includes_estuary = NA, ssm = 20, susm = 20, ndvi = 100)
+```
+
+select_scales(urban = , cultivated = , elevation_delta = , mean_elevation = , average_pop_density = , includes_estuary = , ssm = , susm = , ndvi = )
+
+```{r}
 select_variables_from_random_forest(merlin_city_data_fixed)
 ```
 
 ```{r}
-exclude_merlin <- !names(merlin_city_data_fixed) %in% c(
-  "region_50km_urban", "region_100km_urban", 
-  "region_50km_elevation_delta", "region_100km_elevation_delta", 
-  "region_50km_cultivated", "region_100km_cultivated", 
-  "region_20km_average_pop_density", "region_100km_average_pop_density", 
-  "region_20km_includes_estuary", "region_50km_includes_estuary", "region_100km_includes_estuary", 
-  "region_100km_mean_elevation", "region_20km_mean_elevation")
+exclude_merlin <- !names(merlin_city_data_fixed) %in% select_scales(urban = 20, cultivated = 100, elevation_delta = 50, mean_elevation = 20, average_pop_density = 50, includes_estuary = NA, ssm = 100, susm = 50, ndvi = 20)
 
 merlin_city_data_fixed_single_scale <- merlin_city_data_fixed[,exclude_merlin]
 merlin_city_data_fixed_single_scale
@@ -74,26 +117,23 @@ select_variables_from_random_forest(merlin_city_data_fixed_single_scale)
 
 ```{r}
 create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water", "temperature_monthly_min")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water", "temperature_monthly_min", "region_20km_urban")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water", "temperature_monthly_min", "region_20km_urban", "shrubs")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water", "temperature_monthly_min", "region_20km_urban", "shrubs", "region_20km_cultivated")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water", "temperature_monthly_min", "region_20km_urban", "shrubs", "region_20km_cultivated", "happiness_negative_effect")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water", "temperature_monthly_min", "region_20km_urban", "shrubs", "region_20km_cultivated", "happiness_negative_effect", "share_of_population_within_400m_of_open_space")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water", "temperature_monthly_min", "region_20km_urban", "shrubs", "region_20km_cultivated", "happiness_negative_effect", "share_of_population_within_400m_of_open_space", "temperature_monthly_max")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water", "temperature_monthly_min", "region_20km_urban", "shrubs", "region_20km_cultivated", "happiness_negative_effect", "share_of_population_within_400m_of_open_space", "temperature_monthly_max", "rainfall_monthly_max")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "realm", "biome_name", "temperature_annual_average", "happiness_positive_effect", "region_20km_elevation_delta", "percentage_urban_area_as_open_public_spaces", "rainfall_monthly_min", "permanent_water", "temperature_monthly_min", "region_20km_urban", "shrubs", "region_20km_cultivated", "happiness_negative_effect", "share_of_population_within_400m_of_open_space", "temperature_monthly_max", "rainfall_monthly_max", "rainfall_annual_average")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min", "rainfall_monthly_min")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min", "rainfall_monthly_min", "region_50km_elevation_delta")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min", "rainfall_monthly_min", "region_50km_elevation_delta", "permanent_water")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min", "rainfall_monthly_min", "region_50km_elevation_delta", "permanent_water", "happiness_positive_effect")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min", "rainfall_monthly_min", "region_50km_elevation_delta", "permanent_water", "happiness_positive_effect", "shrubs")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min", "rainfall_monthly_min", "region_50km_elevation_delta", "permanent_water", "happiness_positive_effect", "shrubs", "region_50km_susm")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min", "rainfall_monthly_min", "region_50km_elevation_delta", "permanent_water", "happiness_positive_effect", "shrubs", "region_50km_susm", "region_20km_urban")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min", "rainfall_monthly_min", "region_50km_elevation_delta", "permanent_water", "happiness_positive_effect", "shrubs", "region_50km_susm", "region_20km_urban", "region_20km_ndvi")])
+create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "merlin_pool_size", "biome_name", "realm", "region_100km_ssm", "temperature_annual_average", "temperature_monthly_min", "rainfall_monthly_min", "region_50km_elevation_delta", "permanent_water", "happiness_positive_effect", "shrubs", "region_50km_susm", "region_20km_urban", "region_20km_ndvi", "region_100km_cultivated")])
 ```
 
-"merlin_pool_size", "realm"
+"merlin_pool_size", "biome_name", "realm"
 
 
 ```{r}

@@ -633,7 +633,7 @@ merlin_accumulation = ggplot(accumulation, aes(x = percent, y = merlin_niche_cou
   scale_linetype_manual(values=c("blank", "solid"), guide = "none") +
   geom_hline(data = . %>% group_by(trophic_niche) %>% filter(merlin_niche_count == max(merlin_niche_count)), aes(yintercept = merlin_niche_count), color = "blue", size = 0.25, linetype = "dashed") +
   theme_bw() +
-  theme(legend.position = "bottom") +
+  theme(legend.position = "bottom", strip.text = element_text(size = 6), axis.text.x = element_text(angle = 90, size = 6),  axis.text.y = element_text(size = 6)) +
   facet_wrap (~ trophic_niche) +
   xlab("Percentage of all Species") + 
   ylab("Number of Niches") +
@@ -650,7 +650,7 @@ birdlife_accumulation = ggplot(accumulation, aes(x = percent, y = birdlife_niche
   scale_linetype_manual(values=c("blank", "solid"), guide = "none") +
   geom_hline(data = . %>% group_by(trophic_niche) %>% filter(birdlife_niche_count == max(birdlife_niche_count)), aes(yintercept = birdlife_niche_count), color = "blue", size = 0.25, linetype = "dashed") +
   theme_bw() +
-  theme(legend.position = "bottom") +
+  theme(legend.position = "bottom", strip.text = element_text(size = 6), axis.text.x = element_text(angle = 90, size = 6),  axis.text.y = element_text(size = 6)) +
   facet_wrap (~ trophic_niche) +
   xlab("Percentage of all Species") + 
   ylab("Number of Niches") +
@@ -659,7 +659,14 @@ birdlife_accumulation = ggplot(accumulation, aes(x = percent, y = birdlife_niche
 birdlife_accumulation
 ```
 ```{r}
-ggarrange(merlin_accumulation, birdlife_accumulation)
+annotate_figure(
+  ggarrange(merlin_accumulation + rremove("xlab") + rremove("ylab"), 
+            birdlife_accumulation + rremove("xlab") + rremove("ylab"),
+            ncol = 2, label.x = 0),
+left = text_grob("Number of Niches Present", rot = 90),
+bottom = text_grob("Percentage of all Species - ranked by urbanisation"))
+
+
 ggsave("trophic_niche_accumlation.jpg")
 ```
 

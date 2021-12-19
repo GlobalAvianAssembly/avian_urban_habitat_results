@@ -674,7 +674,7 @@ by_max_birdlife_niche_count = accumulation %>% group_by(trophic_niche) %>% summa
 by_max_birdlife_niche_count[order(-by_max_birdlife_niche_count$Value),]
 ```
 
-```{r}
+```{r, fig.height = 12}
 ggplot(accumulation, aes(x = percent, y = birdlife_niche_count)) + 
   geom_line(linetype = "dotted") + 
   geom_line(aes(linetype = birdlife_remaining_species), na.value = "dash") +
@@ -688,4 +688,12 @@ ggplot(accumulation, aes(x = percent, y = birdlife_niche_count)) +
   labs(title = "Birdlife Niche Accumulation") +
   xlim(0, 50)
 ```
+
+
+
+
+
+
+
+
 

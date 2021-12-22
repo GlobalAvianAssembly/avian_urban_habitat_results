@@ -48,6 +48,7 @@ library(ggplot2)
 library(tidyverse)
 
 library(multcomp)
+library(car)
 ```
 
 ```{r}
@@ -874,7 +875,7 @@ cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_si
 ```
 
 -----------------------------------------------
--- best model with merlin is pool size + realm
+-- best model with merlin is pool size + realm (CV error 13.10131)
 -----------------------------------------------
 
 ```{r}
@@ -965,7 +966,7 @@ with(summary(birdlife.fit), 1 - deviance/null.deviance)
 plot(birdlife.fit)
 ```
 ```{r}
-city_data[c(16, 53, 124), c("name", "birdlife_pool_size", "merlin_pool_size")]
+birdlife_city_data_fixed_no_boreal[c(16, 53, 116, 124), c("name", "birdlife_pool_size")]
 ```
 
 
@@ -973,7 +974,8 @@ city_data[c(16, 53, 124), c("name", "birdlife_pool_size", "merlin_pool_size")]
 ggplot(birdlife_city_data_fixed_no_boreal, aes(x = birdlife_pool_size, y = response)) + 
   geom_point() + 
   geom_smooth(method = "glm", se = F) +
-  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 126),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") +
+  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 124),], size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_point(data = birdlife_city_data_fixed_no_boreal[c(16, 53, 124),], color = "red") +
   facet_wrap(~ realm) +
   theme_bw()
 ```
@@ -989,9 +991,10 @@ city_data[c(7, 24, 77), c("name", "birdlife_pool_size", "merlin_pool_size")]
 ```
 ```{r}
 ggplot(merlin_city_data_fixed_no_boreal, aes(x = merlin_pool_size, y = response)) + 
-  geom_point() + 
+  geom_point(size = 1) + 
   geom_smooth(method = "glm", se = F) +
-  geom_text(aes(label = name), data = merlin_city_data_fixed_no_boreal[c(7, 24, 77),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") +
+  geom_text(aes(label = name), data = merlin_city_data_fixed_no_boreal[c(7, 24, 77),], size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_point(data = merlin_city_data_fixed_no_boreal[c(7, 24, 77),], color = "red") +
   facet_wrap(~ realm) +
   theme_bw()
 ```
@@ -1009,7 +1012,7 @@ birdlife_city_data_fixed_no_boreal$residuals <- resid(birdlife.fit)
 ggplot(birdlife_city_data_fixed_no_boreal, aes(y = response, x = residuals)) + 
   geom_smooth(method = "lm", se = F, alpha = 0.5) +
   geom_point(aes(color = realm)) + 
-  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 126),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") +
+  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 124),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") +
   labs(title = "Birdlife", subtitle = paste("Correlation", cor(birdlife_city_data_fixed_no_boreal$residuals, birdlife_city_data_fixed_no_boreal$response))) +
   theme_bw()
 ```
@@ -1030,4 +1033,82 @@ ggplot(merlin_city_data_fixed_no_boreal, aes(x = realm, y = residuals_of_fit)) +
 merlin.aov <- aov(merlin_city_data_fixed_no_boreal$residuals_of_fit ~ merlin_city_data_fixed_no_boreal$realm)
 summary(merlin.aov)
 ```
+
+
+```{r}
+ggplot(merlin_city_data_fixed_no_boreal, aes(residuals)) + geom_histogram(binwidth = 1)
+```
+```{r}
+ggplot(birdlife_city_data_fixed_no_boreal, aes(residuals)) + geom_histogram(binwidth = 1)
+```
+```{r}
+shapiro.test(birdlife_city_data_fixed_no_boreal$response)
+shapiro.test(birdlife_city_data_fixed_no_boreal$residuals)
+shapiro.test(birdlife_city_data_fixed_no_boreal$residuals_of_fit)
+
+shapiro.test(merlin_city_data_fixed_no_boreal$response)
+shapiro.test(merlin_city_data_fixed_no_boreal$residuals)
+shapiro.test(merlin_city_data_fixed_no_boreal$residuals_of_fit)
+```
+
+Variances of groups are NOT significantly different:
+```{r}
+bartlett.test(merlin_city_data_fixed_no_boreal$residuals, merlin_city_data_fixed_no_boreal$realm) 
+leveneTest(merlin_city_data_fixed_no_boreal$residuals, merlin_city_data_fixed_no_boreal$realm) 
+```
+
+Variances of groups are NOT significantly different:
+```{r}
+bartlett.test(birdlife_city_data_fixed_no_boreal$residuals, birdlife_city_data_fixed_no_boreal$realm) 
+leveneTest(birdlife_city_data_fixed_no_boreal$residuals, birdlife_city_data_fixed_no_boreal$realm) 
+```
+
+Variances of groups are significantly different:
+```{r}
+bartlett.test(merlin_city_data_fixed_no_boreal$residuals_of_fit, merlin_city_data_fixed_no_boreal$realm) 
+leveneTest(merlin_city_data_fixed_no_boreal$residuals_of_fit, merlin_city_data_fixed_no_boreal$realm) 
+```
+
+Variances of groups are significantly different:
+```{r}
+bartlett.test(birdlife_city_data_fixed_no_boreal$residuals_of_fit, birdlife_city_data_fixed_no_boreal$realm) 
+leveneTest(birdlife_city_data_fixed_no_boreal$residuals_of_fit, birdlife_city_data_fixed_no_boreal$realm) 
+```
+
+```{r}
+unique(merlin_city_data_fixed_no_boreal$realm)
+```
+
+```{r, warning = F}
+realms <- unique(merlin_city_data_fixed_no_boreal$realm)
+
+for(i in 1:length(realms)) {
+  realm <- realms[i]
+  delta <- cv.glm(
+              data = merlin_city_data_fixed_no_boreal[merlin_city_data_fixed_no_boreal$realm != realm,], 
+              glm(
+                data = merlin_city_data_fixed_no_boreal[merlin_city_data_fixed_no_boreal$realm != realm,],
+                formula = response ~ merlin_pool_size + realm
+              )
+           )$delta[1]
+  print(paste("Exclude Realm CV", realm, delta))
+}
+```
+
+```{r, warning = F}
+realms <- unique(birdlife_city_data_fixed_no_boreal$realm)
+
+for(i in 1:length(realms)) {
+  realm <- realms[i]
+  delta <- cv.glm(
+              data = birdlife_city_data_fixed_no_boreal[birdlife_city_data_fixed_no_boreal$realm != realm,], 
+              glm(
+                data = birdlife_city_data_fixed_no_boreal[birdlife_city_data_fixed_no_boreal$realm != realm,],
+                formula = response ~ birdlife_pool_size + realm
+              )
+           )$delta[1]
+  print(paste("Exclude Realm CV", realm, delta))
+}
+```
+
 

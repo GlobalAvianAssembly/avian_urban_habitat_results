@@ -794,10 +794,240 @@ either.fit.2 <- glm(data = either_city_data_fixed, formula = response ~ either_p
 plot(either.fit.2)
 ```
 
+------------------------------------------------------------------
+Use cross validation and dropping terms to find best model
+------------------------------------------------------------------
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + population_growth + region_50km_ssm + biome_name + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- Can we drop one?
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + population_growth + region_50km_ssm + biome_name, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + population_growth + region_50km_ssm + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + population_growth + biome_name + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + region_50km_ssm + biome_name + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + biome_name + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop populaion_growth (14.30384)
+
+-- can we drop another?
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + region_50km_ssm + biome_name, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + region_50km_ssm + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + biome_name + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + biome_name + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop ssm (14.20889)
+
+-- can we drop another?
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + biome_name, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ biome_name + realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop biome (13.10131)
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_size * realm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+-----------------------------------------------
+-- best model with merlin is pool size + realm
+-----------------------------------------------
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + population_growth + region_50km_ssm + biome_name + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- can we drop a variable?
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + population_growth + region_50km_ssm + biome_name, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + population_growth + region_50km_ssm + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + population_growth + biome_name + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + region_50km_ssm + biome_name + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ population_growth + region_50km_ssm + biome_name + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop biome (5.492536)
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + population_growth + region_50km_ssm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + population_growth + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + region_50km_ssm + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ population_growth + region_50km_ssm + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop population growth (5.38609)
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + region_50km_ssm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop ssm (5.38033)
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size * realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+----------------------------------------------------
+-- so best model with birdlife is pool size + realm
+----------------------------------------------------
+
+```{r}
+ggplot(merlin_city_data_fixed_no_boreal, aes(x = merlin_pool_size, y = response)) + geom_point() + geom_smooth(method = "glm", se = F) + facet_wrap(~ realm)
+```
+```{r}
+ggplot(birdlife_city_data_fixed_no_boreal, aes(x = birdlife_pool_size, y = response)) + geom_point() + geom_smooth(method = "glm", se = F) + facet_wrap(~ realm)
+```
+
+```{r}
+birdlife.fit <- glm(data = birdlife_city_data_fixed_no_boreal, formula = response ~ birdlife_pool_size + realm)
+summary(birdlife.fit)
+with(summary(birdlife.fit), 1 - deviance/null.deviance)
+plot(birdlife.fit)
+```
+```{r}
+city_data[c(16, 53, 124), c("name", "birdlife_pool_size", "merlin_pool_size")]
+```
 
 
+```{r}
+ggplot(birdlife_city_data_fixed_no_boreal, aes(x = birdlife_pool_size, y = response)) + 
+  geom_point() + 
+  geom_smooth(method = "glm", se = F) +
+  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 126),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") +
+  facet_wrap(~ realm) +
+  theme_bw()
+```
 
+```{r}
+merlin.fit <- glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + realm)
+summary(merlin.fit)
+with(summary(merlin.fit), 1 - deviance/null.deviance)
+plot(merlin.fit)
+```
+```{r}
+city_data[c(7, 24, 77), c("name", "birdlife_pool_size", "merlin_pool_size")]
+```
+```{r}
+ggplot(merlin_city_data_fixed_no_boreal, aes(x = merlin_pool_size, y = response)) + 
+  geom_point() + 
+  geom_smooth(method = "glm", se = F) +
+  geom_text(aes(label = name), data = merlin_city_data_fixed_no_boreal[c(7, 24, 77),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") +
+  facet_wrap(~ realm) +
+  theme_bw()
+```
+```{r}
+merlin_city_data_fixed_no_boreal$residuals <- resid(merlin.fit)
+ggplot(merlin_city_data_fixed_no_boreal, aes(y = response, x = residuals)) + 
+  geom_smooth(method = "lm", se = F) +
+  geom_point(aes(color = realm)) + 
+  geom_text(aes(label = name), data = merlin_city_data_fixed_no_boreal[c(7, 24, 77),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") + 
+  labs(title = "Merlin", subtitle = paste("Correlation", cor(merlin_city_data_fixed_no_boreal$residuals, merlin_city_data_fixed_no_boreal$response))) +
+  theme_bw()
+```
+```{r}
+birdlife_city_data_fixed_no_boreal$residuals <- resid(birdlife.fit)
+ggplot(birdlife_city_data_fixed_no_boreal, aes(y = response, x = residuals)) + 
+  geom_smooth(method = "lm", se = F, alpha = 0.5) +
+  geom_point(aes(color = realm)) + 
+  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 126),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") +
+  labs(title = "Birdlife", subtitle = paste("Correlation", cor(birdlife_city_data_fixed_no_boreal$residuals, birdlife_city_data_fixed_no_boreal$response))) +
+  theme_bw()
+```
+```{r}
+birdlife_city_data_fixed_no_boreal$residuals_of_fit <- resid(lm(response ~ residuals, birdlife_city_data_fixed_no_boreal))
+ggplot(birdlife_city_data_fixed_no_boreal, aes(x = realm, y = residuals_of_fit)) + geom_boxplot()
+```
+```{r}
+birdlife.aov <- aov(birdlife_city_data_fixed_no_boreal$residuals_of_fit ~ birdlife_city_data_fixed_no_boreal$realm)
+summary(birdlife.aov)
+```
 
-
-
+```{r}
+merlin_city_data_fixed_no_boreal$residuals_of_fit <- resid(lm(response ~ residuals, merlin_city_data_fixed_no_boreal))
+ggplot(merlin_city_data_fixed_no_boreal, aes(x = realm, y = residuals_of_fit)) + geom_boxplot()
+```
+```{r}
+merlin.aov <- aov(merlin_city_data_fixed_no_boreal$residuals_of_fit ~ merlin_city_data_fixed_no_boreal$realm)
+summary(merlin.aov)
+```
 

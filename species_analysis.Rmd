@@ -273,7 +273,10 @@ ggplot(merlin_diff_data1, aes(x = increase, y = trophic_niche, color = group)) +
 ```
 
 ```{r}
-ggplot(birdlife_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme_bw()
+ggplot(birdlife_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme_bw() +
+  xlab("Niche fullness") + xlab("Trophic Niche") + labs(title = "Birdlife") + guides(color=guide_legend(title="Most Urbanised Species")) + theme(legend.position="bottom")
+
+ggsave("species_analysis_birdlife_niche_fullness.jpg")
 ```
 
 ```{r}
@@ -674,7 +677,7 @@ by_max_birdlife_niche_count = accumulation %>% group_by(trophic_niche) %>% summa
 by_max_birdlife_niche_count[order(-by_max_birdlife_niche_count$Value),]
 ```
 
-```{r, fig.height = 12}
+```{r}
 ggplot(accumulation, aes(x = percent, y = birdlife_niche_count)) + 
   geom_line(linetype = "dotted") + 
   geom_line(aes(linetype = birdlife_remaining_species), na.value = "dash") +
@@ -687,6 +690,10 @@ ggplot(accumulation, aes(x = percent, y = birdlife_niche_count)) +
   ylab("Number of Niches") +
   labs(title = "Birdlife Niche Accumulation") +
   xlim(0, 50)
+
+
+
+ggsave("trophic_niche_accumlation_birdlife.jpg")
 ```
 
 

@@ -966,18 +966,21 @@ with(summary(birdlife.fit), 1 - deviance/null.deviance)
 plot(birdlife.fit)
 ```
 ```{r}
-birdlife_city_data_fixed_no_boreal[c(16, 53, 116, 124), c("name", "birdlife_pool_size")]
+birdlife_city_data_fixed_no_boreal[c(16, 53, 116, 123), c("name", "birdlife_pool_size")]
 ```
 
 
 ```{r}
 ggplot(birdlife_city_data_fixed_no_boreal, aes(x = birdlife_pool_size, y = response)) + 
-  geom_point() + 
+  geom_point(size=1) + 
   geom_smooth(method = "glm", se = F) +
-  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 124),], size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
-  geom_point(data = birdlife_city_data_fixed_no_boreal[c(16, 53, 124),], color = "red") +
+  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 123),], size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_point(data = birdlife_city_data_fixed_no_boreal[c(16, 53, 123),], color = "red") +
   facet_wrap(~ realm) +
-  theme_bw()
+  theme_bw() +
+  ylab("City Random Effect Intercept") + xlab("Regional Pool Size") + labs(title = "Birdlife")
+
+ggsave("city_effect_richness_birdlife.jpg")
 ```
 
 ```{r}
@@ -996,7 +999,10 @@ ggplot(merlin_city_data_fixed_no_boreal, aes(x = merlin_pool_size, y = response)
   geom_text(aes(label = name), data = merlin_city_data_fixed_no_boreal[c(7, 24, 77),], size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
   geom_point(data = merlin_city_data_fixed_no_boreal[c(7, 24, 77),], color = "red") +
   facet_wrap(~ realm) +
-  theme_bw()
+  theme_bw() +
+  ylab("City Random Effect Intercept") + xlab("Regional Pool Size") + labs(title = "eBird")
+
+ggsave("city_effect_richness_merlin.jpg")
 ```
 ```{r}
 merlin_city_data_fixed_no_boreal$residuals <- resid(merlin.fit)

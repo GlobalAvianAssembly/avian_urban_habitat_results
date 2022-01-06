@@ -232,36 +232,6 @@ Merlin: "merlin_pool_size", "biome_name", "realm"
 Birdlife: "population_growth", "region_50km_ssm", "birdlife_pool_size"
 
 
-```{r}
-ggplot(merlin_city_data_fixed, aes(x = merlin_pool_size, y = response, color = realm)) + geom_point() + geom_smooth(method = "glm", se = F) + theme(legend.position = "bottom")
-```
-
-```{r}
-ggplot(merlin_city_data_fixed, aes(x = merlin_pool_size, y = response, color = biome_name)) + geom_point() + geom_smooth(method = "glm", se = F) + theme(legend.position = "bottom")
-```
-
-```{r}
-ggplot(birdlife_city_data_fixed, aes(x = birdlife_pool_size, y = response, color = region_50km_ssm)) + geom_point() + geom_smooth(method = "glm", se = F) + theme(legend.position = "bottom")
-```
-
-```{r}
-ggplot(birdlife_city_data_fixed, aes(x = birdlife_pool_size, y = response, color = population_growth)) + geom_point() + geom_smooth(method = "glm", se = F) + theme(legend.position = "bottom")
-```
-
-```{r}
-ggplot(merlin_city_data_fixed, aes(y = response, x = population_growth)) + geom_point() + geom_smooth(method = "glm", se = F)
-```
-
-```{r}
-ggplot(birdlife_city_data_fixed, aes(y = response, x = population_growth)) + geom_point() + geom_smooth(method = "glm", se = F)
-```
-```{r}
-ggplot(merlin_city_data_fixed, aes(y = response, x = region_50km_ssm)) + geom_point() + geom_smooth(method = "glm", se = F)
-```
-
-```{r}
-ggplot(birdlife_city_data_fixed, aes(y = response, x = region_50km_ssm)) + geom_point() + geom_smooth(method = "glm", se = F)
-```
 
 -----------------------------
 Try Modelling
@@ -271,528 +241,11 @@ Try Modelling
 library(boot)
 ```
 
-```{r}
-merlin_city_data_fixed_no_boreal <- merlin_city_data_fixed[merlin_city_data_fixed$biome_name != 'Boreal Forests/Taiga',]
-birdlife_city_data_fixed_no_boreal <- birdlife_city_data_fixed[birdlife_city_data_fixed$biome_name != 'Boreal Forests/Taiga',]
-```
-
-```{r}
-test_model <- function(data, formula) {
-  fit <- glm(formula, data = data)
-  
-  cv.glm(data, fit)$delta
-
-  print(paste("R2", with(summary(fit), 1 - deviance/null.deviance)))
-  print(paste("CV Delta", cv.glm(data, fit)$delta))
-}
-```
-
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size)
-```
-
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + realm)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + realm)
-```
-
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + biome_name)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + biome_name)
-```
-
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + biome_name + realm)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + biome_name + realm)
-```
-
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + population_growth)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + population_growth)
-```
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + population_growth + region_50km_ssm)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + population_growth + region_50km_ssm)
-```
-
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-```
-
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + region_50km_ssm + biome_name + realm)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + region_50km_ssm + biome_name + realm)
-```
-
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + region_50km_ssm + realm)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + region_50km_ssm + realm)
-```
-
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + region_50km_ssm + biome_name)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + region_50km_ssm + biome_name)
-```
 
 
-```{r}
-AIC(
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + realm),
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + biome_name),
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + biome_name + realm),
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + population_growth),
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + region_50km_ssm),
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + population_growth + region_50km_ssm),
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + population_growth + region_50km_ssm + biome_name + realm),
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + region_50km_ssm + biome_name + realm),
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + region_50km_ssm + biome_name),
-  glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ merlin_pool_size + region_50km_ssm + realm)
-)
-```
-```{r}
-AIC(
-  glm(data = birdlife_city_data_fixed_no_boreal, formula = response ~ birdlife_pool_size + realm),
-  glm(data = birdlife_city_data_fixed_no_boreal, formula = response ~ birdlife_pool_size + biome_name),
-  glm(data = birdlife_city_data_fixed_no_boreal, formula = response ~ birdlife_pool_size + biome_name + realm),
-  glm(data = birdlife_city_data_fixed_no_boreal, formula = response ~ birdlife_pool_size + population_growth),
-  glm(data = birdlife_city_data_fixed_no_boreal, formula = response ~ birdlife_pool_size + region_50km_ssm),
-  glm(data = birdlife_city_data_fixed_no_boreal, formula = response ~ birdlife_pool_size + population_growth + region_50km_ssm),
-  glm(data = birdlife_city_data_fixed_no_boreal, formula = response ~ birdlife_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-)
-```
 ```{r}
 merlin_city_data_named <- fetch_city_data_for('merlin', T)
 birdlife_city_data_named <- fetch_city_data_for('birdlife', T)
-```
-
-```{r}
-merlin.fit <- glm(data = merlin_city_data_fixed, formula = response ~ merlin_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-plot(merlin.fit)
-```
-```{r}
-jpeg("city_effect_merlin_model.jpg")
-par(mfrow=c(2, 2))
-plot(merlin.fit)
-dev.off()
-```
-
-```{r}
-merlin_city_data_fixed[c(24, 30, 31),c("response", "biome_name", "realm", "region_50km_ssm", "population_growth", "merlin_pool_size")]
-```
-
-```{r}
-birdlife_city_data_fixed[c(24, 30, 31),c("response", "biome_name", "realm", "region_50km_ssm", "population_growth", "birdlife_pool_size")]
-```
-
-```{r}
-merlin_city_data_named$name[c(24, 30, 31)]
-birdlife_city_data_named$name[c(24, 30, 31)]
-```
-
-```{r}
-mean(merlin_city_data_fixed$merlin_pool_size[merlin_city_data_fixed$biome_name == 'Mediterranean Forests, Woodlands & Scrub'])
-mean(merlin_city_data_fixed$merlin_pool_size[merlin_city_data_fixed$realm == 'Palearctic'])
-```
-
-```{r}
-mean(merlin_city_data_fixed$merlin_pool_size[merlin_city_data_fixed$biome_name == 'Tropical & Subtropical Moist Broadleaf Forests'])
-mean(merlin_city_data_fixed$merlin_pool_size[merlin_city_data_fixed$realm == 'Indomalayan'])
-```
-
-```{r}
-mean(merlin_city_data_fixed$merlin_pool_size[merlin_city_data_fixed$biome_name == 'Tropical & Subtropical Moist Broadleaf Forests'])
-mean(merlin_city_data_fixed$merlin_pool_size[merlin_city_data_fixed$realm == 'Neotropic'])
-```
-
-
-```{r}
-test_model(merlin_city_data_fixed[-c(24, 30, 31, 113),], response ~ merlin_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-```
-
-```{r}
-birdlife.fit <- glm(data = birdlife_city_data_fixed, formula = response ~ birdlife_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-plot(birdlife.fit)
-```
-
-```{r}
-jpeg("city_effect_birdlife_model.jpg")
-par(mfrow=c(2, 2))
-plot(birdlife.fit)
-dev.off()
-```
-
-```{r}
-birdlife_city_data_fixed[c(16, 30, 53),c("response", "biome_name", "realm", "region_50km_ssm", "population_growth", "birdlife_pool_size")]
-```
-```{r}
-merlin_city_data_fixed[c(16, 30, 53),c("response", "biome_name", "realm", "region_50km_ssm", "population_growth", "merlin_pool_size")]
-```
-
-```{r}
-mean(birdlife_city_data_fixed$birdlife_pool_size[birdlife_city_data_fixed$biome_name == 'Temperate Broadleaf & Mixed Forests'])
-mean(birdlife_city_data_fixed$birdlife_pool_size[birdlife_city_data_fixed$realm == 'Palearctic'])
-```
-
-```{r}
-mean(birdlife_city_data_fixed$birdlife_pool_size[birdlife_city_data_fixed$biome_name == 'Tropical & Subtropical Moist Broadleaf Forests'])
-mean(birdlife_city_data_fixed$birdlife_pool_size[birdlife_city_data_fixed$realm == 'Indomalayan'])
-```
-
-```{r}
-mean(birdlife_city_data_fixed$birdlife_pool_size[birdlife_city_data_fixed$biome_name == 'Tropical & Subtropical Dry Broadleaf Forests'])
-mean(birdlife_city_data_fixed$birdlife_pool_size[birdlife_city_data_fixed$realm == 'Indomalayan'])
-```
-
-
-```{r}
-birdlife_city_data_named$name[c(16, 30, 53)]
-```
-
-```{r}
-test_model(birdlife_city_data_fixed[-c(16, 30, 53, 113),], response ~ birdlife_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-```
-
-----------------------------------------------------------------------------------------------------
-But can we order cities based on how good they are for biodiversity?
-----------------------------------------------------------------------------------------------------
-
-```{r}
-merlin_city_data_fixed$residuals <- resid(merlin.fit)
-birdlife_city_data_fixed$residuals <- resid(birdlife.fit)
-```
-
-```{r}
-ggplot(merlin_city_data_fixed, aes(y = response, x = residuals)) + geom_point() + geom_smooth(method = "lm", se = F)
-```
-
-```{r}
-cor(merlin_city_data_fixed$response, merlin_city_data_fixed$residuals)
-```
-
-```{r}
-ggplot(birdlife_city_data_fixed, aes(y = response, x = residuals)) + geom_point() + geom_smooth(method = "lm", se = F)
-```
-```{r}
-cor(birdlife_city_data_fixed$response, birdlife_city_data_fixed$residuals)
-```
-
-```{r}
-ordered_cities <- data.frame(
-  ranked_performance = 1:nrow(merlin_city_data_named),
-  merlin_base_response = merlin_city_data_named$name[order(-merlin_city_data$response)],
-  birdlife_base_response = merlin_city_data_named$name[order(-birdlife_city_data$response)],
-  merlin_model_residuals = merlin_city_data_named$name[order(-merlin_city_data$residuals)],
-  birdlife_model_residuals = merlin_city_data_named$name[order(-birdlife_city_data$residuals)]
-)
-ordered_cities
-```
-
-```{r}
-write_csv(ordered_cities, "city_effect_residuals.csv")
-```
-
--------------------------------------------
-What is going on with the response?
--------------------------------------------
-```{r}
-library(ggrepel)
-```
-
-```{r}
-merlin_city_data_fixed$name <- merlin_city_data_named$name
-plot_merlin_poolsize <- ggplot(merlin_city_data_fixed, aes(y = response, x = merlin_pool_size)) + 
-  geom_smooth(method = "lm", se = F) + 
-  geom_point(aes(color = residuals), size = 4) + 
-  geom_label_repel(aes(label = name), size = 4) +
-  xlab("Pool Size") + ylab("City  Random Effect Response") +
-  guides(color=guide_legend(title="Model residuals 'response ~ pool_size'")) +
-  theme_bw() + theme(legend.position="bottom", legend.title=element_text(size=9), legend.text=element_text(size=8), legend.key.size = unit(1,"line")) +
-  labs(title = "Merlin response given pool size")
-plot_merlin_poolsize
-```
-
-```{r}
-birdlife_city_data_fixed$name <- birdlife_city_data_named$name
-plot_birdlife_poolsize <- ggplot(birdlife_city_data_fixed, aes(y = response, x = birdlife_pool_size)) + 
-  geom_smooth(method = "lm", se = F) + 
-  geom_point(aes(color = residuals), size = 4) + 
-  geom_label_repel(aes(label = name), size = 4) +
-  xlab("Pool Size") + ylab("City  Random Effect Response") +
-  guides(color=guide_legend(title="Model residuals 'response ~ pool_size'")) +
-  theme_bw() + theme(legend.position="bottom", legend.title=element_text(size=9), legend.text=element_text(size=8), legend.key.size = unit(1,"line")) +
-  labs(title = "Birdlife response given pool size")
-plot_birdlife_poolsize
-```
-
-
-----------------------------------------------
-Summary of models
-----------------------------------------------
-```{r}
-summary(merlin.fit)
-```
-
-```{r}
-summary(birdlife.fit)
-```
-
-----------------------------------------------
-Review anovas
-----------------------------------------------
-```{r}
-birdlife.biome.anovoa <- aov(response ~ biome_name, data=birdlife_city_data_fixed)
-summary(birdlife.biome.anovoa)
-```
-
-```{r}
-merlin.biome.anovoa <- aov(response ~ biome_name, data=merlin_city_data_fixed)
-summary(merlin.biome.anovoa)
-```
-
-```{r}
-birdlife.realm.anovoa <- aov(response ~ realm, data=birdlife_city_data_fixed)
-summary(birdlife.realm.anovoa)
-```
-
-```{r}
-merlin.realm.anovoa <- aov(response ~ realm, data=merlin_city_data_fixed)
-summary(merlin.realm.anovoa)
-```
-
-```{r}
-interaction.plot(merlin_city_data_fixed$realm, merlin_city_data_fixed$biome_name, merlin_city_data_fixed$response)
-
-meriin.addative.anova <- aov(response ~ biome_name + realm, data=merlin_city_data_fixed) 
-summary(meriin.addative.anova)
-```
-
-```{r}
-interaction.plot(merlin_city_data_fixed$realm, merlin_city_data_fixed$biome_name, merlin_city_data_fixed$response)
-
-meriin.interaction.anova <- aov(response ~ biome_name * realm, data=merlin_city_data_fixed) 
-summary(meriin.interaction.anova)
-```
-
-
-```{r}
-ggplot(merlin_city_data_fixed, aes(x = response, y = realm)) + geom_boxplot()
-```
-```{r}
-library("stringr")     
-```
-
-```{r, fig.height = 12}
-ggplot(merlin_city_data_fixed, aes(x = response, y = biome_name)) + 
-  geom_boxplot() + 
-  facet_wrap(~ realm, scales = "free") +
-  theme(text = element_text(size = 30), legend.text=element_text(size=20)) +
-  scale_y_discrete(labels = function(x) str_wrap(x, width = 10))
-```
-```{r, fig.height = 12}
-ggplot(birdlife_city_data_fixed, aes(x = response, y = biome_name)) + 
-  geom_boxplot() + 
-  facet_wrap(~ realm, scales = "free") +
-  theme(text = element_text(size = 30), legend.text=element_text(size=20)) +
-  scale_y_discrete(labels = function(x) str_wrap(x, width = 10))
-```
-
-```{r}
-ggplot(merlin_city_data_fixed, aes(y = response, x = region_50km_ssm, color = realm)) + geom_point() + geom_smooth(method = "lm", se = F)
-```
-
-```{r}
-ggplot(merlin_city_data_fixed, aes(y = response, x = region_50km_ssm, color = biome_name)) + geom_point() + geom_smooth(method = "lm", se = F)
-```
-```{r}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-```
-
-```{r}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-```
-
-```{r, warning=FALSE}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + population_growth + region_50km_ssm *  biome_name * realm)
-```
-
-```{r, warning=FALSE}
-test_model(birdlife_city_data_fixed_no_boreal, response ~ birdlife_pool_size + population_growth + region_50km_ssm * biome_name * realm)
-```
-
-```{r, warning=FALSE}
-test_model(merlin_city_data_fixed_no_boreal, response ~ merlin_pool_size + region_50km_ssm * biome_name * realm)
-```
-
-
-```{r}
-min(merlin_city_data$response)
-max(merlin_city_data$response)
-```
-
-```{r}
-min(birdlife_city_data$response)
-max(birdlife_city_data$response)
-```
-
--------------------------------------------------------
-Maybe the either pool is missing the random pool sizes?
--------------------------------------------------------
-
-```{r}
-either_city_data <- fetch_city_data_for('either')
-either_city_data
-```
-
-```{r}
-ggplot(either_city_data, aes(response)) + geom_histogram(binwidth = 1)
-```
-
-```{r}
-either_city_data_fixed <- rfImpute(response ~ ., either_city_data)
-either_city_data_fixed
-```
-
-```{r}
-select_variables_from_random_forest(either_city_data_fixed)
-```
-
-```{r}
-exclude_either <- !names(either_city_data_fixed) %in% select_scales(urban = 20, cultivated = 100, elevation_delta = 50, mean_elevation = 50, average_pop_density = 20, includes_estuary = NA, ssm = 50, susm = 100, ndvi = 20, percentage_protected = 20)
-
-either_city_data_fixed_single_scale <- either_city_data_fixed[,exclude_either]
-either_city_data_fixed_single_scale
-```
-
-```{r}
-select_variables_from_random_forest(either_city_data_fixed_single_scale)
-```
-
-```{r}
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name", "permanent_water")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name", "permanent_water", "rainfall_monthly_min")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name", "permanent_water", "rainfall_monthly_min", "share_of_population_within_400m_of_open_space")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name", "permanent_water", "rainfall_monthly_min", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name", "permanent_water", "rainfall_monthly_min", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces", "mean_population_exposure_to_pm2_5_2019")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name", "permanent_water", "rainfall_monthly_min", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces", "mean_population_exposure_to_pm2_5_2019", "temperature_annual_average")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name", "permanent_water", "rainfall_monthly_min", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces", "mean_population_exposure_to_pm2_5_2019", "temperature_annual_average", "city_average_pop_density")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name", "permanent_water", "rainfall_monthly_min", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces", "mean_population_exposure_to_pm2_5_2019", "temperature_annual_average", "city_average_pop_density", "percentage_urban_area_as_open_public_spaces_and_streets")])
-create_fifty_rows_of_oob(either_city_data_fixed[,c("response", "either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density", "region_100km_susm", "city_ssm", "temperature_monthly_min", "shrubs", "region_50km_elevation_delta", "biome_name", "permanent_water", "rainfall_monthly_min", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces", "mean_population_exposure_to_pm2_5_2019", "temperature_annual_average", "city_average_pop_density", "percentage_urban_area_as_open_public_spaces_and_streets", "happiness_positive_effect")])
-```
-
-"either_pool_size", "region_50km_ssm", "population_growth", "region_100km_cultivated", "realm", "region_20km_average_pop_density"
-
-```{r}
-test_model(either_city_data_fixed, response ~ either_pool_size)
-```
-
-```{r}
-test_model(either_city_data_fixed, response ~ either_pool_size + region_50km_ssm)
-```
-
-```{r}
-test_model(either_city_data_fixed, response ~ either_pool_size + region_50km_ssm + population_growth)
-```
-
-```{r}
-test_model(either_city_data_fixed, response ~ either_pool_size + region_50km_ssm + population_growth + region_100km_cultivated)
-```
-```{r}
-test_model(either_city_data_fixed, response ~ either_pool_size + region_50km_ssm + population_growth + region_100km_cultivated + realm)
-```
-
-```{r}
-test_model(either_city_data_fixed, response ~ either_pool_size + region_50km_ssm + population_growth + region_100km_cultivated + realm + region_20km_average_pop_density)
-```
-```{r}
-AIC(
-  glm(data = either_city_data_fixed, formula = response ~ either_pool_size),
-  glm(data = either_city_data_fixed, formula = response ~ either_pool_size + region_50km_ssm),
-  glm(data = either_city_data_fixed, formula = response ~ either_pool_size + region_50km_ssm + population_growth),
-  glm(data = either_city_data_fixed, formula = response ~ either_pool_size + region_50km_ssm + population_growth + region_100km_cultivated),
-  glm(data = either_city_data_fixed, formula = response ~ either_pool_size + region_50km_ssm + population_growth + region_100km_cultivated + realm),
-  glm(data = either_city_data_fixed, formula = response ~ either_pool_size + region_50km_ssm + population_growth + region_100km_cultivated + realm + region_20km_average_pop_density)
-)
-```
-```{r}
-either.fit <- glm(data = either_city_data_fixed, formula = response ~ either_pool_size + region_50km_ssm + population_growth + region_100km_cultivated + realm + region_20km_average_pop_density)
-either_city_data_fixed$residuals <- resid(either.fit)
-
-cor(either_city_data_fixed$residuals, either_city_data_fixed$response)
-```
-
-```{r}
-plot(either.fit)
-```
-```{r}
-either_city_data_fixed[c(16, 30, 53),c("response", "either_pool_size")]
-```
-```{r}
-mean(either_city_data_fixed$either_pool_size[either_city_data_fixed$biome_name == 'Temperate Broadleaf & Mixed Forests'])
-mean(either_city_data_fixed$either_pool_size[either_city_data_fixed$realm == 'Palearctic'])
-```
-
-```{r}
-mean(either_city_data_fixed$either_pool_size[either_city_data_fixed$biome_name == 'Tropical & Subtropical Moist Broadleaf Forests'])
-mean(either_city_data_fixed$either_pool_size[either_city_data_fixed$realm == 'Indomalayan'])
-```
-
-```{r}
-mean(either_city_data_fixed$either_pool_size[either_city_data_fixed$biome_name == 'Tropical & Subtropical Dry Broadleaf Forests'])
-mean(either_city_data_fixed$either_pool_size[either_city_data_fixed$realm == 'Indomalayan'])
-```
-
-
-```{r}
-birdlife_city_data_named$name[c(16, 30, 53)]
-```
-
-```{r}
-either.fit.2 <- glm(data = either_city_data_fixed, formula = response ~ either_pool_size + population_growth + region_50km_ssm + biome_name + realm)
-plot(either.fit.2)
 ```
 
 ------------------------------------------------------------------
@@ -877,6 +330,10 @@ cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_si
 -----------------------------------------------
 -- best model with merlin is pool size + realm (CV error 13.10131)
 -----------------------------------------------
+```{r}
+summary(glm(data = merlin_city_data_fixed, formula = response ~ merlin_pool_size + realm))
+```
+
 
 ```{r}
 cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_pool_size + population_growth + region_50km_ssm + biome_name + realm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
@@ -953,8 +410,13 @@ cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_poo
 ----------------------------------------------------
 
 ```{r}
+summary(glm(data = birdlife_city_data_fixed, formula = response ~ birdlife_pool_size + realm))
+```
+
+```{r}
 ggplot(merlin_city_data_fixed_no_boreal, aes(x = merlin_pool_size, y = response)) + geom_point() + geom_smooth(method = "glm", se = F) + facet_wrap(~ realm)
 ```
+
 ```{r}
 ggplot(birdlife_city_data_fixed_no_boreal, aes(x = birdlife_pool_size, y = response)) + geom_point() + geom_smooth(method = "glm", se = F) + facet_wrap(~ realm)
 ```
@@ -965,10 +427,10 @@ summary(birdlife.fit)
 with(summary(birdlife.fit), 1 - deviance/null.deviance)
 plot(birdlife.fit)
 ```
+
 ```{r}
 birdlife_city_data_fixed_no_boreal[c(16, 53, 116, 123), c("name", "birdlife_pool_size")]
 ```
-
 
 ```{r}
 ggplot(birdlife_city_data_fixed_no_boreal, aes(x = birdlife_pool_size, y = response)) + 
@@ -989,9 +451,11 @@ summary(merlin.fit)
 with(summary(merlin.fit), 1 - deviance/null.deviance)
 plot(merlin.fit)
 ```
+
 ```{r}
 city_data[c(7, 24, 77), c("name", "birdlife_pool_size", "merlin_pool_size")]
 ```
+
 ```{r}
 ggplot(merlin_city_data_fixed_no_boreal, aes(x = merlin_pool_size, y = response)) + 
   geom_point(size = 1) + 
@@ -1004,6 +468,7 @@ ggplot(merlin_city_data_fixed_no_boreal, aes(x = merlin_pool_size, y = response)
 
 ggsave("city_effect_richness_merlin.jpg")
 ```
+
 ```{r}
 merlin_city_data_fixed_no_boreal$residuals <- resid(merlin.fit)
 ggplot(merlin_city_data_fixed_no_boreal, aes(y = response, x = residuals)) + 
@@ -1013,6 +478,7 @@ ggplot(merlin_city_data_fixed_no_boreal, aes(y = response, x = residuals)) +
   labs(title = "Merlin", subtitle = paste("Correlation", cor(merlin_city_data_fixed_no_boreal$residuals, merlin_city_data_fixed_no_boreal$response))) +
   theme_bw()
 ```
+
 ```{r}
 birdlife_city_data_fixed_no_boreal$residuals <- resid(birdlife.fit)
 ggplot(birdlife_city_data_fixed_no_boreal, aes(y = response, x = residuals)) + 
@@ -1022,10 +488,12 @@ ggplot(birdlife_city_data_fixed_no_boreal, aes(y = response, x = residuals)) +
   labs(title = "Birdlife", subtitle = paste("Correlation", cor(birdlife_city_data_fixed_no_boreal$residuals, birdlife_city_data_fixed_no_boreal$response))) +
   theme_bw()
 ```
+
 ```{r}
 birdlife_city_data_fixed_no_boreal$residuals_of_fit <- resid(lm(response ~ residuals, birdlife_city_data_fixed_no_boreal))
 ggplot(birdlife_city_data_fixed_no_boreal, aes(x = realm, y = residuals_of_fit)) + geom_boxplot()
 ```
+
 ```{r}
 birdlife.aov <- aov(birdlife_city_data_fixed_no_boreal$residuals_of_fit ~ birdlife_city_data_fixed_no_boreal$realm)
 summary(birdlife.aov)
@@ -1035,6 +503,7 @@ summary(birdlife.aov)
 merlin_city_data_fixed_no_boreal$residuals_of_fit <- resid(lm(response ~ residuals, merlin_city_data_fixed_no_boreal))
 ggplot(merlin_city_data_fixed_no_boreal, aes(x = realm, y = residuals_of_fit)) + geom_boxplot()
 ```
+
 ```{r}
 merlin.aov <- aov(merlin_city_data_fixed_no_boreal$residuals_of_fit ~ merlin_city_data_fixed_no_boreal$realm)
 summary(merlin.aov)
@@ -1044,9 +513,11 @@ summary(merlin.aov)
 ```{r}
 ggplot(merlin_city_data_fixed_no_boreal, aes(residuals)) + geom_histogram(binwidth = 1)
 ```
+
 ```{r}
 ggplot(birdlife_city_data_fixed_no_boreal, aes(residuals)) + geom_histogram(binwidth = 1)
 ```
+
 ```{r}
 shapiro.test(birdlife_city_data_fixed_no_boreal$response)
 shapiro.test(birdlife_city_data_fixed_no_boreal$residuals)
@@ -1081,40 +552,21 @@ bartlett.test(birdlife_city_data_fixed_no_boreal$residuals_of_fit, birdlife_city
 leveneTest(birdlife_city_data_fixed_no_boreal$residuals_of_fit, birdlife_city_data_fixed_no_boreal$realm) 
 ```
 
+
+-------------------------
+Check AIC
+-------------------------
+
 ```{r}
-unique(merlin_city_data_fixed_no_boreal$realm)
+AIC(
+  glm(data = merlin_city_data_fixed, formula = response ~ merlin_pool_size + population_growth + region_50km_ssm + biome_name + realm),
+  glm(data = merlin_city_data_fixed, formula = response ~ merlin_pool_size + realm)
+)
 ```
 
-```{r, warning = F}
-realms <- unique(merlin_city_data_fixed_no_boreal$realm)
-
-for(i in 1:length(realms)) {
-  realm <- realms[i]
-  delta <- cv.glm(
-              data = merlin_city_data_fixed_no_boreal[merlin_city_data_fixed_no_boreal$realm != realm,], 
-              glm(
-                data = merlin_city_data_fixed_no_boreal[merlin_city_data_fixed_no_boreal$realm != realm,],
-                formula = response ~ merlin_pool_size + realm
-              )
-           )$delta[1]
-  print(paste("Exclude Realm CV", realm, delta))
-}
+```{r}
+AIC(
+  glm(data = birdlife_city_data_fixed, formula = response ~ birdlife_pool_size + population_growth + region_50km_ssm + biome_name + realm),
+  glm(data = birdlife_city_data_fixed, formula = response ~ birdlife_pool_size + realm)
+)
 ```
-
-```{r, warning = F}
-realms <- unique(birdlife_city_data_fixed_no_boreal$realm)
-
-for(i in 1:length(realms)) {
-  realm <- realms[i]
-  delta <- cv.glm(
-              data = birdlife_city_data_fixed_no_boreal[birdlife_city_data_fixed_no_boreal$realm != realm,], 
-              glm(
-                data = birdlife_city_data_fixed_no_boreal[birdlife_city_data_fixed_no_boreal$realm != realm,],
-                formula = response ~ birdlife_pool_size + realm
-              )
-           )$delta[1]
-  print(paste("Exclude Realm CV", realm, delta))
-}
-```
-
-

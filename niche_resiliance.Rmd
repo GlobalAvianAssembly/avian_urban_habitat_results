@@ -218,6 +218,10 @@ merlin_niche_city_response <- create_city_dataset(merlin_niche_mixed_model)
 merlin_niche_city_response[order(merlin_niche_city_response$response), c('name', 'response')]
 ```
 ```{r}
+summary(merlin_niche_mixed_model)
+```
+
+```{r}
 write_csv(merlin_niche_city_response[, c('name', 'response')], 'merlin_city_niche_resilience_intercept.csv')
 ```
 
@@ -244,6 +248,7 @@ merlin_niche3_resiliance_sum <- model_summary('merlin', 'niche_3_resiliance', me
 merlin_niche3_resiliance_sum
 ```
 
+
 ----------------------
 Birdlife: Niche Resiliance
 ----------------------
@@ -266,6 +271,10 @@ anova(birdlife_niche_mixed_model, birdlife_niche_fixed_model)
 ```{r}
 birdlife_niche_city_response <- create_city_dataset(birdlife_niche_mixed_model)
 birdlife_niche_city_response[order(birdlife_niche_city_response$response), c('name', 'response')]
+```
+
+```{r}
+summary(birdlife_niche_mixed_model)
 ```
 
 ```{r}

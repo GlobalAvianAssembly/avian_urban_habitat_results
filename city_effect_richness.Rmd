@@ -331,6 +331,7 @@ cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ merlin_pool_si
 -- best model with merlin is pool size + realm (CV error 13.10131)
 -----------------------------------------------
 ```{r}
+merlin_city_data_fixed$realm <- factor(merlin_city_data_fixed$realm, levels = c("Palearctic", "Nearctic", "Australasia", "Indomalayan", "Neotropic", "Afrotropic"))
 summary(glm(data = merlin_city_data_fixed, formula = response ~ merlin_pool_size + realm))
 ```
 
@@ -410,6 +411,7 @@ cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ birdlife_poo
 ----------------------------------------------------
 
 ```{r}
+birdlife_city_data_fixed$realm <- factor(birdlife_city_data_fixed$realm, levels = c("Palearctic", "Nearctic", "Australasia", "Indomalayan", "Neotropic", "Afrotropic"))
 summary(glm(data = birdlife_city_data_fixed, formula = response ~ birdlife_pool_size + realm))
 ```
 

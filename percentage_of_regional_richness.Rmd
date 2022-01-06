@@ -76,6 +76,10 @@ merlin_niche_resiliance_city_sum <- model_summary('merlin', 'richness', merlin_n
 merlin_niche_resiliance_city_sum
 ```
 
+```{r}
+summary(merlin_mixed_model)
+```
+
 ----------------------
 Birdlife: Difference in richness
 ----------------------
@@ -121,6 +125,10 @@ bl_richness_sum
 birdlife_niche_resiliance_city_result <- model_average_for_city(birdlife_city_response)
 birdlife_niche_resiliance_city_sum <- model_summary('birdlife', 'richness', birdlife_niche_resiliance_city_result)
 birdlife_niche_resiliance_city_sum
+```
+
+```{r}
+summary(birdlife_mixed_model)
 ```
 
 ----------------------
@@ -204,19 +212,9 @@ Full result
 ```{r}
 richness_all <- full_join(full_join(merlin_richness_sum, bl_richness_sum), full_join(both_richness_sum, either_richness_sum))
 write_csv(richness_all, "richness_result.csv")
+richness_all
 ```
 
-```{r}
-ggplot(merlin, aes(x = herbaceous_wetland, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = "lm", se = F) + geom_point(alpha = 0.1) + theme_bw()
-```
-
-```{r}
-ggplot(merlin, aes(x = open_forest, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = "lm", se = F) + geom_point(alpha = 0.1) + theme_bw()
-```
-
-```{r}
-ggplot(merlin, aes(x = cultivated, y = percentage_of_regional_pool_present, colour = realm)) + geom_smooth(method = "lm", se = F) + geom_point(alpha = 0.1) + theme_bw()
-```
 
 
 

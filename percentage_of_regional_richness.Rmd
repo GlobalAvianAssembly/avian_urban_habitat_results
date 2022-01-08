@@ -10,7 +10,7 @@ options(na.action = "na.fail")
 ```
 
 ```{r}
-source("./dredge_functions.R")
+source("./helper__dredge_functions.R")
 ```
 
 ```{r}
@@ -67,7 +67,7 @@ merlin_city_response[order(merlin_city_response$response), c('name', 'response')
 ```
 
 ```{r}
-write_csv(merlin_city_response[, c('name', 'response')], 'merlin_city_richness_intercept.csv')
+write_csv(merlin_city_response[, c('name', 'response')], 'percentage_of_regional_richness__output__merlin_city_richness_intercept.csv')
 ```
 
 ```{r}
@@ -112,7 +112,7 @@ birdlife_city_response[order(birdlife_city_response$response), c('name', 'respon
 ```
 
 ```{r}
-write_csv(birdlife_city_response[, c('name', 'response')], 'birdlife_city_richness_intercept.csv')
+write_csv(birdlife_city_response[, c('name', 'response')], 'percentage_of_regional_richness__output__birdlife_city_richness_intercept.csv')
 ```
 
 
@@ -159,7 +159,7 @@ both_city_response[order(both_city_response$response), c('name', 'response')]
 ```
 
 ```{r}
-write_csv(both_city_response[, c('name', 'response')], 'both_city_richness_intercept.csv')
+write_csv(both_city_response[, c('name', 'response')], 'percentage_of_regional_richness__output__both_city_richness_intercept.csv')
 ```
 
 ```{r}
@@ -197,7 +197,7 @@ either_city_response[order(either_city_response$response), c('name', 'response')
 ```
 
 ```{r}
-write_csv(either_city_response[, c('name', 'response')], 'either_city_richness_intercept.csv')
+write_csv(either_city_response[, c('name', 'response')], 'percentage_of_regional_richness__output__either_city_richness_intercept.csv')
 ```
 
 ```{r}
@@ -211,7 +211,7 @@ Full result
 ----------------------
 ```{r}
 richness_all <- full_join(full_join(merlin_richness_sum, bl_richness_sum), full_join(both_richness_sum, either_richness_sum))
-write_csv(richness_all, "richness_result.csv")
+write_csv(richness_all, "percentage_of_regional_richness__output__richness_result.csv")
 richness_all
 ```
 

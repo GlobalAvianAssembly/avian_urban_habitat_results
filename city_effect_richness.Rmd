@@ -11,14 +11,14 @@ city_data
 
 ```{r}
 fetch_city_data_for <- function(pool_name, include_city_name = F, include_pool_size = T) {
-  results_filename <- paste(paste(pool_name, 'city', 'richness', 'intercept', sep = "_"), "csv", sep = ".")
+  results_filename <- paste(paste('percentage_of_regional_richness__output_', pool_name, 'city', 'richness', 'intercept', sep = "_"), "csv", sep = ".")
   results <- read_csv(results_filename)
   
   joined <- left_join(city_data, results)
   
   pool_size_col_name <- paste(pool_name, 'pool', 'size', sep = "_")
   
-  required_columns <- c("population_growth", "rainfall_monthly_min", "rainfall_annual_average", "rainfall_monthly_max", "temperature_annual_average", "temperature_monthly_min", "temperature_monthly_max", "happiness_negative_effect", "happiness_positive_effect", "happiness_future_life", "number_of_biomes", "realm", "biome_name", "region_20km_includes_estuary", "region_50km_includes_estuary", "region_100km_includes_estuary", "city_includes_estuary", "region_20km_average_pop_density", "region_50km_average_pop_density", "region_100km_average_pop_density", "city_max_pop_density", "city_average_pop_density", "mean_population_exposure_topm2_5_2019", "region_20km_cultivated", "region_20km_urban", "region_50km_cultivated", "region_50km_urban", "region_100km_cultivated", "region_100km_urban", "region_20km_elevation_delta", "region_20km_mean_elevation", "region_50km_elevation_delta", "region_50km_mean_elevation", "region_100km_elevation_delta", "region_100km_mean_elevation", "city_elevation_delta", "city_mean_elevation", "urbanPshrubs", "permanent_water", "open_forest", "herbaceous_wetland", "herbaceous_vegetation", "cultivated", "closed_forest", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_streets", "percentage_urban_area_as_open_public_spaces_and_streets", "percentage_urban_area_as_open_public_spaces", "city_gdp_per_population", "city_ndvi", "city_ssm", "city_susm", "region_20km_ndvi", "region_20km_ssm", "region_20km_susm", "region_50km_ndvi", "region_50km_ssm", "region_50km_susm", "region_100km_ndvi", "region_100km_ssm", "region_100km_susm", "city_percentage_protected", "region_20km_percentage_protected", "region_50km_percentage_protected", "region_100km_percentage_protected")
+  required_columns <- c("population_growth", "rainfall_monthly_min", "rainfall_annual_average", "rainfall_monthly_max", "temperature_annual_average", "temperature_monthly_min", "temperature_monthly_max", "happiness_negative_effect", "happiness_positive_effect", "happiness_future_life", "number_of_biomes", "realm", "biome_name", "region_20km_includes_estuary", "region_50km_includes_estuary", "region_100km_includes_estuary", "city_includes_estuary", "region_20km_average_pop_density", "region_50km_average_pop_density", "region_100km_average_pop_density", "city_max_pop_density", "city_average_pop_density", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "region_20km_urban", "region_50km_cultivated", "region_50km_urban", "region_100km_cultivated", "region_100km_urban", "region_20km_elevation_delta", "region_20km_mean_elevation", "region_50km_elevation_delta", "region_50km_mean_elevation", "region_100km_elevation_delta", "region_100km_mean_elevation", "city_elevation_delta", "city_mean_elevation", "urban", "shrubs", "permanent_water", "open_forest", "herbaceous_wetland", "herbaceous_vegetation", "cultivated", "closed_forest", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_streets", "percentage_urban_area_as_open_public_spaces_and_streets", "percentage_urban_area_as_open_public_spaces", "city_gdp_per_population", "city_ndvi", "city_ssm", "city_susm", "region_20km_ndvi", "region_20km_ssm", "region_20km_susm", "region_50km_ndvi", "region_50km_ssm", "region_50km_susm", "region_100km_ndvi", "region_100km_ssm", "region_100km_susm", "city_percentage_protected", "region_20km_percentage_protected", "region_50km_percentage_protected", "region_100km_percentage_protected")
   
   if (include_pool_size) {
     required_columns <- append(c(pool_size_col_name), required_columns)
@@ -61,7 +61,7 @@ ggplot(merlin_city_data_fixed, aes(response)) + geom_histogram(binwidth = 2)
 ```
 
 ```{r}
-source('./random_forest_selection_functions.R')
+source('./helper__random_forest_selection_functions.R')
 ```
 
 ```{r}
@@ -444,7 +444,7 @@ ggplot(birdlife_city_data_fixed_no_boreal, aes(x = birdlife_pool_size, y = respo
   theme_bw() +
   ylab("City Random Effect Intercept") + xlab("Regional Pool Size") + labs(title = "Birdlife")
 
-ggsave("city_effect_richness_birdlife.jpg")
+ggsave("city_effect_richness__output__birdlife.jpg")
 ```
 
 ```{r}
@@ -468,7 +468,7 @@ ggplot(merlin_city_data_fixed_no_boreal, aes(x = merlin_pool_size, y = response)
   theme_bw() +
   ylab("City Random Effect Intercept") + xlab("Regional Pool Size") + labs(title = "eBird")
 
-ggsave("city_effect_richness_merlin.jpg")
+ggsave("city_effect_richness__output__merlin.jpg")
 ```
 
 ```{r}

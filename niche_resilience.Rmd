@@ -1,0 +1,401 @@
+---
+title: "Effectiveness at maintaining niches"
+output: html_notebook
+---
+Run 'download_data.Rmd` First!
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+options(na.action = "na.fail") 
+```
+
+```{r}
+source("./helper__dredge_functions.R")
+```
+
+---------------------------------------------------------------------
+Choose model for residuals which will form our niche reseliance score
+---------------------------------------------------------------------
+```{r}
+ggplot(merlin, aes(x = percentage_of_regional_pool_present, y = percentage_of_niches_present)) + geom_point()
+```
+```{r}
+ggplot(birdlife, aes(x = percentage_of_regional_pool_present, y = percentage_of_niches_present)) + geom_point()
+```
+
+```{r}
+model_selection_by_anova <- function(data) {
+  anova(
+    glm(data = data, percentage_of_niches_present ~ percentage_of_regional_pool_present, family = "gaussian"),
+    glm(data = data, percentage_of_niches_present ~ I(percentage_of_regional_pool_present^2), family = "gaussian"),
+    glm(data = data, percentage_of_niches_present ~ I(percentage_of_regional_pool_present^3), family = "gaussian")
+  )
+}
+
+model_selection_by_aic <- function(data) {
+  AIC(
+    glm(data = data, percentage_of_niches_present ~ percentage_of_regional_pool_present, family = "gaussian"),
+    glm(data = data, percentage_of_niches_present ~ I(percentage_of_regional_pool_present^2), family = "gaussian"),
+    glm(data = data, percentage_of_niches_present ~ I(percentage_of_regional_pool_present^3), family = "gaussian")
+  )
+}
+```
+
+```{r}
+model_selection_by_anova(merlin)
+```
+
+```{r}
+model_selection_by_aic(merlin)
+```
+
+```{r}
+model_selection_by_anova(birdlife)
+```
+
+```{r}
+model_selection_by_aic(birdlife)
+```
+
+```{r}
+model_selection_by_anova(both)
+```
+
+```{r}
+model_selection_by_aic(both)
+```
+
+```{r}
+model_selection_by_anova(either)
+```
+
+```{r}
+model_selection_by_aic(either)
+```
+
+
+---------------------------------------------------------------------
+Create niche reseliance score
+---------------------------------------------------------------------
+```{r}
+score_niche_reseliance <- function(data) {
+  linear_model <- glm(data = data, percentage_of_niches_present ~ percentage_of_regional_pool_present, family = "gaussian")
+  linear_model$residuals
+}
+
+score_niche_2_reseliance <- function(data) {
+  linear_model <- glm(data = data, percentage_of_niches_2_present ~ percentage_of_regional_pool_present, family = "gaussian")
+  linear_model$residuals
+}
+
+score_niche_3_reseliance <- function(data) {
+  linear_model <- glm(data = data, percentage_of_niches_3_present ~ percentage_of_regional_pool_present, family = "gaussian")
+  linear_model$residuals
+}
+```
+
+```{r}
+merlin$niche_resiliance <- score_niche_reseliance(merlin)
+birdlife$niche_resiliance <- score_niche_reseliance(birdlife)
+both$niche_resiliance <- score_niche_reseliance(both)
+either$niche_resiliance <- score_niche_reseliance(either)
+
+merlin$niche_2_resiliance <- score_niche_2_reseliance(merlin)
+birdlife$niche_2_resiliance <- score_niche_2_reseliance(birdlife)
+both$niche_2_resiliance <- score_niche_2_reseliance(both)
+either$niche_2_resiliance <- score_niche_2_reseliance(either)
+
+merlin$niche_3_resiliance <- score_niche_3_reseliance(merlin)
+birdlife$niche_3_resiliance <- score_niche_3_reseliance(birdlife)
+both$niche_3_resiliance <- score_niche_3_reseliance(both)
+either$niche_3_resiliance <- score_niche_3_reseliance(either)
+```
+
+----------------------
+Check correlation
+----------------------
+
+```{r}
+cor(merlin[,c("percentage_of_regional_pool_present", "niche_resiliance", "percentage_of_niches_present")])
+```
+
+
+```{r}
+cor(birdlife[,c("percentage_of_regional_pool_present", "niche_resiliance", "percentage_of_niches_present")])
+```
+
+```{r}
+cor(both[,c("percentage_of_regional_pool_present", "niche_resiliance", "percentage_of_niches_present")])
+```
+
+```{r}
+cor(either[,c("percentage_of_regional_pool_present", "niche_resiliance", "percentage_of_niches_present")])
+```
+
+----------------------
+Find city predictors
+----------------------
+
+```{r}
+create_city_dataset <- function(mixed_model) {
+  city_coeefs <- ranef(mixed_model)$city_name
+  city_coeefs <- cbind(city_name = rownames(city_coeefs), city_coeefs)
+  rownames(city_coeefs) <- NULL
+  names(city_coeefs) <- c('name', 'response')
+  
+  left_join(city_coeefs, city_data)
+}
+```
+
+----------------------
+Find predictors
+----------------------
+
+```{r}
+model_average_niche_resiliance <- function(data) {
+  model_average(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + (1|city_name), data, 4)
+}
+
+model_average_niche_2_resiliance <- function(data) {
+  model_average(niche_2_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + (1|city_name), data, 4)
+}
+
+model_average_niche_3_resiliance <- function(data) {
+  model_average(niche_3_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm + (1|city_name), data, 4)
+}
+```
+
+----------------------
+Find city predictors
+----------------------
+
+```{r}
+create_city_dataset <- function(mixed_model) {
+  city_coeefs <- ranef(mixed_model)$city_name
+  city_coeefs <- cbind(city_name = rownames(city_coeefs), city_coeefs)
+  rownames(city_coeefs) <- NULL
+  names(city_coeefs) <- c('name', 'response')
+  
+  left_join(city_coeefs, city_data)
+}
+```
+
+```{r}
+model_average_niche_resiliance_for_city <- function(data) {
+  model_dredge(
+    lm(response ~ population_scaled + area_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm, data), data, 4)
+}
+```
+
+----------------------
+Merlin: Niche Resiliance
+----------------------
+```{r}
+merlin_niche_resiliance_result <- model_average_niche_resiliance(merlin)
+merlin_niche_resiliance_result
+```
+
+```{r}
+merlin_niche_mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + shrubs + urban + realm + (1|city_name), merlin)
+r.squaredGLMM(merlin_niche_mixed_model)
+```
+
+```{r}
+merlin_niche_fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + shrubs + urban + realm, merlin)
+anova(merlin_niche_mixed_model, merlin_niche_fixed_model)
+```
+
+```{r}
+merlin_niche_resiliance_sum <- model_summary('merlin', 'niche_resiliance', merlin_niche_resiliance_result)
+merlin_niche_resiliance_sum
+```
+
+```{r}
+merlin_niche_city_response <- create_city_dataset(merlin_niche_mixed_model)
+merlin_niche_city_response[order(merlin_niche_city_response$response), c('name', 'response')]
+```
+```{r}
+summary(merlin_niche_mixed_model)
+```
+
+```{r}
+write_csv(merlin_niche_city_response[, c('name', 'response')], 'merlin_city_niche_resilience_intercept.csv')
+```
+
+```{r}
+merlin_niche_resiliance_city_result <- model_average_niche_resiliance_for_city(merlin_city_response)
+merlin_niche_resiliance_city_sum <- model_summary('merlin', 'niche_resiliance', merlin_niche_resiliance_city_result)
+merlin_niche_resiliance_city_sum
+```
+
+```{r}
+merlin_city_response <- create_city_dataset(merlin_mixed_model)
+merlin_city_response[order(merlin_city_response$response), c('name', 'response')]
+```
+
+```{r}
+merlin_niche2_resiliance_result <- model_average_niche_2_resiliance(merlin)
+merlin_niche2_resiliance_sum <- model_summary('merlin', 'niche_2_resiliance', merlin_niche2_resiliance_result)
+merlin_niche2_resiliance_sum
+```
+
+```{r}
+merlin_niche3_resiliance_result <- model_average_niche_3_resiliance(merlin)
+merlin_niche3_resiliance_sum <- model_summary('merlin', 'niche_3_resiliance', merlin_niche3_resiliance_result)
+merlin_niche3_resiliance_sum
+```
+
+
+----------------------
+Birdlife: Niche Resiliance
+----------------------
+```{r}
+bl_niche_resiliance_result <- model_average_niche_resiliance(birdlife)]
+bl_niche_resiliance_result
+```
+
+
+```{r}
+birdlife_niche_mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm + (1|city_name), birdlife)
+r.squaredGLMM(birdlife_niche_mixed_model)
+```
+
+```{r}
+birdlife_niche_fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm, birdlife)
+anova(birdlife_niche_mixed_model, birdlife_niche_fixed_model)
+```
+
+```{r}
+birdlife_niche_city_response <- create_city_dataset(birdlife_niche_mixed_model)
+birdlife_niche_city_response[order(birdlife_niche_city_response$response), c('name', 'response')]
+```
+
+```{r}
+summary(birdlife_niche_mixed_model)
+```
+
+```{r}
+write_csv(birdlife_niche_city_response[, c('name', 'response')], 'niche_resilience__output__birdlife_city_niche_resilience_intercept.csv')
+```
+
+```{r}
+bl_niche_resiliance_sum <- model_summary('birdlife', 'niche_resiliance', bl_niche_resiliance_result)
+bl_niche_resiliance_sum
+```
+
+
+```{r}
+bl_niche2_resiliance_result <- model_average_niche_2_resiliance(birdlife)
+bl_niche2_resiliance_sum <- model_summary('birdlife', 'niche_2_resiliance', bl_niche2_resiliance_result)
+bl_niche2_resiliance_sum
+```
+
+```{r}
+bl_niche3_resiliance_result <- model_average_niche_3_resiliance(birdlife)
+bl_niche3_resiliance_sum <- model_summary('birdlife', 'niche_3_resiliance', bl_niche3_resiliance_result)
+bl_niche3_resiliance_sum
+```
+
+----------------------
+Both: Niche Resiliance
+----------------------
+```{r}
+both_niche_resiliance_result <- model_average_niche_resiliance(both)
+both_niche_resiliance_result
+```
+
+```{r}
+both_niche_mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm + (1|city_name), both)
+r.squaredGLMM(both_niche_mixed_model)
+```
+
+```{r}
+both_niche_fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm, both)
+anova(both_niche_mixed_model, both_niche_fixed_model)
+```
+
+```{r}
+both_niche_city_response <- create_city_dataset(both_niche_mixed_model)
+both_niche_city_response[order(both_niche_city_response$response), c('name', 'response')]
+```
+
+```{r}
+write_csv(both_niche_city_response[, c('name', 'response')], 'niche_resilience__output__both_city_niche_resilience_intercept.csv')
+```
+
+```{r}
+both_niche_resiliance_sum <- model_summary('both', 'niche_resiliance', both_niche_resiliance_result)
+both_niche_resiliance_sum
+```
+
+```{r}
+both_niche2_resiliance_result <- model_average_niche_2_resiliance(both)
+both_niche2_resiliance_sum <- model_summary('both', 'niche_2_resiliance', both_niche2_resiliance_result)
+both_niche2_resiliance_sum
+```
+
+```{r}
+both_niche3_resiliance_result <- model_average_niche_3_resiliance(both)
+both_niche3_resiliance_sum <- model_summary('both', 'niche_3_resiliance', both_niche3_resiliance_result)
+both_niche3_resiliance_sum
+```
+
+----------------------
+Either: Niche Resiliance
+----------------------
+```{r}
+either_niche_resiliance_result <- model_average_niche_resiliance(either)
+either_niche_resiliance_result
+```
+
+```{r}
+either_niche_mixed_model <- lmer(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + shrubs + urban + realm + (1|city_name), either)
+r.squaredGLMM(either_niche_mixed_model)
+```
+
+```{r}
+either_niche_fixed_model <- lm(niche_resiliance ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + permanent_water + open_forest + shrubs + urban + realm, either)
+anova(either_niche_mixed_model, either_niche_fixed_model)
+```
+
+```{r}
+either_niche_city_response <- create_city_dataset(either_niche_mixed_model)
+either_niche_city_response[order(either_niche_city_response$response), c('name', 'response')]
+```
+
+```{r}
+write_csv(either_niche_city_response[, c('name', 'response')], 'niche_resilience__output__either_city_niche_resilience_intercept.csv')
+```
+
+```{r}
+either_niche_resiliance_sum <- model_summary('either', 'niche_resiliance', either_niche_resiliance_result)
+either_niche_resiliance_sum
+```
+
+```{r}
+either_niche2_resiliance_result <- model_average_niche_2_resiliance(either)
+either_niche2_resiliance_sum <- model_summary('either', 'niche_2_resiliance', either_niche2_resiliance_result)
+either_niche2_resiliance_sum
+```
+
+```{r}
+either_niche3_resiliance_result <- model_average_niche_3_resiliance(either)
+either_niche3_resiliance_sum <- model_summary('either', 'niche_3_resiliance', either_niche3_resiliance_result)
+either_niche3_resiliance_sum
+```
+
+----------------------
+Full result
+----------------------
+```{r}
+niche_resiliance_all <- full_join(full_join(merlin_niche_resiliance_sum, bl_niche_resiliance_sum), full_join(both_niche_resiliance_sum, either_niche_resiliance_sum))
+niche2_resiliance_all <- full_join(full_join(merlin_niche2_resiliance_sum, bl_niche2_resiliance_sum), full_join(both_niche2_resiliance_sum, either_niche2_resiliance_sum))
+niche3_resiliance_all <- full_join(full_join(merlin_niche3_resiliance_sum, bl_niche3_resiliance_sum), full_join(both_niche3_resiliance_sum, either_niche3_resiliance_sum))
+
+write_csv(full_join(full_join(niche_resiliance_all, niche2_resiliance_all), niche3_resiliance_all), "niche_resilience__output__niche_resiliance_result.csv")
+```
+
+

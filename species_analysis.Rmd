@@ -22,7 +22,7 @@ options(na.action = "na.fail")
 ```
 
 ```{r}
-source("./dredge_functions.R")
+source("./helper__dredge_functions.R")
 ```
 
 ```{r}
@@ -38,7 +38,7 @@ dredge_and_subset <- function(data) {
 
 ```{r}
 load_niche_data <- function() {
-  filename <- 'species_analysis_cache.csv'
+  filename <- 'species_analysis__output__cache.csv'
   
   if (!file.exists(filename)) {
     
@@ -137,7 +137,7 @@ Full result for 10% of species
 ------------------------------
 ```{r}
 all_species_results <- full_join(full_join(merlin_10_summ, birdlife_10_summ), full_join(both_10_summ, either_10_summ))
-write_csv(all_species_results, "species_analysis_result_10_perc.csv")
+write_csv(all_species_results, "species_analysis__output__result_10_perc.csv")
 ```
 
 ---------------------------------
@@ -177,7 +177,7 @@ Full result for 10% of species
 ------------------------------
 ```{r}
 all_species_results <- full_join(full_join(merlin_20_summ, birdlife_20_summ), full_join(both_20_summ, either_20_summ))
-write_csv(all_species_results, "species_analysis_result_20_perc.csv")
+write_csv(all_species_results, "species_analysis__output__result_20_perc.csv")
 ```
 
 ------------------------------
@@ -276,7 +276,7 @@ ggplot(merlin_diff_data1, aes(x = increase, y = trophic_niche, color = group)) +
 ggplot(birdlife_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme_bw() +
   xlab("Niche fullness") + ylab("Trophic Niche") + labs(title = "Birdlife") + guides(color=guide_legend(title="Most Urbanised Species")) + theme(legend.position="bottom")
 
-ggsave("species_analysis_birdlife_niche_fullness.jpg")
+ggsave("species_analysis__output___birdlife_niche_fullness.jpg")
 ```
 
 ```{r}
@@ -615,7 +615,7 @@ Trophic Niche Accumulation
 ----------------------------------
 
 ```{r}
-accumulation <- read_csv('trophic_niche_accumulation.csv')
+accumulation <- read_csv('species_analysis__input__trophic_niche_accumulation.csv')
 accumulation
 ```
 ```{r}
@@ -659,7 +659,7 @@ left = text_grob("Number of Niches Present", rot = 90),
 bottom = text_grob("Percentage of all Species - ranked by urbanisation"))
 
 
-ggsave("trophic_niche_accumlation.jpg")
+ggsave("species_analysis__output__trophic_niche_accumlation.jpg")
 ```
 ```{r}
 by_max_birdlife_niche_count = accumulation %>% group_by(trophic_niche) %>% summarise(Value = max(birdlife_niche_count))
@@ -682,7 +682,7 @@ ggplot(accumulation, aes(x = percent, y = birdlife_niche_count)) +
 
 
 
-ggsave("trophic_niche_accumlation_birdlife.jpg")
+ggsave("species_analysis__output__trophic_niche_accumlation_birdlife.jpg")
 ```
 
 

@@ -67,7 +67,7 @@ JOIN model.urban_area USING (city_id)", '##POOL_NAME##', poolname)
 
 ```{r}
 load_dataset <- function(poolname) {
-  filename <- str_replace('hotspot_metrics_##POOL_NAME##.csv', '##POOL_NAME##', poolname)
+  filename <- str_replace('download_data__output__hotspot_metrics_##POOL_NAME##.csv', '##POOL_NAME##', poolname)
   
   if (!file.exists(filename)) {
     data <- create_dataset(poolname)
@@ -139,7 +139,7 @@ population_growth <- function(city_row) {
 
 
 ```{r}
-city_data <- read_csv('city_data.csv')
+city_data <- read_csv('download_data__input__city_data.csv')
 city_data$realm <- as.factor(city_data$realm)
 city_data$city_includes_estuary <- as.factor(city_data$city_includes_estuary)
 city_data$region_100km_includes_estuary <- as.factor(city_data$region_100km_includes_estuary)

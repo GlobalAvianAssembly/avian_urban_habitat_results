@@ -8,6 +8,12 @@ Run `download_data.Rmd` and `percentage_of_regional_richness.Rmd` First!
 city_data
 ```
 
+```{r}
+length(city_data$city_gdp_per_population[!is.na(city_data$city_gdp_per_population)])
+length(city_data$percentage_urban_area_as_open_public_spaces[!is.na(city_data$percentage_urban_area_as_open_public_spaces)])
+length(city_data$happiness_future_life[!is.na(city_data$happiness_future_life)])
+length(city_data$mean_population_exposure_to_pm2_5_2019[!is.na(city_data$mean_population_exposure_to_pm2_5_2019)])
+```
 
 ```{r}
 fetch_city_data_for <- function(pool_name, include_city_name = F, include_pool_size = T) {

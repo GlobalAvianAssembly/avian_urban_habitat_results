@@ -274,7 +274,7 @@ ggplot(merlin_diff_data1, aes(x = increase, y = trophic_niche, color = group)) +
 
 ```{r}
 ggplot(birdlife_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme_bw() +
-  xlab("Niche fullness") + xlab("Trophic Niche") + labs(title = "Birdlife") + guides(color=guide_legend(title="Most Urbanised Species")) + theme(legend.position="bottom")
+  xlab("Niche fullness") + ylab("Trophic Niche") + labs(title = "Birdlife") + guides(color=guide_legend(title="Most Urbanised Species")) + theme(legend.position="bottom")
 
 ggsave("species_analysis_birdlife_niche_fullness.jpg")
 ```
@@ -538,7 +538,6 @@ ggplot(merlin_ever_data, aes(color = present, x = pc1, y = trophic_niche)) +
     theme(legend.position="bottom", legend.title=element_text(size=9), legend.text=element_text(size=8), legend.key.size = unit(1,"line")) +
     guides(color=guide_legend(title="Present in any city?"), size=guide_legend(title="Niche size")) +
     ylab("Trophic Niche") + xlab("PC1: Body size") + labs(title = "Merlin Regional Pool")
-ggsave("species_analysis_pc1_merlin.jpg")
 ```
 ```{r}
 ggplot(merlin_diff_data, aes(color = niche_appearance, x = pc1, y = trophic_niche)) + 
@@ -566,8 +565,8 @@ ggplot(birdlife_ever_data, aes(color = present, x = pc1, y = trophic_niche)) +
     theme(legend.position="bottom", legend.title=element_text(size=9), legend.text=element_text(size=8), legend.key.size = unit(1,"line")) +
     guides(color=guide_legend(title="Present in any city?"), size=guide_legend(title="Niche size")) +
     ylab("Trophic Niche") + xlab("PC1: Body size") + labs(title = "Birdlife Regional Pool")
-ggsave("species_analysis_pc1_birdlife.jpg")
 ```
+
 ----------------------------------
 First attempt figures
 ----------------------------------
@@ -610,16 +609,6 @@ species_plot2
 c) The redundancy/fullness of the niches that are present in cities with 10% of the most urbanised species, and the redundancy/fullness of the niches that are present in cities with 20% of the most urbanised species.
 d) The percentage increase in redundancy/fullness of niches between the top 10% of most urbanised species and the top 20% of most urbanised species, grouped using Tukey based on an anova of the percentage increase given the tropic niche. This shows the amount of redundancy that is increased from the bottom 25% performing hotspots (hotspots with 10% of regional pool) and the bottom 75% of performing hotspots (hotspots with 20% of regional pool).
 
-
-```{r}
-jpeg("species_plot1.jpg", width = 800, height = 600)
-species_plot1
-dev.off()
-
-jpeg("species_plot2.jpg", width = 800, height = 600)
-species_plot2
-dev.off()
-```
 
 ----------------------------------
 Trophic Niche Accumulation

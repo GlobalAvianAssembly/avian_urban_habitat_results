@@ -181,7 +181,7 @@ write_csv(all_species_results, "species_analysis__output__result_20_perc.csv")
 ```
 
 ------------------------------
-Comparing the 2 percentiles
+Comparing the 2 percentiles - Merlin
 ------------------------------
 
 ```{r}
@@ -246,9 +246,11 @@ merlin_increase_tropic_niche_tukey <- cld(glht(merlin_increase_tropic_niche_anov
 merlin_increase_tropic_niche_tukey
 ```
 
+
 ```{r}
 plot(merlin_increase_tropic_niche_tukey)
 ```
+
 ```{r}
 with.tukey.label.as.group <- function(tukey, dataset, join_by) {
   labels <- data.frame(tukey$mcletters$Letters)
@@ -271,12 +273,15 @@ table(merlin_diff_data1$trophic_niche)
 ```{r}
 ggplot(merlin_diff_data1, aes(x = increase, y = trophic_niche, color = group)) + geom_boxplot() + theme_bw()
 ```
+------------------------------
+Comparing the 2 percentiles - Birdlife
+------------------------------
 
 ```{r}
 ggplot(birdlife_species_data, aes(x = response, y = trophic_niche, color = percentile)) + geom_boxplot() + theme_bw() +
   xlab("Niche fullness") + ylab("Trophic Niche") + labs(title = "Birdlife") + guides(color=guide_legend(title="Most Urbanised Species")) + theme(legend.position="bottom")
 
-ggsave("species_analysis__output___birdlife_niche_fullness.jpg")
+ggsave("species_analysis__output__birdlife_niche_fullness.jpg")
 ```
 
 ```{r}
@@ -299,6 +304,61 @@ birdlife_increase_tropic_niche_tukey
 ```{r}
 birdlife_diff_data1 <- with.tukey.label.as.group(birdlife_increase_tropic_niche_tukey, birdlife_diff_data, c("trophic_niche" = "category"))
 ggplot(birdlife_diff_data1, aes(x = increase, y = trophic_niche, color = group)) + geom_boxplot() + theme_bw()
+```
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Invertivore'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Invertivore'])
+```
+
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Aquatic predator'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Aquatic predator'])
+```
+
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Herbivore aquatic'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Herbivore aquatic'])
+```
+
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Vertivore'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Vertivore'])
+```
+
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Scavenger'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Scavenger'])
+```
+
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Omnivore'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Omnivore'])
+```
+
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Nectarivore'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Nectarivore'])
+```
+
+
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Herbivore terrestrial'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Herbivore terrestrial'])
+```
+
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Granivore'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Granivore'])
+```
+
+```{r}
+mean(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Frugivore'])
+sd(birdlife_diff_data$increase[birdlife_diff_data$trophic_niche == 'Frugivore'])
+```
+
+```{r}
+birdlife_fullness_increase <- birdlife_diff_data %>% group_by(trophic_niche) %>% summarise(across(.cols = c("increase"), list(mean = mean, sd = sd)))
+birdlife_fullness_increase
 ```
 
 ```{r}
@@ -687,11 +747,50 @@ ggplot(accumulation, aes(x = percent, y = birdlife_niche_count)) +
 ggsave("species_analysis__output__trophic_niche_accumlation_birdlife.jpg")
 ```
 
+```{r}
+urban_niche_counts <- read_csv("species_analysis__input__birdlife_urban_niche_counts.csv")
+urban_niche_counts
+```
 
 
+```{r}
+birdlife_compare_counts_10 <- accumulation[accumulation$percent == 10, c("trophic_niche", "birdlife_niche_count")]
+names(birdlife_compare_counts_10) <- c("trophic_niche", "top_10_count")
+birdlife_compare_counts_10
+```
+
+```{r}
+birdlife_compare_counts_20 <- accumulation[accumulation$percent == 20, c("birdlife_niche_count")]
+names(birdlife_compare_counts_20) <- c("top_20_count")
+birdlife_compare_counts_100 <- accumulation[accumulation$percent == 100, c("birdlife_niche_count")]
+names(birdlife_compare_counts_100) <- c("top_100_count")
+
+birdlife_compare_counts <- cbind(birdlife_compare_counts_10, birdlife_compare_counts_20, birdlife_compare_counts_100)
+birdlife_compare_counts$diff <- birdlife_compare_counts$top_20_count - birdlife_compare_counts$top_10_count
+birdlife_compare_counts$increase <- birdlife_compare_counts$diff / birdlife_compare_counts$top_10_count
+
+birdlife_compare_counts$top_10_perc <- birdlife_compare_counts$top_10_count / birdlife_compare_counts$top_100_count
+birdlife_compare_counts$top_20_perc <- birdlife_compare_counts$top_20_count / birdlife_compare_counts$top_100_count
+
+birdlife_compare_counts$trophic_niche <- factor(birdlife_compare_counts$trophic_niche)
 
 
+niche_count_data <- right_join(birdlife_compare_counts, urban_niche_counts)
+
+niche_count_data$urban_10_perc <- niche_count_data$top_10_count / niche_count_data$urban_niche_count
+niche_count_data$urban_20_perc <- niche_count_data$top_20_count / niche_count_data$urban_niche_count
 
 
+niche_count_data$total_perc <- niche_count_data$urban_niche_count / niche_count_data$top_100_count
+
+names(birdlife_fullness_increase) <- c("trophic_niche", "fullness_increase_mean", "fullness_increase_sd")
+niche_count_data <- right_join(niche_count_data, birdlife_fullness_increase)
+
+format(niche_count_data[,c("trophic_niche", "top_10_count", "top_20_count", "increase", "top_10_perc", "top_20_perc", "urban_10_perc", "urban_20_perc", "top_100_count", "total_perc", "urban_niche_count", "fullness_increase_mean", "fullness_increase_sd")], digits = 2)
+```
+
+```{r}
+write_csv(format(niche_count_data[,c("trophic_niche", "top_10_count", "top_20_count", "increase", "top_10_perc", "top_20_perc", "urban_10_perc", "urban_20_perc", "top_100_count", "total_perc", "urban_niche_count", "fullness_increase_mean", "fullness_increase_sd")], digits = 2), "species_analysis__output__niche_accumulation_results.csv")
+```
 
 

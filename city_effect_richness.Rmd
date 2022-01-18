@@ -578,3 +578,16 @@ AIC(
   glm(data = birdlife_city_data_fixed, formula = response ~ birdlife_pool_size + realm)
 )
 ```
+
+----------------------------------------
+Compare outliers between two pool sizes
+----------------------------------------
+```{r}
+ggplot(city_data, aes(x = merlin_pool_size, y = birdlife_pool_size)) + 
+  geom_point() +
+  geom_smooth(se = F, method = "lm") +
+  geom_text(aes(label = name), data = city_data[c(16, 53, 124, 7, 24, 77),], size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_point(data = city_data[c(16, 53, 124, 7, 24, 77),], color = "red") +
+  face t_wrap (~ realm) +
+  xlab("eBird Pool Size") + ylab("Birdlife Pool Size")
+```

@@ -732,15 +732,13 @@ ggplot(accumulation, aes(x = percent, y = birdlife_niche_count)) +
   geom_line(aes(linetype = birdlife_remaining_species), na.value = "dash") +
   scale_linetype_manual(values=c("blank", "solid"), guide = "none") +
   geom_hline(data = . %>% group_by(trophic_niche) %>% filter(birdlife_niche_count == max(birdlife_niche_count)), aes(yintercept = birdlife_niche_count), color = "blue", size = 0.25, linetype = "dashed") +
-  geom_vline(xintercept = 10, colour = "#F8766D") +
-  geom_vline(xintercept = 20, colour = "#00BFC4") +
   theme_bw() +
   theme(legend.position = "bottom", strip.text = element_text(size = 6), axis.text.x = element_text(angle = 90, size = 6),  axis.text.y = element_text(size = 6)) +
   facet_wrap (~ factor(trophic_niche, levels = c("Invertivore", "Aquatic predator", "Omnivore", "Vertivore", "Frugivore", "Herbivore aquatic", "Granivore", "Herbivore terrestrial", "Nectarivore", "Scavenger")), scales = "free") +
   xlab("Percentage of Species ranked from the most urbanised") + 
   ylab("Number of Niches") +
   labs(title = "Birdlife Niche Accumulation") +
-  xlim(0, 50)
+  xlim(0, 40)
 
 
 
@@ -792,5 +790,12 @@ format(niche_count_data[,c("trophic_niche", "top_10_count", "top_20_count", "inc
 ```{r}
 write_csv(format(niche_count_data[,c("trophic_niche", "top_10_count", "top_20_count", "increase", "top_10_perc", "top_20_perc", "urban_10_perc", "urban_20_perc", "top_100_count", "total_perc", "urban_niche_count", "fullness_increase_mean", "fullness_increase_sd")], digits = 2), "species_analysis__output__niche_accumulation_results.csv")
 ```
+
+
+
+
+
+
+
 
 

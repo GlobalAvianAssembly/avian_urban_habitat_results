@@ -217,6 +217,7 @@ merlin_niche_resiliance_sum
 merlin_niche_city_response <- create_city_dataset(merlin_niche_mixed_model)
 merlin_niche_city_response[order(merlin_niche_city_response$response), c('name', 'response')]
 ```
+
 ```{r}
 summary(merlin_niche_mixed_model)
 ```
@@ -253,7 +254,7 @@ merlin_niche3_resiliance_sum
 Birdlife: Niche Resiliance
 ----------------------
 ```{r}
-bl_niche_resiliance_result <- model_average_niche_resiliance(birdlife)]
+bl_niche_resiliance_result <- model_average_niche_resiliance(birdlife)
 bl_niche_resiliance_result
 ```
 

@@ -326,9 +326,14 @@ cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ss
 summary(glm(data = merlin_city_data_fixed, formula = response ~ region_50km_ssm + region_50km_elevation_delta))
 ```
 
+```{r}
+reg_merlin = glm(data = merlin_city_data_fixed, formula = response ~ region_50km_ssm + region_50km_elevation_delta)
+with(summary(reg_merlin), 1 - deviance/null.deviance)
+```
 
 Birdlife data set
 ----------------
+
 
 ```{r}
 cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + city_gdp_per_population + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
@@ -417,6 +422,11 @@ cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ 1, data = bi
 
 ```{r}
 summary(glm(data = birdlife_city_data_fixed, formula = response ~ region_50km_ssm))
+```
+
+```{r}
+reg_birdlife = glm(data = birdlife_city_data_fixed, formula = response ~ region_50km_ssm)
+with(summary(reg_birdlife), 1 - deviance/null.deviance)
 ```
 
 --------------------------------
@@ -533,3 +543,8 @@ AIC(
   glm(data = birdlife_city_data_fixed, formula = response ~ region_50km_ssm)
 )
 ```
+
+
+
+
+

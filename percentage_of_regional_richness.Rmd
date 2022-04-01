@@ -70,11 +70,6 @@ merlin_city_response[order(merlin_city_response$response), c('name', 'response')
 write_csv(merlin_city_response[, c('name', 'response')], 'percentage_of_regional_richness__output__merlin_city_richness_intercept.csv')
 ```
 
-```{r}
-merlin_niche_resiliance_city_result <- model_average_for_city(merlin_city_response)
-merlin_niche_resiliance_city_sum <- model_summary('merlin', 'richness', merlin_niche_resiliance_city_result)
-merlin_niche_resiliance_city_sum
-```
 
 ```{r}
 summary(merlin_mixed_model)
@@ -119,12 +114,6 @@ write_csv(birdlife_city_response[, c('name', 'response')], 'percentage_of_region
 ```{r}
 bl_richness_sum <- model_summary('birdlife', 'richness', bl_richness_result)
 bl_richness_sum
-```
-
-```{r}
-birdlife_niche_resiliance_city_result <- model_average_for_city(birdlife_city_response)
-birdlife_niche_resiliance_city_sum <- model_summary('birdlife', 'richness', birdlife_niche_resiliance_city_result)
-birdlife_niche_resiliance_city_sum
 ```
 
 ```{r}
@@ -216,6 +205,38 @@ richness_all
 ```
 
 
+
+
+---------------------------------------
+Additional figures
+---------------------------------------
+
+```{r}
+library(tidyr)
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+environment <- merlin[,c('closed_forest', 'cultivated', 'herbaceous_vegetation', 'herbaceous_wetland', 'open_forest', 'permanent_water', 'shrubs', 'urban')]
+names(environment) <- c('Closed Forest', 'Cultivated', 'Herbaceous Vegetation', 'Herbaceous Wetland', 'Open Forest', 'Permanent Water', 'Shurbs', 'Urban')
+landcover <- gather(environment, landcover, proportion)
+
+ggplot(landcover, aes(x = landcover, y = proportion)) + geom_boxplot() + xlab('Landcover Class') + ylab('Proportion in 5 km around sites') +
+  scale_x_discrete(labels = scales::wrap_format(10)) + theme_bw() + labs(title = "Landcover Proportions")
+
+ggsave("percentage_of_regional_richness__output__som_landcover_proportions.jpg")
+```
+```{r}
+ggarrange(
+  ggplot(merlin, aes(y = elevation_delta)) + geom_boxplot() + xlab('Elevation Delta') + ylab('Average Metres in 5 km around sites') +
+    scale_x_discrete(labels = scales::wrap_format(10)) + theme_bw(),
+  ggplot(merlin, aes(y = mean_elevation)) + geom_boxplot() + xlab('Mean Elevation') + ylab('Average Metres in 5 km around sites') +
+    scale_x_discrete(labels = scales::wrap_format(10)) + theme_bw()
+)
+
+ggsave("percentage_of_regional_richness__output__som_elevations.jpg")
+```
 
 
 

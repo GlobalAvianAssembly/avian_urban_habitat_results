@@ -4,15 +4,11 @@ output: html_notebook
 ---
 Run 'download_data.Rmd` First!
 
-```{r}
+```{r setup}
 library(tidyverse)
-```
 
-```{r}
 options(na.action = "na.fail") 
-```
 
-```{r}
 source("./helper__dredge_functions.R")
 ```
 
@@ -186,7 +182,7 @@ create_city_dataset <- function(mixed_model) {
 ```{r}
 model_average_niche_resiliance_for_city <- function(data) {
   model_dredge(
-    lm(response ~ population_scaled + area_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm, data), data, 4)
+    lm(response ~ area_scaled + closed_forest + cultivated + herbaceous_wetland + herbaceous_vegetation + open_forest + permanent_water + shrubs + urban + realm, data), data, 4)
 }
 ```
 
@@ -249,6 +245,27 @@ merlin_niche3_resiliance_sum <- model_summary('merlin', 'niche_3_resiliance', me
 merlin_niche3_resiliance_sum
 ```
 
+```{r}
+merlin_nicheres_plot <- merlin_niche_resiliance_sum[bl_niche_resiliance_sum$model == 'full',]
+merlin_nicheres_plot$explanatory <- factor(merlin_nicheres_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+merlin_nicheres_plot$type <- 'Proportion of landcover\n5 km around site'
+merlin_nicheres_plot$type[merlin_nicheres_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Average elevation\n5 km around site'
+merlin_nicheres_plot$type[merlin_nicheres_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+
+ggplot(merlin_nicheres_plot, aes(y=explanatory, x=niche_resiliance_merlin_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=niche_resiliance_merlin_estimate-niche_resiliance_merlin_error, xmax=niche_resiliance_merlin_estimate+niche_resiliance_merlin_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(merlin_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous vegetation', 'herbaceous_wetland' = 'Herbaceous wetland', 'permanent_water' = 'Permanent water', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation scaled', 'elevation_delta_scaled' = 'Elevation delta scaled', 'realmAfrotropic' = 'Afrotropic', 'realmAustralasia' = 'Austaliasia', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropic')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Explanatory type")) + xlab('Increase in\n(percentage of regional niches / percentage of regional richness)\n± Standard Error') + ylab('Explanatory')
+
+ggsave('niche_resilience__output__merlin_niche_resilience_result.jpg')
+```
 
 ----------------------
 Birdlife: Niche Resiliance
@@ -298,6 +315,29 @@ bl_niche2_resiliance_sum
 bl_niche3_resiliance_result <- model_average_niche_3_resiliance(birdlife)
 bl_niche3_resiliance_sum <- model_summary('birdlife', 'niche_3_resiliance', bl_niche3_resiliance_result)
 bl_niche3_resiliance_sum
+```
+
+
+```{r}
+birdlife_nicheres_plot <- bl_niche_resiliance_sum[bl_niche_resiliance_sum$model == 'full',]
+birdlife_nicheres_plot$explanatory <- factor(birdlife_nicheres_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlife_nicheres_plot$type <- 'Proportion of landcover\n5 km around site'
+birdlife_nicheres_plot$type[birdlife_nicheres_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Average elevation\n5 km around site'
+birdlife_nicheres_plot$type[birdlife_nicheres_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+
+ggplot(birdlife_nicheres_plot, aes(y=explanatory, x=niche_resiliance_birdlife_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=niche_resiliance_birdlife_estimate-niche_resiliance_birdlife_error, xmax=niche_resiliance_birdlife_estimate+niche_resiliance_birdlife_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(merlin_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous vegetation', 'herbaceous_wetland' = 'Herbaceous wetland', 'permanent_water' = 'Permanent water', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation scaled', 'elevation_delta_scaled' = 'Elevation delta scaled', 'realmAfrotropic' = 'Afrotropic', 'realmAustralasia' = 'Austaliasia', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropic')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Explanatory type")) + xlab('Increase in\n(percentage of regional niches / percentage of regional richness)\n± Standard Error') + ylab('Explanatory')
+
+ggsave('niche_resilience__output__birdlife_niche_resilience_result.jpg')
 ```
 
 ----------------------

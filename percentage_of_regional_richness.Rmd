@@ -5,11 +5,12 @@ output: html_notebook
 
 Run 'download_data.Rmd` First!
 
-```{r}
+```{r setup}
 options(na.action = "na.fail") 
-```
 
-```{r}
+library(tidyverse)
+library(dplyr)
+
 source("./helper__dredge_functions.R")
 ```
 
@@ -56,6 +57,7 @@ anova(merlin_mixed_model, merlin_fixed_model)
 anova(merlin_mixed_model, lm(percentage_of_regional_pool_present ~ city_name, merlin))
 ```
 
+
 ```{r}
 merlin_richness_sum <- model_summary('merlin', 'richness', merlin_richness_result)
 merlin_richness_sum
@@ -74,6 +76,29 @@ write_csv(merlin_city_response[, c('name', 'response')], 'percentage_of_regional
 ```{r}
 summary(merlin_mixed_model)
 ```
+
+```{r}
+merlin_richness_plot <- merlin_richness_sum[merlin_richness_sum$model == 'full',]
+merlin_richness_plot$explanatory <- factor(merlin_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+merlin_richness_plot$type <- 'Landcover'
+merlin_richness_plot$type[merlin_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Elevation'
+merlin_richness_plot$type[merlin_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+
+ggplot(merlin_richness_plot, aes(y=explanatory, x=richness_merlin_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=richness_merlin_estimate-richness_merlin_error, xmax=richness_merlin_estimate+richness_merlin_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(merlin_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous vegetation', 'herbaceous_wetland' = 'Herbaceous wetland', 'permanent_water' = 'Permanent water', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation scaled', 'elevation_delta_scaled' = 'Elevation delta scaled', 'realmAfrotropic' = 'Afrotropic', 'realmAustralasia' = 'Austaliasia', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropic')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Explanatory type")) + xlab('Estimate ± Standard Error') + ylab('Explanatory')
+
+ggsave('percentage_of_regional_pool__output__merlin_richness_result.jpg')
+```
+
 
 ----------------------
 Birdlife: Difference in richness
@@ -120,6 +145,28 @@ bl_richness_sum
 summary(birdlife_mixed_model)
 ```
 
+```{r}
+birdlife_richness_plot <- bl_richness_sum[bl_richness_sum$model == 'full',]
+birdlife_richness_plot$explanatory <- factor(birdlife_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlife_richness_plot$type <- 'Landcover'
+birdlife_richness_plot$type[birdlife_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Elevation'
+birdlife_richness_plot$type[birdlife_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+
+ggplot(birdlife_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=richness_birdlife_estimate-richness_birdlife_error, xmax=richness_birdlife_estimate+richness_birdlife_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(birdlife_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous vegetation', 'herbaceous_wetland' = 'Herbaceous wetland', 'permanent_water' = 'Permanent water', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation scaled', 'elevation_delta_scaled' = 'Elevation delta scaled', 'realmAfrotropic' = 'Afrotropic', 'realmAustralasia' = 'Austaliasia', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropic')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Explanatory type")) + xlab('Estimate ± Standard Error') + ylab('Explanatory')
+
+ggsave('percentage_of_regional_pool__output__birdlife_richness_result.jpg')
+```
+
 ----------------------
 Both: Difference in richness
 ----------------------
@@ -142,6 +189,7 @@ anova(both_mixed_model, both_fixed_model)
 both_richness_sum <- model_summary('both', 'richness', both_richness_result)
 both_richness_sum
 ```
+
 ```{r}
 both_city_response <- create_city_dataset(both_mixed_model)
 both_city_response[order(both_city_response$response), c('name', 'response')]
@@ -227,6 +275,7 @@ ggplot(landcover, aes(x = landcover, y = proportion)) + geom_boxplot() + xlab('L
 
 ggsave("percentage_of_regional_richness__output__som_landcover_proportions.jpg")
 ```
+
 ```{r}
 ggarrange(
   ggplot(merlin, aes(y = elevation_delta)) + geom_boxplot() + xlab('Elevation Delta') + ylab('Average Metres in 5 km around sites') +

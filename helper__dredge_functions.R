@@ -71,13 +71,13 @@ model_summary <- function(pool, response_var, model_sum) {
                                             attr(model_sum, "revised.var"), FALSE, 0.05)))
   
   
-  coefmat.subset <- coefmat.subset[-c(1), c(1, 5)]
-  names(coefmat.subset) <- c(.column_name("estimate"), .column_name("p"))
+  coefmat.subset <- coefmat.subset[-c(1), c(1, 2, 5)]
+  names(coefmat.subset) <- c(.column_name("estimate"), .column_name("error"), .column_name("p"))
   coefmat.subset <- tibble::rownames_to_column(coefmat.subset, "explanatory")
   coefmat.subset$model = 'subset'
   
-  coefmat.full <- coefmat.full[-c(1), c(1, 5)]
-  names(coefmat.full) <- c(.column_name("estimate"), .column_name("p"))
+  coefmat.full <- coefmat.full[-c(1), c(1, 2, 5)]
+  names(coefmat.full) <- c(.column_name("estimate"), .column_name("error"), .column_name("p"))
   coefmat.full <- tibble::rownames_to_column(coefmat.full, "explanatory")
   coefmat.full$model = 'full'
   

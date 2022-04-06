@@ -149,7 +149,7 @@ urbanite_families
 nrow(urbanite_families)
 ```
 
-```{r}
+```{r, fig.width = 6}
 families_ordered_by_birdlife <- urbanite_families$taxonomic_family[order(urbanite_families$birdlife_city_ratio)]
 urbanite_families$taxonomic_family = factor(urbanite_families$taxonomic_family, levels=families_ordered_by_birdlife)
 
@@ -162,7 +162,7 @@ ggplot(urbanite_families, aes(y = birdlife_city_ratio * 100, x = taxonomic_famil
 
 ggsave("species_analysis__output__birdlife_taxonmic_families.jpg")
 ```
-```{r}
+```{r, fig.width = 6}
 families_ordered_by_merlin <- urbanite_families$taxonomic_family[order(urbanite_families$merlin_city_ratio)]
 urbanite_families$taxonomic_family = factor(urbanite_families$taxonomic_family, levels=families_ordered_by_merlin)
 
@@ -175,3 +175,6 @@ ggplot(urbanite_families, aes(y = merlin_city_ratio * 100, x = taxonomic_family)
 
 ggsave("species_analysis__output__merlin_taxonmic_families.jpg")
 ```
+
+
+

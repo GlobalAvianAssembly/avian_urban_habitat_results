@@ -162,16 +162,22 @@ ggplot(urbanite_families, aes(y = birdlife_city_ratio * 100, x = taxonomic_famil
 
 ggsave("species_analysis__output__birdlife_taxonmic_families.jpg")
 ```
-```{r, fig.width = 6}
+```{r, fig.width = 6, fig.height = 8}
 families_ordered_by_merlin <- urbanite_families$taxonomic_family[order(urbanite_families$merlin_city_ratio)]
 urbanite_families$taxonomic_family = factor(urbanite_families$taxonomic_family, levels=families_ordered_by_merlin)
 
                   
 ggplot(urbanite_families, aes(y = merlin_city_ratio * 100, x = taxonomic_family)) + 
-  geom_point() +
-  ylab("Percentage of cities\npresent when in\nregional pool") + xlab("Taxonomic Family") +
+  geom_col( alpha = .2) +
+  ylab("") + xlab("") +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=5)) 
+  #theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=5)) +
+  theme(axis.text.x = element_text(angle = 360/(2*pi) * rev( pi/2 + seq( pi/155, 2*pi-pi/155, len=155)))) +
+  theme(panel.border = element_blank(),
+        legend.key = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text.y = element_blank()) +
+  coord_polar(clip = "off")
 
 ggsave("species_analysis__output__merlin_taxonmic_families.jpg")
 ```

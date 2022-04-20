@@ -1,0 +1,189 @@
+---
+title: "Analysis of phylogeny"
+output: html_notebook
+---
+
+
+```{r setup}
+library(phytools)
+library(dplyr)
+library(tidyverse)
+rm(list = ls())
+```
+
+
+Load a maximum clade credibility tree from jetz
+```{r}
+tree <- read.tree("./phylogeny__input__stage2_hackett_mcc_no_neg.tre")
+```
+
+Load BirdLife regional pool and city data
+```{r}
+birdlife_raw <- read_csv('./phylogeny__input__birdlife_city_presence.csv')
+```
+Species from birdlife pool not in tree
+```{r}
+birdlife_raw[!birdlife_raw$jetz_scientific_name %in% tree$tip.label,]
+```
+
+Format birdlife data
+```{r}
+birdlife_input <- birdlife_raw[birdlife_raw$jetz_scientific_name %in% tree$tip.label,]
+birdlife_pruned <- ladderize(drop.tip(tree, setdiff(tree$tip.label, birdlife_input$jetz_scientific_name)))
+
+birdlife <- birdlife_input$presence_ratio
+names(birdlife) <- birdlife_input$jetz_scientific_name
+
+head(birdlife)
+```
+
+
+Run the analysis on birdlife
+```{r}
+birdlife_phylo_signal <- phylosig(birdlife_pruned, birdlife, method="lambda", test=TRUE)
+birdlife_phylo_signal
+```
+
+
+Show the results for birdlife
+```{r}
+birdlife_continuous_trait_evolution <- contMap(birdlife_pruned, birdlife, outline=FALSE, fsize=0.05, lwd=0.3)
+```
+Change colour ramp
+```{r}
+colourCount <- length(birdlife_continuous_trait_evolution$cols)
+birdlife_continuous_trait_evolution$cols[1:colourCount]<-colorRampPalette(c("#FFC20A","#0C7BDC"), space="Lab")(colourCount)
+```
+
+function from: http://blog.phytools.org/2017/03/clade-labels-on-circular-fan-tree.html
+adapted due to: https://github.com/liamrevell/phytools/issues/79
+```{r}
+library(plotrix)
+arc.cladelabels.fixed <- function(tree=NULL,text,node=NULL,ln.offset=1.02,
+	lab.offset=1.06,cex=1,orientation="curved",...){
+	obj<-get("last_plot.phylo",envir=.PlotPhyloEnv)
+	if(obj$type!="fan") stop("method works only for type=\"fan\"")
+	h<-max(sqrt(obj$xx^2+obj$yy^2))
+	if(hasArg(mark.node)) mark.node<-list(...)$mark.node
+	else mark.node<-TRUE
+	if(hasArg(interactive)) interactive<-list(...)$interactive
+	else {
+		if(is.null(node)) interactive<-TRUE
+		else interactive<-FALSE
+	}
+	if(interactive) node<-getnode()
+	if(hasArg(lwd)) lwd<-list(...)$lwd
+	else lwd<-par()$lwd
+	if(hasArg(col)) col<-list(...)$col
+	else col<-par()$col
+	if(hasArg(lend)) lend<-list(...)$lend
+	else lend<-par()$lend
+	if(hasArg(clockwise)) clockwise<-list(...)$clockwise
+	else clockwise<-TRUE
+	if(hasArg(n)) n<-list(...)$n
+	else n<-0.05
+	if(mark.node) points(obj$xx[node],obj$yy[node],pch=21,
+		bg="red")
+	if(is.null(tree)){
+		tree<-list(edge=obj$edge,tip.label=1:obj$Ntip,
+			Nnode=obj$Nnode)
+		class(tree)<-"phylo"
+	}
+	d<-getDescendants(tree,node)
+	d<-sort(d[d<=Ntip(tree)])
+	
+	deg<-atan(obj$yy[d]/obj$xx[d])*180/pi
+	
+	ii<-intersect(which(obj$yy[d]>=0),which(obj$xx[d]<0))
+	deg[ii]<-180+deg[ii]
+	
+	ii<-intersect(which(obj$yy[d]<0),which(obj$xx[d]<0))
+	deg[ii]<-180+deg[ii]
+	
+	ii<-intersect(which(obj$yy[d]<0),which(obj$xx[d]>=0))
+	deg[ii]<-360+deg[ii]
+	
+	deg1 <- min(deg, na.rm = T)
+	deg2 <- max(deg, na.rm = T)
+	draw.arc(x=0,y=0,radius=ln.offset*h,deg1=deg1, deg2=deg2,lwd=lwd,col=col,lend=lend,n=n)
+	
+	if(orientation=="curved")
+		arctext(text, radius=lab.offset*h, middle=mean(range(deg * pi/180, na.rm = T)), cex=cex, clockwise=clockwise)
+	else if(orientation=="horizontal") {
+	  deg_med <- median(deg, na.rm = T)
+		x0<-lab.offset * cos(deg_med*pi/180)*h
+		y0<-lab.offset * sin(deg_med*pi/180)*h
+		text(x=x0,y=y0,label=text,
+		adj=c(if(x0>=0) 0 else 1,if(y0>=0) 0 else 1),
+		offset=0,cex=cex)
+	}
+}
+```
+
+
+```{r}
+plot(birdlife_continuous_trait_evolution, type="fan", outline=FALSE, fsize=c(0.01, 1), lwd = c(0.1, 1), leg.txt="Cities/Regional Pools")
+
+for(family in unique(birdlife_input$birdlife_v3_family_name_english)) {
+  tips <- birdlife_input$jetz_scientific_name[birdlife_input$birdlife_v3_family_name_english == family]
+  node <- findMRCA(tree, tips)
+  arc.cladelabels.fixed(text=family, node=node, tree = tree, cex = 0.2, mark.node = F)
+}
+```
+
+Save the results
+```{r}
+pdf(file="phylogeny__output__birdlife_tree.pdf")
+plot(birdlife_continuous_trait_evolution, type="fan", outline=FALSE, fsize=c(0.01, 0.5), lwd = c(0.1, 1), leg.txt="Cities/Regional Pools")
+
+for(family in unique(birdlife_input$birdlife_v3_family_name_english)) {
+  tips <- birdlife_input$jetz_scientific_name[birdlife_input$birdlife_v3_family_name_english == family]
+  node <- findMRCA(tree, tips)
+  arc.cladelabels.fixed(text=family, node=node, tree = tree, cex = 0.2, mark.node = F)
+}
+dev.off()
+```
+
+Load Merlin regional pool and city data
+```{r}
+merlin_raw <- read_csv('./phylogeny__input__merlin_city_presence.csv')
+```
+
+Species from birdlife pool not in tree
+```{r}
+merlin_raw[!merlin_raw$jetz_scientific_name %in% tree$tip.label,]
+```
+
+Format birdlife data
+```{r}
+merlin_input <- merlin_raw[merlin_raw$jetz_scientific_name %in% tree$tip.label,]
+merlin_pruned <- ladderize(drop.tip(tree, setdiff(tree$tip.label, merlin_input$jetz_scientific_name)))
+
+merlin <- merlin_input$presence_ratio
+names(merlin) <- merlin_input$jetz_scientific_name
+
+head(merlin)
+```
+
+Run the analysis on merlin
+```{r}
+merlin_phylo_signal <- phylosig(merlin_pruned, merlin, method="lambda", test=TRUE)
+merlin_phylo_signal
+```
+
+
+Show the results for merlin
+```{r}
+merlin_continuous_trait_evolution <- contMap(merlin_pruned, merlin, outline=FALSE, fsize=0.05, lwd=0.3)
+```
+
+```{r}
+plot(merlin_continuous_trait_evolution)
+```
+
+Save the results
+```{r}
+pdf(file="phylogeny__output__merlin_tree.pdf", width=6, height=35)
+merlin_continuous_trait_evolution
+dev.off()
+```

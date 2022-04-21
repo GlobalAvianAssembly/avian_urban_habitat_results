@@ -136,9 +136,9 @@ birdlife_jitter_down_down = c('Pardalotes', 'Antthrushes and antpittas', 'Roller
 
 birdlife_jitter_up = c('Wrens', 'Screamers', 'Coursers and pratincoles', 'Butcherbirds', 'Indigobirds and allies', 'Antbirds', 'Bee-eaters', 'Gnateaters', 'Rails, crakes and allies', 'Tinamous', 'Cuckoo-shrikes', 'Storks', 'Painted-snipes', 'Wagtails and pipits', 'Weavers and allies', 'Puffbirds', 'Ovenbirds', 'Osprey, kites, hawks and eagles', 'Waxwings', 'Bustards', 'Australian treecreepers', 'Cuckoos', 'Crows and jays', 'Cotingas', 'Chats and Old World flycatchers', 'Flamingos', 'Parrots', 'Stilts and avocets')
 
-birdlife_jitter_up_up = c('Larks', 'Goldcrests and kinglets', 'Broadbills', 'Butcherbirds', 'Woodhoopoes', 'Toucans and barbets', 'New World vultures', 'Honeyeaters', 'Anhingas', 'Australasian robins', 'Lyrebirds', 'Sparrows, snowfinches and allies', 'Ibises and spoonbills', 'Whipbirds, wedgebills and jewel-babblers', 'Leafbirds', 'Shrikes', 'Falcons and caracaras')
+birdlife_jitter_up_up = c('Larks', 'Broadbills', 'Butcherbirds', 'Woodhoopoes', 'Toucans and barbets', 'New World vultures', 'Honeyeaters', 'Anhingas', 'Australasian robins', 'Lyrebirds', 'Sparrows, snowfinches and allies', 'Ibises and spoonbills', 'Whipbirds, wedgebills and jewel-babblers', 'Leafbirds', 'Shrikes', 'Falcons and caracaras')
 
-birdlife_jitter_up_up_up = c('Oystercatchers', 'Pelicans', 'Thick-knees')
+birdlife_jitter_up_up_up = c('Oystercatchers', 'Pelicans', 'Thick-knees', 'Goldcrests and kinglets')
 ```
 
 ```{r}
@@ -266,16 +266,53 @@ merlin_continuous_trait_evolution$cols[1:colourCountM]<-colorRampPalette(c("#FFC
 ```
 
 ```{r}
+merlin_jitter_down = c('Orioles and figbirds', 'Long-tailed Tits', 'Honeyguides', 'Ground-hornbills', 'Sunbirds', 'Mockingbirds and thrashers', 'Ducks, geese and swans', 'Treecreepers', 'Guans and curassows', 'Grouse, pheasants and partridges', 'Starlings', 'Jacanas', 'New World warblers', 'Antthrushes and antpittas', 'Pardalotes', 'Honeyeaters', 'Vireos and allies', 'Australasian babblers', 'Shrike-tits', 'Australasian wrens', 'Woodswallows', 'Shrike-flycatchers, wattle-eyes and batises', 'White-eyes', 'Woodpeckers', 'Pardalotes', 'Motmots', 'Sparrows, snowfinches and allies', 'Herons and egrets', 'Drongos', 'Trogons', 'Manakins', 'Babblers and parrotbills', 'Sandgrouse', 'Waxbills, grass finches, munias and allies', 'Sparrows, snowfinches and allies', )
+
+merlin_jitter_down_down = c('Pardalotes', 'Antthrushes and antpittas', 'Rollers', 'Buttonquails', 'Swallows and martins', 'Guineafowl', 'Shrike-flycatchers, wattle-eyes and batises', 'Turacos', 'Lyrebirds', 'Flowerpeckers', 'Penduline-tits', 'Tits and chickadees', 'Grosbeaks, saltators and allies', 'Helmetshrikes, bushshrikes and puffbacks', 'Accentors', 'Osprey, kites, hawks and eagles', 'Vireos and allies', 'Gnateaters', 'Dippers', 'Nightjars', 'Hummingbirds', 'Frogmouths', 'Finches and Hawaiian honeycreepers', 'New World quails')
+
+merlin_jitter_up = c('Wrens', 'Screamers', 'Butcherbirds', 'Indigobirds and allies', 'Antbirds', 'Bee-eaters', 'Rails, crakes and allies', 'Tinamous', 'Cuckoo-shrikes', 'Storks', 'Painted-snipes', 'Wagtails and pipits', 'Weavers and allies', 'Puffbirds', 'Waxwings', 'Bustards', 'Australian treecreepers', 'Cuckoos', 'Crows and jays', 'Cotingas', 'Chats and Old World flycatchers', 'Flamingos', 'Parrots', 'Stilts and avocets', 'Thrushes', 'Honeyeaters', 'Doves and pigeons')
+
+merlin_jitter_up_up = c('Larks', 'Goldcrests and kinglets', 'Broadbills', 'Butcherbirds', 'Woodhoopoes', 'Toucans and barbets', 'New World vultures', 'Anhingas', 'Australasian robins', 'Lyrebirds', 'Ibises and spoonbills', 'Whipbirds, wedgebills and jewel-babblers', 'Leafbirds', 'Shrikes', 'Thick-knees', 'Ovenbirds', 'Kingfishers', 'Cisticolas and allies', 'Old World warblers')
+
+merlin_jitter_up_up_up = c('Oystercatchers', 'Pelicans', 'Jacamars', 'Buntings, American sparrows and allies', 'Falcons and caracaras')
+```
+
+```{r}
 plot(merlin_continuous_trait_evolution, type="fan", outline=FALSE, fsize=c(0.01, 1), lwd = c(0.1, 1), leg.txt="Cities/Regional Pools")
 
 for(family in unique(merlin_input$birdlife_v3_family_name_english)) {
   col = "black"
-  lab.offset = 1.06
-  ln.offset = 1.02
+  lab.offset = 1.04
+  ln.offset = 1.00
+  
+  if (family %in% merlin_jitter_down) {
+    lab.offset = 1.025
+  }
+  
+  if (family %in% merlin_jitter_up) {
+    lab.offset = 1.055
+  }
+  
+  if (family %in% merlin_jitter_up_up) {
+    lab.offset = 1.07
+  }
+  
+  if (family %in% merlin_jitter_up_up_up) {
+    lab.offset = 1.085
+  }
+  
+  if (family %in% merlin_jitter_down_down) {
+    lab.offset = 1.01
+  }
   
   tips <- merlin_input$jetz_scientific_name[merlin_input$birdlife_v3_family_name_english == family]
   node <- findMRCA(tree, tips)
-  arc.cladelabels.fixed(text=family, node=node, tree = tree, cex = 0.2, mark.node = F, col = col, lab.offset = lab.offset, ln.offset = ln.offset)
+  tryCatch(
+    expr = {
+      arc.cladelabels.fixed(text=family, node=node, tree = tree, cex = 0.2, mark.node = F, col = col, lab.offset = lab.offset, ln.offset = ln.offset)
+    },
+    error=function(e){}
+  )
 }
 ```
 
@@ -287,10 +324,30 @@ plot(merlin_continuous_trait_evolution, type="fan", outline=FALSE, fsize=c(0.01,
 
 for(family in unique(merlin_input$birdlife_v3_family_name_english)) {
   col = "black"
-  lab.offset = 1.06
-  ln.offset = 1.02
+  lab.offset = 1.04
+  ln.offset = 1.00
   
-  tips <- merlin_input$jetz_scientific_name[merlin_input$birdlife_v3_family_name_english == family]
+  if (family %in% merlin_jitter_down) {
+    lab.offset = 1.025
+  }
+  
+  if (family %in% merlin_jitter_up) {
+    lab.offset = 1.055
+  }
+  
+  if (family %in% merlin_jitter_up_up) {
+    lab.offset = 1.07
+  }
+  
+  if (family %in% merlin_jitter_up_up_up) {
+    lab.offset = 1.085
+  }
+  
+  if (family %in% merlin_jitter_down_down) {
+    lab.offset = 1.01
+  }
+  
+  tips <- birdlife_input$jetz_scientific_name[birdlife_input$birdlife_v3_family_name_english == family]
   node <- findMRCA(tree, tips)
   tryCatch(
     expr = {

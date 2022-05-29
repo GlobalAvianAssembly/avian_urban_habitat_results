@@ -81,7 +81,7 @@ summary(merlin_mixed_model)
 merlin_richness_plot <- merlin_richness_sum[merlin_richness_sum$model == 'full',]
 merlin_richness_plot$explanatory <- factor(merlin_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
 merlin_richness_plot$type <- 'Proportion of landcover\n5 km around site'
-merlin_richness_plot$type[merlin_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Average elevation\n5 km around site'
+merlin_richness_plot$type[merlin_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average elevation\n5 km around site'
 merlin_richness_plot$type[merlin_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
 
 ggplot(merlin_richness_plot, aes(y=explanatory, x=richness_merlin_estimate, colour = type)) + 
@@ -94,7 +94,7 @@ ggplot(merlin_richness_plot, aes(y=explanatory, x=richness_merlin_estimate, colo
     labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous vegetation', 'herbaceous_wetland' = 'Herbaceous wetland', 'permanent_water' = 'Permanent water', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation scaled', 'elevation_delta_scaled' = 'Elevation delta scaled', 'realmAfrotropic' = 'Afrotropic', 'realmAustralasia' = 'Austaliasia', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropic')) +
   theme_bw() +
   geom_vline(xintercept=0, linetype="dotted") +
-  guides(colour=guide_legend(title="Explanatory type")) + xlab('Increase in percentage of regional richness\n± Standard Error') + ylab('Explanatory')
+  guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional richness\n± Standard Error') + ylab('Predictor')
 
 ggsave('percentage_of_regional_pool__output__merlin_richness_result.jpg')
 ```
@@ -149,7 +149,7 @@ summary(birdlife_mixed_model)
 birdlife_richness_plot <- bl_richness_sum[bl_richness_sum$model == 'full',]
 birdlife_richness_plot$explanatory <- factor(birdlife_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
 birdlife_richness_plot$type <- 'Proportion of landcover\n5 km around site'
-birdlife_richness_plot$type[birdlife_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Average elevation\n5 km around site'
+birdlife_richness_plot$type[birdlife_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average elevation\n5 km around site'
 birdlife_richness_plot$type[birdlife_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
 
 ggplot(birdlife_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
@@ -162,7 +162,7 @@ ggplot(birdlife_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, 
     labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous vegetation', 'herbaceous_wetland' = 'Herbaceous wetland', 'permanent_water' = 'Permanent water', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation scaled', 'elevation_delta_scaled' = 'Elevation delta scaled', 'realmAfrotropic' = 'Afrotropic', 'realmAustralasia' = 'Austaliasia', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropic')) +
   theme_bw() +
   geom_vline(xintercept=0, linetype="dotted") +
-  guides(colour=guide_legend(title="Explanatory type")) + xlab('Increase in percentage of regional pool richness\n± Standard Error') + ylab('Explanatory')
+  guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor')
 
 ggsave('percentage_of_regional_pool__output__birdlife_richness_result.jpg')
 ```

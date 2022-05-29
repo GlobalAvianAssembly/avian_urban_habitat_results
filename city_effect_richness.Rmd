@@ -13,6 +13,9 @@ library(tidyverse)
 
 library(multcomp)
 library(car)
+library(VSURF)
+
+library(boot)
 ```
 
 ```{r}
@@ -46,6 +49,10 @@ fetch_city_data_for <- function(pool_name, include_city_name = F) {
 ```
 
 
+----------------------
+Merlin Response
+----------------------
+
 ```{r}
 merlin_city_data <- fetch_city_data_for('merlin')
 merlin_city_data
@@ -61,103 +68,26 @@ ggplot(merlin_city_data_fixed, aes(response)) + geom_histogram(binwidth = 2)
 ```
 
 ```{r}
-source('./helper__random_forest_selection_functions.R')
+names(merlin_city_data_fixed)
 ```
 
 ```{r}
-scale_parameter_name <- function(scale, postscript) {
-  paste('region', paste(scale, 'km', sep = ''), postscript, sep = '_')  
-}
-
-scale_parameters <- function(postscript) {
-  c(scale_parameter_name(20, postscript), scale_parameter_name(50, postscript), scale_parameter_name(100, postscript))
-}
-
-scales_parameters_without <- function(scale_to_exclude, postscript) {
-  scales <- scale_parameters(postscript)
-  scales[scales != scale_parameter_name(scale_to_exclude, postscript)]
-}
-
-select_scales <- function(urban, cultivated, elevation_delta, mean_elevation, average_pop_density, includes_estuary, ssm, susm, ndvi, percentage_protected) {
-  append(
-    append(
-      append(
-        append(
-          scales_parameters_without(scale_to_exclude = urban, postscript = 'urban'),
-          scales_parameters_without(scale_to_exclude = cultivated, postscript = 'cultivated')
-        ),
-        append(
-          scales_parameters_without(scale_to_exclude = elevation_delta, postscript = 'elevation_delta'),
-          scales_parameters_without(scale_to_exclude = mean_elevation, postscript = 'mean_elevation')
-        )
-      ),
-      append(
-        append(
-          scales_parameters_without(scale_to_exclude = average_pop_density, postscript = 'average_pop_density'),
-          scales_parameters_without(scale_to_exclude = includes_estuary, postscript = 'includes_estuary')
-        ),
-        append(
-          scales_parameters_without(scale_to_exclude = ssm, postscript = 'ssm'),
-          scales_parameters_without(scale_to_exclude = susm, postscript = 'susm')
-        )
-      )
-    ),
-    append(
-      scales_parameters_without(scale_to_exclude = ndvi, postscript = 'ndvi'),
-      scales_parameters_without(scale_to_exclude = percentage_protected, postscript = 'percentage_protected')
-    )
-  )
-}
+merlin_response <- merlin_city_data_fixed$response
+merlin_predictors <- merlin_city_data_fixed[,-1]
+merlin_predictors
 ```
 
 ```{r}
-select_scales(urban = 20, cultivated = 100, elevation_delta = 20, mean_elevation = 100, average_pop_density = NA, includes_estuary = NA, ssm = 20, susm = 20, ndvi = 100, percentage_protected = NA)
-```
-
-select_scales(urban = , cultivated = , elevation_delta = , mean_elevation = , average_pop_density = , includes_estuary = , ssm = , susm = , ndvi =, percentage_protected = )
-
-```{r}
-select_variables_from_random_forest(merlin_city_data_fixed)
+merlin_interp <- VSURF(x = merlin_predictors, y  = merlin_response)
 ```
 
 ```{r}
-exclude_merlin <- !names(merlin_city_data_fixed) %in% select_scales(urban = 20, cultivated = 20, elevation_delta = 50, mean_elevation = 20, average_pop_density = 50, includes_estuary = NA, ssm = 50, susm = 100, ndvi =50, percentage_protected = 50)
-
-merlin_city_data_fixed_single_scale <- merlin_city_data_fixed[,exclude_merlin]
-merlin_city_data_fixed_single_scale
+names(merlin_predictors[,merlin_interp$varselect.interp])
 ```
 
-```{r}
-select_variables_from_random_forest(merlin_city_data_fixed_single_scale)
-```
-
-```{r}
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland", "city_max_pop_density")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland", "city_max_pop_density", "city_ssm")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland", "city_max_pop_density", "city_ssm", "region_50km_average_pop_density")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland", "city_max_pop_density", "city_ssm", "region_50km_average_pop_density", "city_average_pop_density")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland", "city_max_pop_density", "city_ssm", "region_50km_average_pop_density", "city_average_pop_density", "realm")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland", "city_max_pop_density", "city_ssm", "region_50km_average_pop_density", "city_average_pop_density", "realm", "temperature_monthly_max")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland", "city_max_pop_density", "city_ssm", "region_50km_average_pop_density", "city_average_pop_density", "realm", "temperature_monthly_max", "happiness_positive_effect")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland", "city_max_pop_density", "city_ssm", "region_50km_average_pop_density", "city_average_pop_density", "realm", "temperature_monthly_max", "happiness_positive_effect", "region_50km_percentage_protected")])
-create_fifty_rows_of_oob(merlin_city_data_fixed[,c("response", "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population", "permanent_water", "city_ndvi", "temperature_annual_average",  "region_20km_cultivated", "shrubs", "temperature_monthly_min", "region_20km_urban", "herbaceous_wetland", "city_max_pop_density", "city_ssm", "region_50km_average_pop_density", "city_average_pop_density", "realm", "temperature_monthly_max", "happiness_positive_effect", "region_50km_percentage_protected", "rainfall_monthly_max")])
-```
-
-"region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population"
-
-
+----------------------
+Birdlife Response
+----------------------
 ```{r}
 birdlife_city_data <- fetch_city_data_for('birdlife')
 birdlife_city_data
@@ -173,61 +103,35 @@ birdlife_city_data_fixed
 ```
 
 ```{r}
-select_variables_from_random_forest(birdlife_city_data_fixed)
+names(merlin_city_data_fixed)
 ```
 
 ```{r}
-exclude_birdlife <- !names(birdlife_city_data_fixed) %in% select_scales(urban = 100, cultivated = 100, elevation_delta = 20, mean_elevation = 100, average_pop_density = 20, includes_estuary = NA, ssm = 50, susm = 100, ndvi = 50, percentage_protected = 100)
+birdlife_response <- birdlife_city_data_fixed$response
+birdlife_predictors <- birdlife_city_data_fixed[,-1]
+birdlife_predictors
+```
 
-birdlife_city_data_fixed_single_scale <- birdlife_city_data_fixed[,exclude_birdlife]
-birdlife_city_data_fixed_single_scale
+
+
+```{r}
+birdlife_interp <- VSURF(x = birdlife_predictors, y  = birdlife_response)
 ```
 
 ```{r}
-select_variables_from_random_forest(birdlife_city_data_fixed_single_scale)
+names(birdlife_predictors[,birdlife_interp$varselect.interp])
 ```
-
-```{r}
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average", "region_100km_urban")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average", "region_100km_urban", "region_20km_elevation_delta")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average", "region_100km_urban", "region_20km_elevation_delta", "rainfall_annual_average")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average", "region_100km_urban", "region_20km_elevation_delta", "rainfall_annual_average", "share_of_population_within_400m_of_open_space")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average", "region_100km_urban", "region_20km_elevation_delta", "rainfall_annual_average", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average", "region_100km_urban", "region_20km_elevation_delta", "rainfall_annual_average", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces", "mean_population_exposure_to_pm2_5_2019")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average", "region_100km_urban", "region_20km_elevation_delta", "rainfall_annual_average", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces", "mean_population_exposure_to_pm2_5_2019", "city_average_pop_density")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average", "region_100km_urban", "region_20km_elevation_delta", "rainfall_annual_average", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces", "mean_population_exposure_to_pm2_5_2019", "city_average_pop_density", "shrubs")])
-create_fifty_rows_of_oob(birdlife_city_data_fixed[,c("response", "population_growth", "region_50km_ssm", "region_100km_cultivated", "city_ndvi", "biome_name", "city_ndvi", "region_20km_average_pop_density", "permanent_water", "temperature_monthly_min", "percentage_urban_area_as_open_public_spaces_and_streets", "region_50km_ndvi", "temperature_annual_average", "region_100km_urban", "region_20km_elevation_delta", "rainfall_annual_average", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_open_public_spaces", "mean_population_exposure_to_pm2_5_2019", "city_average_pop_density", "shrubs", "city_susm")])
-```
-
-"population_growth", "region_50km_ssm"
 
 
 ------------------------------------------
 So....
 ------------------------------------------
-Merlin: "region_50km_ssm", "region_50km_elevation_delta", "biome_name", "city_gdp_per_population"
-Birdlife: "population_growth", "region_50km_ssm"
+Merlin: "region_50km_elevation_delta" "biome_name" "region_50km_ssm" "region_100km_ssm"
+Birdlife: "population_growth" "region_50km_ssm"  
 
 -----------------------------
 Try Modelling
 -----------------------------
-
-```{r}
-library(boot)
-```
-
 
 
 ```{r}
@@ -239,154 +143,159 @@ birdlife_city_data_named <- fetch_city_data_for('birdlife', T)
 Use cross validation and dropping terms to find best model
 ------------------------------------------------------------------
 
-full model:  response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + city_gdp_per_population + population_growth
+full model:  response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + biome_name + population_growth
 
 
 Merlin data set
 ----------------
-
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + city_gdp_per_population + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
+merlin_city_data_fixed_no_boreal <- merlin_city_data_fixed[merlin_city_data_fixed$biome_name != 'Boreal Forests/Taiga',]
 ```
 
--- CVE 19.47322
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + biome_name + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- CVE 19.72841
 -- Can we drop one?
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta + biome_name + city_gdp_per_population + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + biome_name + city_gdp_per_population + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + city_gdp_per_population + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
 
 ```{r}
 cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + city_gdp_per_population, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_elevation_delta + biome_name + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
--- drop biome_name to give smaller CVE of 18.35732
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + biome_name + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + biome_name, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop biome_name to give smaller CVE of 18.53183
 -- can we drop another?
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta + city_gdp_per_population + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + city_gdp_per_population + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
 
 ```{r}
 cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + city_gdp_per_population, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_elevation_delta + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
--- drop population_growth to give CVE of 18.02666
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + population_growth, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop population_growth to give CVE of 18.20095
 -- can we drop another?
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta + city_gdp_per_population, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + city_gdp_per_population, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
 
 ```{r}
 cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
--- drop city_gdp_per_population to give CVE of 17.9362
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_elevation_delta, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop region_50km_ssm to give CVE of 17.91216
 -- can we drop another?
+
+```{r}
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
+```
 
 ```{r}
 cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
 
-
------------------------------------------------
--- best model with region_50km_ssm + region_50km_elevation_delta (CV error 17.9362)
------------------------------------------------
+----------------------------------------------------------------------------------------------
+-- best model with region_100km_ssm + region_50km_elevation_delta (CV error 17.91216)
+----------------------------------------------------------------------------------------------
 
 ```{r}
-summary(glm(data = merlin_city_data_fixed, formula = response ~ region_50km_ssm + region_50km_elevation_delta))
+summary(glm(data = merlin_city_data_fixed, formula = response ~ region_100km_ssm + region_50km_elevation_delta))
 ```
 
 ```{r}
-reg_merlin = glm(data = merlin_city_data_fixed, formula = response ~ region_50km_ssm + region_50km_elevation_delta)
+reg_merlin = glm(data = merlin_city_data_fixed, formula = response ~ region_100km_ssm + region_50km_elevation_delta)
 with(summary(reg_merlin), 1 - deviance/null.deviance)
 ```
 
 Birdlife data set
 ----------------
-
+```{r}
+birdlife_city_data_fixed_no_boreal <- birdlife_city_data_fixed[birdlife_city_data_fixed$biome_name != 'Boreal Forests/Taiga',]
+```
 
 ```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + city_gdp_per_population + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + biome_name + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
 -- can we drop a variable?
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta + biome_name + city_gdp_per_population + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + biome_name + city_gdp_per_population + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + city_gdp_per_population + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
 
 ```{r}
 cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + city_gdp_per_population, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_elevation_delta + biome_name + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
--- drop biome_name to give CVE of 6.455193
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + biome_name + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + biome_name, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop biome_name to give CVE of 6.503421
 -- can we drop another?
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta + city_gdp_per_population + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + city_gdp_per_population + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
 
 ```{r}
 cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
-
 ```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + city_gdp_per_population, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_elevation_delta + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
--- drop region_50km_elevation_delta to give CVE of 6.38495
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+
+```{r}
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+```
+
+-- drop region_100km_ssm to give CVE of 6.417311
 -- can we drop another?
 
 ```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ city_gdp_per_population + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
@@ -394,14 +303,14 @@ cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_
 ```
 
 ```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + city_gdp_per_population, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
--- drop population_growth to give CVE of 6.331564
+-- drop region_50km_elevation_delta to give CVE of 6.342025
 -- can we drop another?
 
 ```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ city_gdp_per_population, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
@@ -429,50 +338,58 @@ reg_birdlife = glm(data = birdlife_city_data_fixed, formula = response ~ region_
 with(summary(reg_birdlife), 1 - deviance/null.deviance)
 ```
 
---------------------------------
-Lets look at SSM for both pools
---------------------------------
 
 ```{r}
-ggplot(merlin_city_data_fixed_no_boreal, aes(x = region_50km_ssm, y = response)) + geom_point() + geom_smooth(method = "glm", se = F)
+ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = response)) + geom_point() + geom_smooth(method = "glm")
 ```
 
-```{r}
-ggplot(birdlife_city_data_fixed_no_boreal, aes(x = region_50km_ssm, y = response)) + geom_point() + geom_smooth(method = "glm", se = F)
-```
 
-------------------------------------------------------------------------
-and include region_50km_elevation_delta for merlin
-------------------------------------------------------------------------
-```{r}
-ggplot(merlin_city_data_fixed_no_boreal, aes(x = region_50km_ssm, y = response, size = region_50km_elevation_delta)) + geom_point() + geom_smooth(method = "glm", se = F)
-```
+
 
 ------------------------
 Check birdlife model fit
 ------------------------
 
 ```{r}
-birdlife.fit <- glm(data = birdlife_city_data_fixed_no_boreal, formula = response ~ region_50km_ssm)
+birdlife.fit <- glm(data = birdlife_city_data_fixed, formula = response ~ region_50km_ssm)
 summary(birdlife.fit)
 with(summary(birdlife.fit), 1 - deviance/null.deviance)
 plot(birdlife.fit)
 ```
-
 ```{r}
-birdlife_city_data_fixed_no_boreal[c(16, 53, 72), c("name", "region_50km_ssm")]
+birdlife_city_data_fixed_no_boreal[c(16, 53, 72), c("region_50km_ssm")]
 ```
 
 ```{r}
-ggplot(birdlife_city_data_fixed_no_boreal, aes(x = region_50km_ssm, y = response)) + 
+city_data[c(16, 53, 72), c("name", "region_50km_ssm")]
+```
+
+```{r}
+dat <- predict(glm(formula = response ~ region_50km_ssm, data = birdlife_city_data_named), se.fit=T)
+
+outside_se <- birdlife_city_data_named[birdlife_city_data_named$response < dat$fit - 15* dat$se.fit | birdlife_city_data_named$response > dat$fit + 15 * dat$se.fit,]
+
+ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = response)) + 
   geom_point(size=1) + 
-  geom_smooth(method = "glm", se = F) +
-  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 72),], size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
-  geom_point(data = birdlife_city_data_fixed_no_boreal[c(16, 53, 72),], color = "red") +
+  geom_smooth(method = "glm") +
+  geom_text(aes(label = name), data = outside_se, size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_point(data = outside_se, color = "red") +
   theme_bw() +
   ylab("City Random Effect Intercept") + xlab("Regional (50km) SSM") + labs(title = "Birdlife")
 
 ggsave("city_effect_richness__output__birdlife.jpg")
+```
+
+How much variation have we explained?
+------------------------------------
+
+```{r}
+birdlife_city_data_named$residuals <- resid(birdlife.fit)
+ggplot(birdlife_city_data_named, aes(y = response, x = residuals)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(title = "Birdlife", subtitle = paste("Correlation", cor(birdlife_city_data_named$residuals, birdlife_city_data_named$response))) +
+  theme_bw()
 ```
 
 ------------------------
@@ -480,51 +397,42 @@ Check Merlin model fit
 ------------------------
 
 ```{r}
-merlin.fit <- glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ region_50km_ssm + region_50km_elevation_delta)
+merlin.fit <- glm(data = merlin_city_data_named, formula = response ~ region_100km_ssm + region_50km_elevation_delta)
 summary(merlin.fit)
 with(summary(merlin.fit), 1 - deviance/null.deviance)
 plot(merlin.fit)
 ```
 
 ```{r}
-city_data[c(24, 30, 42), c("name", "region_50km_ssm", "region_50km_elevation_delta")]
+merlin_city_data_fixed_no_boreal[c(24, 42, 72), c("region_100km_ssm", "region_50km_elevation_delta")]
 ```
 
 ```{r}
-ggplot(merlin_city_data_fixed_no_boreal, aes(x = region_50km_ssm, y = response)) + 
+city_data[c(24, 42, 72), c("name", "region_100km_ssm", "region_50km_elevation_delta")]
+```
+
+```{r}
+ggplot(merlin_city_data_named, aes(x = region_100km_ssm, y = response)) + 
   geom_point(aes(size = region_50km_elevation_delta)) + 
-  geom_smooth(method = "glm", se = F) +
-  geom_text(aes(label = name), data = merlin_city_data_fixed_no_boreal[c(24, 30, 42),], size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
-  geom_point(data = merlin_city_data_fixed_no_boreal[c(24, 30, 42),], color = "red") +
+  geom_smooth(method = "glm") +
   theme_bw() +
   theme(legend.position="bottom") +
-  ylab("City Random Effect Intercept") + xlab("Regional (50km) SSM") + labs(title = "eBird") + guides(size=guide_legend(title="Regional (50km) Elevation Delta"))
+  ylab("City Random Effect Intercept") + xlab("Regional (100km) SSM") + labs(title = "eBird") + guides(size=guide_legend(title="Regional (50km) Elevation Delta"))
 
 ggsave("city_effect_richness__output__merlin.jpg")
 ```
 
-------------------------------------
 How much variation have we explained?
 ------------------------------------
 ```{r}
-merlin_city_data_fixed_no_boreal$residuals <- resid(merlin.fit)
-ggplot(merlin_city_data_fixed_no_boreal, aes(y = response, x = residuals)) + 
+merlin_city_data_named$residuals <- resid(merlin.fit)
+ggplot(merlin_city_data_named, aes(y = response, x = residuals)) + 
+  geom_point() +
   geom_smooth(method = "lm", se = F) +
-  geom_point(aes(color = realm)) + 
-  geom_text(aes(label = name), data = merlin_city_data_fixed_no_boreal[c(24, 30, 42),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") + 
-  labs(title = "Merlin", subtitle = paste("Correlation", cor(merlin_city_data_fixed_no_boreal$residuals, merlin_city_data_fixed_no_boreal$response))) +
+  labs(title = "Merlin", subtitle = paste("Correlation", cor(merlin_city_data_named$residuals, merlin_city_data_named$response))) +
   theme_bw()
 ```
 
-```{r}
-birdlife_city_data_fixed_no_boreal$residuals <- resid(birdlife.fit)
-ggplot(birdlife_city_data_fixed_no_boreal, aes(y = response, x = residuals)) + 
-  geom_smooth(method = "lm", se = F, alpha = 0.5) +
-  geom_point(aes(color = realm)) + 
-  geom_text(aes(label = name), data = birdlife_city_data_fixed_no_boreal[c(16, 53, 72),], size = 4, position = "dodge", vjust = "inward", hjust = "inward") +
-  labs(title = "Birdlife", subtitle = paste("Correlation", cor(birdlife_city_data_fixed_no_boreal$residuals, birdlife_city_data_fixed_no_boreal$response))) +
-  theme_bw()
-```
 
 -------------------------
 Check AIC
@@ -532,14 +440,14 @@ Check AIC
 
 ```{r}
 AIC(
-  glm(data = merlin_city_data_fixed, formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + city_gdp_per_population + population_growth),
-  glm(data = merlin_city_data_fixed, formula = response ~ region_50km_ssm + region_50km_elevation_delta)
+  glm(data = merlin_city_data_fixed, formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + biome_name + population_growth),
+  glm(data = merlin_city_data_fixed, formula = response ~ region_100km_ssm + region_50km_elevation_delta)
 )
 ```
 
 ```{r}
 AIC(
-  glm(data = birdlife_city_data_fixed, formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + city_gdp_per_population + population_growth),
+  glm(data = birdlife_city_data_fixed, formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + biome_name + population_growth),
   glm(data = birdlife_city_data_fixed, formula = response ~ region_50km_ssm)
 )
 ```

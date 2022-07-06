@@ -36,7 +36,7 @@ fetch_city_data_for <- function(pool_name, include_city_name = F) {
   
   joined <- left_join(city_data, results)
   
-  required_columns <- c("population_growth", "rainfall_monthly_min", "rainfall_annual_average", "rainfall_monthly_max", "temperature_annual_average", "temperature_monthly_min", "temperature_monthly_max", "happiness_negative_effect", "happiness_positive_effect", "happiness_future_life", "number_of_biomes", "realm", "biome_name", "region_20km_includes_estuary", "region_50km_includes_estuary", "region_100km_includes_estuary", "city_includes_estuary", "region_20km_average_pop_density", "region_50km_average_pop_density", "region_100km_average_pop_density", "city_max_pop_density", "city_average_pop_density", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "region_20km_urban", "region_50km_cultivated", "region_50km_urban", "region_100km_cultivated", "region_100km_urban", "region_20km_elevation_delta", "region_20km_mean_elevation", "region_50km_elevation_delta", "region_50km_mean_elevation", "region_100km_elevation_delta", "region_100km_mean_elevation", "city_elevation_delta", "city_mean_elevation", "urban", "shrubs", "permanent_water", "open_forest", "herbaceous_wetland", "herbaceous_vegetation", "cultivated", "closed_forest", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_streets", "percentage_urban_area_as_open_public_spaces_and_streets", "percentage_urban_area_as_open_public_spaces", "city_gdp_per_population", "city_ndvi", "city_ssm", "city_susm", "region_20km_ndvi", "region_20km_ssm", "region_20km_susm", "region_50km_ndvi", "region_50km_ssm", "region_50km_susm", "region_100km_ndvi", "region_100km_ssm", "region_100km_susm", "city_percentage_protected", "region_20km_percentage_protected", "region_50km_percentage_protected", "region_100km_percentage_protected")
+  required_columns <- c("population_growth", "rainfall_monthly_min", "rainfall_annual_average", "rainfall_monthly_max", "temperature_annual_average", "temperature_monthly_min", "temperature_monthly_max", "happiness_negative_effect", "happiness_positive_effect", "happiness_future_life", "number_of_biomes", "realm", "biome_name", "region_20km_includes_estuary", "region_50km_includes_estuary", "region_100km_includes_estuary", "city_includes_estuary", "region_20km_average_pop_density", "region_50km_average_pop_density", "region_100km_average_pop_density", "city_max_pop_density", "city_average_pop_density", "mean_population_exposure_to_pm2_5_2019", "region_20km_cultivated", "region_20km_urban", "region_50km_cultivated", "region_50km_urban", "region_100km_cultivated", "region_100km_urban", "region_20km_elevation_delta", "region_20km_mean_elevation", "region_50km_elevation_delta", "region_50km_mean_elevation", "region_100km_elevation_delta", "region_100km_mean_elevation", "city_elevation_delta", "city_mean_elevation", "urban", "shrubs", "permanent_water", "open_forest", "herbaceous_wetland", "herbaceous_vegetation", "cultivated", "closed_forest", "share_of_population_within_400m_of_open_space", "percentage_urban_area_as_streets", "percentage_urban_area_as_open_public_spaces_and_streets", "percentage_urban_area_as_open_public_spaces", "city_gdp_per_population", "city_ndvi", "city_ssm", "city_susm", "region_20km_ndvi", "region_20km_ssm", "region_20km_susm", "region_50km_ndvi", "region_50km_ssm", "region_50km_susm", "region_100km_ndvi", "region_100km_ssm", "region_100km_susm", "city_percentage_protected", "region_20km_percentage_protected", "region_50km_percentage_protected", "region_100km_percentage_protected", "city_centre_latitude")
   
   if (include_city_name) {
     required_columns <- append(c("name"), required_columns)
@@ -93,6 +93,8 @@ birdlife_city_data <- fetch_city_data_for('birdlife')
 birdlife_city_data
 ```
 
+
+
 ```{r}
 ggplot(birdlife_city_data, aes(response)) + geom_histogram(binwidth = 1)
 ```
@@ -111,7 +113,6 @@ birdlife_response <- birdlife_city_data_fixed$response
 birdlife_predictors <- birdlife_city_data_fixed[,-1]
 birdlife_predictors
 ```
-
 
 
 ```{r}
@@ -356,6 +357,7 @@ summary(birdlife.fit)
 with(summary(birdlife.fit), 1 - deviance/null.deviance)
 plot(birdlife.fit)
 ```
+
 ```{r}
 birdlife_city_data_fixed_no_boreal[c(16, 53, 72), c("region_50km_ssm")]
 ```
@@ -454,5 +456,42 @@ AIC(
 
 
 
+---------------------
+LDG
+----------------------
+```{r}
+birdlife_data_with_lat = fetch_city_data_for('birdlife', include_city_name = T)
+
+dat2 <- predict(glm(formula = response ~ city_centre_latitude, data = birdlife_data_with_lat), se.fit=T)
+
+outside_se <- birdlife_data_with_lat[birdlife_data_with_lat$response < dat2$fit - 15* dat2$se.fit | birdlife_data_with_lat$response > dat2$fit + 15 * dat2$se.fit,]
+
+ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
+  geom_point(size=1) + 
+  geom_smooth(method = "glm", formula = y ~ I(x^2)) +
+  geom_text(aes(label = name), data = outside_se, size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_point(data = outside_se, color = "red") +
+  theme_bw() +
+  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "Birdlife")
+
+ggsave('city_effect_richness__output__ldg_birdlife.jpg')
+```
 
 
+```{r}
+merlin_data_with_lat = fetch_city_data_for('merlin', include_city_name = T)
+
+dat2 <- predict(glm(formula = response ~ city_centre_latitude, data = merlin_data_with_lat), se.fit=T)
+
+outside_se <- merlin_data_with_lat[merlin_data_with_lat$response < dat2$fit - 15* dat2$se.fit | merlin_data_with_lat$response > dat2$fit + 15 * dat2$se.fit,]
+
+ggplot(merlin_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
+  geom_point(size=1) + 
+  geom_smooth(method = "glm", formula = y ~ I(x^2)) +
+  geom_text(aes(label = name), data = outside_se, size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_point(data = outside_se, color = "red") +
+  theme_bw() +
+  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "eBird")
+
+ggsave('city_effect_richness__output__ldg_merlin.jpg')
+```

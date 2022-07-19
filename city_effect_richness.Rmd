@@ -654,6 +654,8 @@ model2 <- glm(formula = response ~ I(city_centre_latitude^2), data = birdlife_da
 dat2 <- predict(model2, se.fit=T)
 summary(model2)
 
+with(summary(model2), 1 - deviance/null.deviance)
+
 outside_se <- birdlife_data_with_lat[birdlife_data_with_lat$response < dat2$fit - 15* dat2$se.fit | birdlife_data_with_lat$response > dat2$fit + 15 * dat2$se.fit,]
 
 ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
@@ -674,6 +676,8 @@ merlin_data_with_lat = fetch_city_data_for('merlin', include_city_name = T)
 model2 <- glm(formula = response ~ I(city_centre_latitude^2), data = merlin_data_with_lat)
 dat2 <- predict(model2, se.fit=T)
 summary(model2)
+
+with(summary(model2), 1 - deviance/null.deviance)
 
 outside_se <- merlin_data_with_lat[merlin_data_with_lat$response < dat2$fit - 15* dat2$se.fit | merlin_data_with_lat$response > dat2$fit + 15 * dat2$se.fit,]
 

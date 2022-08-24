@@ -16,6 +16,8 @@ library(car)
 library(VSURF)
 
 library(boot)
+
+library(ggrepel)
 ```
 
 ```{r}
@@ -560,9 +562,9 @@ dat <- predict(glm(formula = response ~ region_50km_ssm, data = birdlife_city_da
 outside_se <- birdlife_city_data_named[birdlife_city_data_named$response < dat$fit - 15* dat$se.fit | birdlife_city_data_named$response > dat$fit + 15 * dat$se.fit,]
 
 ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = response)) + 
-  geom_point(size=1) + 
+  geom_point(size=1, alpha = 0.2) + 
   geom_smooth(method = "glm") +
-  geom_text(aes(label = name), data = outside_se, size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_se, color = "red") +
   theme_bw() +
   ylab("City Random Effect Intercept") + xlab("Regional (50km) SSM") + labs(title = "Birdlife")
@@ -659,9 +661,9 @@ with(summary(model2), 1 - deviance/null.deviance)
 outside_se <- birdlife_data_with_lat[birdlife_data_with_lat$response < dat2$fit - 15* dat2$se.fit | birdlife_data_with_lat$response > dat2$fit + 15 * dat2$se.fit,]
 
 ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
-  geom_point(size=1) + 
+  geom_point(size=1, alpha = 0.2) + 
   geom_smooth(method = "glm", formula = y ~ I(x^2)) +
-  geom_text(aes(label = name), data = outside_se, size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_se, color = "red") +
   theme_bw() +
   ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "Birdlife")
@@ -682,9 +684,9 @@ with(summary(model2), 1 - deviance/null.deviance)
 outside_se <- merlin_data_with_lat[merlin_data_with_lat$response < dat2$fit - 15* dat2$se.fit | merlin_data_with_lat$response > dat2$fit + 15 * dat2$se.fit,]
 
 ggplot(merlin_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
-  geom_point(size=1) + 
+  geom_point(size=1, alpha = 0.2) + 
   geom_smooth(method = "glm", formula = y ~ I(x^2)) +
-  geom_text(aes(label = name), data = outside_se, size = 3, position = "dodge", vjust = "inward", hjust = "inward", color = "red", angle=-15) +
+  geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_se, color = "red") +
   theme_bw() +
   ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "eBird")

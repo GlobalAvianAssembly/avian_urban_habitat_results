@@ -673,6 +673,23 @@ ggsave('city_effect_richness__output__ldg_birdlife.jpg')
 
 
 ```{r}
+ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
+  geom_point(size=1, alpha = 0.2) + 
+  geom_smooth(method = "glm", formula = y ~ I(x^2)) +
+  geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
+  geom_point(data = outside_se, aes(color = region_50km_ssm)) +
+  scale_colour_gradientn(colours = c("yellow", "red")) +
+  guides(colour=guide_legend(title="SSM in 50km Surrounding city")) +
+  theme_bw() +
+  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "Birdlife") +
+  theme(legend.position="bottom", legend.box = "horizontal")
+
+
+ggsave('city_effect_richness__output__ldg_birdlife_with_ssm.jpg')
+```
+
+
+```{r}
 merlin_data_with_lat = fetch_city_data_for('merlin', include_city_name = T)
 
 model2 <- glm(formula = response ~ I(city_centre_latitude^2), data = merlin_data_with_lat)

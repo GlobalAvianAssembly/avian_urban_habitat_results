@@ -673,7 +673,9 @@ ggsave('city_effect_richness__output__ldg_birdlife.jpg')
 
 
 ```{r}
-ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
+library(grid)
+library(gridExtra)
+birdlife_plot_ldm = ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
   geom_point(size=1, alpha = 0.2) + 
   geom_smooth(method = "glm", formula = y ~ I(x^2)) +
   geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
@@ -684,10 +686,27 @@ ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) +
   ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "Birdlife") +
   theme(legend.position="bottom", legend.box = "horizontal")
 
-
+grid.arrange(birdlife_plot_ldm + theme(legend.position = 'none'))
 ggsave('city_effect_richness__output__ldg_birdlife_with_ssm.jpg')
 ```
 
+```{r}
+g_legend<-function(a.gplot){
+    tmp <- ggplot_gtable(ggplot_build(a.gplot))
+    leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+    legend <- tmp$grobs[[leg]]
+    legend
+}
+
+birdlife_ldm_legend <- g_legend(birdlife_plot_ldm)
+grid.newpage()
+grid.draw(birdlife_ldm_legend) 
+
+jpeg('city_effect_richness__output__ldg_birdlife_with_ssm__legend.jpg', width = 500, height = 100)
+grid.newpage()
+grid.draw(birdlife_ldm_legend) 
+dev.off()
+```
 
 ```{r}
 merlin_data_with_lat = fetch_city_data_for('merlin', include_city_name = T)

@@ -47,10 +47,21 @@ birdlife_phylo_signal <- phylosig(birdlife_pruned, birdlife, method="lambda", te
 birdlife_phylo_signal
 ```
 
+```{r}
+birdlife_input
+```
+
+```{r}
+birdlife_input %>% group_by(birdlife_v3_family_name_english) %>% summarise(averge_adaptation = mean(presence_ratio), number = n()) %>% arrange(averge_adaptation)
+```
+
 Show the results for birdlife
 
 ```{r}
 birdlife_continuous_trait_evolution <- contMap(birdlife_pruned, birdlife, outline=FALSE, fsize=0.05, lwd=0.3)
+```
+```{r}
+ 
 ```
 
 Change colour ramp
@@ -140,6 +151,8 @@ birdlife_jitter_up_up = c('Larks', 'Broadbills', 'Butcherbirds', 'Woodhoopoes', 
 
 birdlife_jitter_up_up_up = c('Oystercatchers', 'Pelicans', 'Thick-knees', 'Goldcrests and kinglets')
 ```
+
+
 
 ```{r}
 plot(birdlife_continuous_trait_evolution, type="fan", outline=FALSE, fsize=c(0.01, 1), lwd = c(0.1, 1), leg.txt="Cities/Regional Pools")
@@ -266,7 +279,7 @@ merlin_continuous_trait_evolution$cols[1:colourCountM]<-colorRampPalette(c("#FFC
 ```
 
 ```{r}
-merlin_jitter_down = c('Orioles and figbirds', 'Long-tailed Tits', 'Honeyguides', 'Ground-hornbills', 'Sunbirds', 'Mockingbirds and thrashers', 'Ducks, geese and swans', 'Treecreepers', 'Guans and curassows', 'Grouse, pheasants and partridges', 'Starlings', 'Jacanas', 'New World warblers', 'Antthrushes and antpittas', 'Pardalotes', 'Honeyeaters', 'Vireos and allies', 'Australasian babblers', 'Shrike-tits', 'Australasian wrens', 'Woodswallows', 'Shrike-flycatchers, wattle-eyes and batises', 'White-eyes', 'Woodpeckers', 'Pardalotes', 'Motmots', 'Sparrows, snowfinches and allies', 'Herons and egrets', 'Drongos', 'Trogons', 'Manakins', 'Babblers and parrotbills', 'Sandgrouse', 'Waxbills, grass finches, munias and allies', 'Sparrows, snowfinches and allies', )
+merlin_jitter_down = c('Orioles and figbirds', 'Long-tailed Tits', 'Honeyguides', 'Ground-hornbills', 'Sunbirds', 'Mockingbirds and thrashers', 'Ducks, geese and swans', 'Treecreepers', 'Guans and curassows', 'Grouse, pheasants and partridges', 'Starlings', 'Jacanas', 'New World warblers', 'Antthrushes and antpittas', 'Pardalotes', 'Honeyeaters', 'Vireos and allies', 'Australasian babblers', 'Shrike-tits', 'Australasian wrens', 'Woodswallows', 'Shrike-flycatchers, wattle-eyes and batises', 'White-eyes', 'Woodpeckers', 'Pardalotes', 'Motmots', 'Sparrows, snowfinches and allies', 'Herons and egrets', 'Drongos', 'Trogons', 'Manakins', 'Babblers and parrotbills', 'Sandgrouse', 'Waxbills, grass finches, munias and allies', 'Sparrows, snowfinches and allies')
 
 merlin_jitter_down_down = c('Pardalotes', 'Antthrushes and antpittas', 'Rollers', 'Buttonquails', 'Swallows and martins', 'Guineafowl', 'Shrike-flycatchers, wattle-eyes and batises', 'Turacos', 'Lyrebirds', 'Flowerpeckers', 'Penduline-tits', 'Tits and chickadees', 'Grosbeaks, saltators and allies', 'Helmetshrikes, bushshrikes and puffbacks', 'Accentors', 'Osprey, kites, hawks and eagles', 'Vireos and allies', 'Gnateaters', 'Dippers', 'Nightjars', 'Hummingbirds', 'Frogmouths', 'Finches and Hawaiian honeycreepers', 'New World quails')
 

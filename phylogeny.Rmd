@@ -299,4 +299,6 @@ plot(birdlife_family_continuous_trait_evolution, type="fan", outline=FALSE, fsiz
 dev.off()
 ```
 
-
+```{r}
+birdlife_family_input[order(-birdlife_family_input$presence_ratio),c('birdlife_v3_family_name', 'presence_ratio')]
+```

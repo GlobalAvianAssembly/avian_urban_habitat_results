@@ -567,7 +567,7 @@ birdlife_ssm = ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = res
   geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_se, color = "red") +
   theme_bw() +
-  ylab("City Random Effect Intercept") + xlab("Regional (50km) SSM") + labs(title = "a)")
+  ylab("Standardized bird retention response") + xlab("Regional (50km) SSM")
 
 birdlife_ssm
 ggsave("city_effect_richness__output__birdlife.jpg")
@@ -610,7 +610,7 @@ ggplot(merlin_city_data_named, aes(x = region_100km_ssm, y = response)) +
   geom_smooth(method = "glm") +
   theme_bw() +
   theme(legend.position="bottom") +
-  ylab("City Random Effect Intercept") + xlab("Regional (100km) SSM") + labs(title = "eBird") + guides(size=guide_legend(title="Regional (50km) Elevation Delta"))
+  ylab("Standardized bird retention response") + xlab("SSM in 100 km surrounding city") + guides(size=guide_legend(title="Regional (50 km) elevation delta"))
 
 ggsave("city_effect_richness__output__merlin.jpg")
 ```
@@ -667,7 +667,7 @@ birdlife_ldg = ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = 
   geom_text_repel(aes(label = name), data = outside_ldg_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_ldg_se, color = "red") +
   theme_bw() +
-  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "Birdlife LDG")
+  ylab("Standardized bird retention response") + xlab("Latitude (of city centre)") + labs(title = "Birdlife LDG")
 
 birdlife_ldg
 ggsave('city_effect_richness__output__ldg_birdlife.jpg')
@@ -683,9 +683,9 @@ birdlife_plot_ldg = ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude,
   geom_text_repel(aes(label = name), data = outside_ldg_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_ldg_se, aes(color = region_50km_ssm)) +
   scale_colour_gradientn(colours = c("#ffee00", "#0019ff"), limits=c(5,22)) +
-  guides(colour=guide_legend(title="SSM in 50km Surrounding city")) +
+  guides(colour=guide_legend(title="SSM in 50 km surrounding city")) +
   theme_bw() +
-  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + 
+  ylab("Standardized bird retention response") + xlab("Latitude (of city centre)") + 
   theme(legend.position="bottom", legend.box = "horizontal")
 
 birdlife_plot_ldg
@@ -699,9 +699,9 @@ birdlife_ssm2 = ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = re
   geom_text_repel(aes(label = name), data = outside_ssm_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_ssm_se, aes(color = region_50km_ssm)) +
   scale_colour_gradientn(colours = c("#ffee00", "#0019ff"), limits=c(5,22)) +
-  guides(colour=guide_legend(title="SSM in 50km Surrounding city")) +
+  guides(colour=guide_legend(title="SSM in 50 km surrounding city")) +
   theme_bw() +
-  ylab("City Random Effect Intercept") + xlab("Regional (50km) SSM") +
+  ylab("Standardized bird retention response") + xlab("SSM in 50 km surrounding city") +
   theme(legend.position="bottom", legend.box = "horizontal")
 
 birdlife_ssm2
@@ -711,7 +711,7 @@ birdlife_ssm2
 library(ggpubr)
 birdlife_figure = ggarrange(birdlife_ssm2 + rremove("ylab"), birdlife_plot_ldg + rremove("ylab"), labels = c("a", "b"), ncol = 2, common.legend = T, legend = "bottom")
 annotate_figure(birdlife_figure,
-                left = text_grob("City random effect intercept", rot = 90))
+                left = text_grob("Standardized bird retention response", rot = 90))
 
 ggsave('city_effect_richness__output__ldg_birdlife_with_ssm.jpg', height = 1500, width = 2250, units = "px")
 ```
@@ -733,7 +733,7 @@ ggplot(merlin_data_with_lat, aes(x = city_centre_latitude, y = response)) +
   geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_se, color = "red") +
   theme_bw() +
-  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "eBird")
+  ylab("Standardized bird retention response") + xlab("Latitude (of city centre)")
 
 ggsave('city_effect_richness__output__ldg_merlin.jpg')
 ```

@@ -561,14 +561,15 @@ dat <- predict(glm(formula = response ~ region_50km_ssm, data = birdlife_city_da
 
 outside_se <- birdlife_city_data_named[birdlife_city_data_named$response < dat$fit - 15* dat$se.fit | birdlife_city_data_named$response > dat$fit + 15 * dat$se.fit,]
 
-ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = response)) + 
+birdlife_ssm = ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = response)) + 
   geom_point(size=1, alpha = 0.2) + 
   geom_smooth(method = "glm") +
   geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_se, color = "red") +
   theme_bw() +
-  ylab("City Random Effect Intercept") + xlab("Regional (50km) SSM") + labs(title = "Birdlife")
+  ylab("City Random Effect Intercept") + xlab("Regional (50km) SSM") + labs(title = "a)")
 
+birdlife_ssm
 ggsave("city_effect_richness__output__birdlife.jpg")
 ```
 
@@ -658,16 +659,17 @@ summary(model2)
 
 with(summary(model2), 1 - deviance/null.deviance)
 
-outside_se <- birdlife_data_with_lat[birdlife_data_with_lat$response < dat2$fit - 15* dat2$se.fit | birdlife_data_with_lat$response > dat2$fit + 15 * dat2$se.fit,]
+outside_ldg_se <- birdlife_data_with_lat[birdlife_data_with_lat$response < dat2$fit - 15* dat2$se.fit | birdlife_data_with_lat$response > dat2$fit + 15 * dat2$se.fit,]
 
-ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
+birdlife_ldg = ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
   geom_point(size=1, alpha = 0.2) + 
   geom_smooth(method = "glm", formula = y ~ I(x^2)) +
-  geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
-  geom_point(data = outside_se, color = "red") +
+  geom_text_repel(aes(label = name), data = outside_ldg_se, size = 3, nudge_y = 1, color = "red") +
+  geom_point(data = outside_ldg_se, color = "red") +
   theme_bw() +
-  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "Birdlife")
+  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "Birdlife LDG")
 
+birdlife_ldg
 ggsave('city_effect_richness__output__ldg_birdlife.jpg')
 ```
 
@@ -675,37 +677,43 @@ ggsave('city_effect_richness__output__ldg_birdlife.jpg')
 ```{r}
 library(grid)
 library(gridExtra)
-birdlife_plot_ldm = ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
+birdlife_plot_ldg = ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = response)) + 
   geom_point(size=1, alpha = 0.2) + 
   geom_smooth(method = "glm", formula = y ~ I(x^2)) +
-  geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
-  geom_point(data = outside_se, aes(color = region_50km_ssm)) +
-  scale_colour_gradientn(colours = c("yellow", "red")) +
+  geom_text_repel(aes(label = name), data = outside_ldg_se, size = 3, nudge_y = 1, color = "red") +
+  geom_point(data = outside_ldg_se, aes(color = region_50km_ssm)) +
+  scale_colour_gradientn(colours = c("#ffee00", "#0019ff"), limits=c(5,22)) +
   guides(colour=guide_legend(title="SSM in 50km Surrounding city")) +
   theme_bw() +
-  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + labs(title = "Birdlife") +
+  ylab("City Random Effect Intercept") + xlab("Latitude (of city centre)") + 
   theme(legend.position="bottom", legend.box = "horizontal")
 
-grid.arrange(birdlife_plot_ldm + theme(legend.position = 'none'))
-ggsave('city_effect_richness__output__ldg_birdlife_with_ssm.jpg')
+birdlife_plot_ldg
+```
+```{r}
+outside_ssm_se <- birdlife_city_data_named[birdlife_city_data_named$response < dat$fit - 15* dat$se.fit | birdlife_city_data_named$response > dat$fit + 15 * dat$se.fit,]
+
+birdlife_ssm2 = ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = response)) + 
+  geom_point(size=1, alpha = 0.2) + 
+  geom_smooth(method = "glm") +
+  geom_text_repel(aes(label = name), data = outside_ssm_se, size = 3, nudge_y = 1, color = "red") +
+  geom_point(data = outside_ssm_se, aes(color = region_50km_ssm)) +
+  scale_colour_gradientn(colours = c("#ffee00", "#0019ff"), limits=c(5,22)) +
+  guides(colour=guide_legend(title="SSM in 50km Surrounding city")) +
+  theme_bw() +
+  ylab("City Random Effect Intercept") + xlab("Regional (50km) SSM") +
+  theme(legend.position="bottom", legend.box = "horizontal")
+
+birdlife_ssm2
 ```
 
 ```{r}
-g_legend<-function(a.gplot){
-    tmp <- ggplot_gtable(ggplot_build(a.gplot))
-    leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
-    legend <- tmp$grobs[[leg]]
-    legend
-}
+library(ggpubr)
+birdlife_figure = ggarrange(birdlife_ssm2 + rremove("ylab"), birdlife_plot_ldg + rremove("ylab"), labels = c("a", "b"), ncol = 2, common.legend = T, legend = "bottom")
+annotate_figure(birdlife_figure,
+                left = text_grob("City random effect intercept", rot = 90))
 
-birdlife_ldm_legend <- g_legend(birdlife_plot_ldm)
-grid.newpage()
-grid.draw(birdlife_ldm_legend) 
-
-jpeg('city_effect_richness__output__ldg_birdlife_with_ssm__legend.jpg', width = 500, height = 100)
-grid.newpage()
-grid.draw(birdlife_ldm_legend) 
-dev.off()
+ggsave('city_effect_richness__output__ldg_birdlife_with_ssm.jpg', height = 1500, width = 2250, units = "px")
 ```
 
 ```{r}

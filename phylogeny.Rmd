@@ -284,7 +284,7 @@ birdlife_family_continuous_trait_evolution <- contMap(birdlife_family_pruned, fa
 Change colour ramp
 ```{r}
 colourCount <- length(birdlife_family_continuous_trait_evolution$cols)
-birdlife_family_continuous_trait_evolution$cols[1:colourCount]<-colorRampPalette(c("#02e3f7","#f70212"), space="Lab")(colourCount)
+birdlife_family_continuous_trait_evolution$cols[1:colourCount]<-colorRampPalette(c("#c2cc31","#3134cc"), space="Lab")(colourCount)
 ```
 
 ```{r}
@@ -295,7 +295,7 @@ Save the results
 
 ```{r}
 jpeg(file="phylogeny__output__birdlife_family_tree.jpg", width = 2056, height=2056)
-plot(birdlife_family_continuous_trait_evolution, type="fan", outline=FALSE, fsize=2, lwd = 4, cex.legend=0.5, leg.txt="Cities/regional pools")
+plot(birdlife_family_continuous_trait_evolution, type="fan", outline=FALSE, fsize=2, lwd = 10, cex.legend=0.5, leg.txt="Cities/regional pools")
 dev.off()
 ```
 

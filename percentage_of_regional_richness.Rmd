@@ -38,7 +38,7 @@ create_city_dataset <- function(mixed_model) {
 ----------------------
 Merlin: Difference in richness
 ----------------------
-```{r}
+```{r, cache = TRUE}
 merlin_richness_result <- model_average_richness(merlin)
 merlin_richness_result
 ```
@@ -104,7 +104,7 @@ ggsave('percentage_of_regional_pool__output__merlin_richness_result.jpg')
 ----------------------
 Birdlife: Difference in richness
 ----------------------
-```{r}
+```{r, cache = TRUE}
 bl_richness_result <- model_average_richness(birdlife)
 bl_richness_result
 ```
@@ -174,7 +174,7 @@ ggsave('percentage_of_regional_pool__output__birdlife_richness_result.jpg')
 ----------------------
 Both: Difference in richness
 ----------------------
-```{r}
+```{r, cache = TRUE}
 both_richness_result <- model_average_richness(both)
 both_richness_result
 ```
@@ -206,7 +206,7 @@ write_csv(both_city_response[, c('name', 'response')], 'percentage_of_regional_r
 ----------------------
 Either: Difference in richness
 ----------------------
-```{r}
+```{r, cache = TRUE}
 either_richness_result <- model_average_richness(either)
 either_richness_result
 ```
@@ -278,4 +278,359 @@ ggsave("percentage_of_regional_richness__output__som_elevations.jpg")
 ```
 
 
+------------------------------------------------------------------
+Birdlife [300 or less checklists]: Difference in richness
+------------------------------------------------------------------
+```{r}
+birdlife300 = birdlife[birdlife$number_of_checklists <= 300,]
+nrow(birdlife300)
+```
 
+```{r, cache = TRUE}
+blr300_richness_result <- model_average_richness(birdlife300)
+blr300_richness_result
+```
+
+
+Cities ordered by response for hotspots with 300 or less checklists
+```{r}
+birdlife300_city_response <- create_city_dataset(birdlife300_mixed_model)
+birdlife300_city_response = birdlife300_city_response[,c('name', 'response')]
+names(birdlife300_city_response) = c('name', 'response_300_checklists')
+birdlife300_city_response = left_join(birdlife300_city_response, birdlife_city_response[,c('name', 'response')])
+birdlife300_city_response[order(birdlife300_city_response$response_300_checklists), c('name', 'response_300_checklists', 'response')]
+```
+
+Cities ordered by response for all hotspots
+```{r}
+birdlife300_city_response[order(birdlife300_city_response$response), c('name', 'response_300_checklists', 'response')]
+```
+
+
+```{r}
+bl300_richness_sum <- model_summary('birdlife', 'richness', blr300_richness_result)
+bl300_richness_sum
+```
+
+```{r}
+birdlife300_richness_plot <- bl300_richness_sum[bl300_richness_sum$model == 'full',]
+
+birdlife300_richness_plot$explanatory <- factor(birdlife300_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlife300_richness_plot$type <- 'Proportion of landcover\n5 km around site'
+birdlife300_richness_plot$type[birdlife300_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
+birdlife300_richness_plot$type[birdlife300_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+
+birdlife300_plot = ggplot(birdlife300_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=richness_birdlife_estimate-richness_birdlife_error, xmax=richness_birdlife_estimate+richness_birdlife_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(birdlife300_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
+  theme(legend.justification = "top")
+birdlife300_plot
+ggsave('percentage_of_regional_pool__output__birdlife_richness_300_checklists_or_less_result.jpg')
+```
+
+
+------------------------------------------------------------------
+Birdlife [No Australasia]: Difference in richness
+------------------------------------------------------------------
+```{r}
+birdlifeNoAustralia = birdlife[birdlife$realm != 'Australasia',]
+nrow(birdlifeNoAustralia)
+```
+
+```{r, cache = TRUE}
+blrNoAustralia_richness_result <- model_average_richness(birdlifeNoAustralia)
+blrNoAustralia_richness_result
+```
+
+
+Cities ordered by response for hotspots with no australasia
+```{r}
+birdlifeNoAustralia_city_response <- create_city_dataset(birdlifeNoAustralia_mixed_model)
+birdlifeNoAustralia_city_response = birdlifeNoAustralia_city_response[,c('name', 'response')]
+names(birdlifeNoAustralia_city_response) = c('name', 'response_no_australasia')
+birdlifeNoAustralia_city_response = left_join(birdlifeNoAustralia_city_response, birdlife_city_response[,c('name', 'response')])
+birdlifeNoAustralia_city_response[order(birdlifeNoAustralia_city_response$response_no_australasia), c('name', 'response_no_australasia', 'response')]
+```
+
+Cities ordered by response for all hotspots
+```{r}
+birdlifeNoAustralia_city_response[order(birdlifeNoAustralia_city_response$response), c('name', 'response_no_australasia', 'response')]
+```
+
+
+```{r}
+blNoAustralia_richness_sum <- model_summary('birdlife', 'richness', blrNoAustralia_richness_result)
+blNoAustralia_richness_sum
+```
+
+```{r}
+birdlifeNoAustralia_richness_plot <- blNoAustralia_richness_sum[blNoAustralia_richness_sum$model == 'full',]
+
+birdlifeNoAustralia_richness_plot$explanatory <- factor(birdlifeNoAustralia_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlifeNoAustralia_richness_plot$type <- 'Proportion of landcover\n5 km around site'
+birdlifeNoAustralia_richness_plot$type[birdlifeNoAustralia_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
+birdlifeNoAustralia_richness_plot$type[birdlifeNoAustralia_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+
+birdlifeNoAustralia_plot = ggplot(birdlifeNoAustralia_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=richness_birdlife_estimate-richness_birdlife_error, xmax=richness_birdlife_estimate+richness_birdlife_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(birdlifeNoAustralia_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
+  theme(legend.justification = "top")
+birdlifeNoAustralia_plot
+ggsave('percentage_of_regional_pool__output__birdlife_richness_no_australia.jpg')
+```
+
+------------------------------------------------------------------
+Birdlife [No Afrotropics]: Difference in richness
+------------------------------------------------------------------
+```{r}
+birdlifeNoAfrica = birdlife[birdlife$realm != 'Afrotropic',]
+nrow(birdlifeNoAfrica)
+```
+
+```{r, cache = TRUE}
+blrNoAfrica_richness_result <- model_average_richness(birdlifeNoAfrica)
+blrNoAfrica_richness_result
+```
+
+
+Cities ordered by response for hotspots with no afrotropics
+```{r}
+birdlifeNoAfrica_city_response <- create_city_dataset(birdlifeNoAfrica_mixed_model)
+birdlifeNoAfrica_city_response = birdlifeNoAfrica_city_response[,c('name', 'response')]
+names(birdlifeNoAfrica_city_response) = c('name', 'response_no_africa')
+birdlifeNoAfrica_city_response = left_join(birdlifeNoAfrica_city_response, birdlife_city_response[,c('name', 'response')])
+birdlifeNoAfrica_city_response[order(birdlifeNoAfrica_city_response$response_no_africa), c('name', 'response_no_africa', 'response')]
+```
+
+Cities ordered by response for all hotspots
+```{r}
+birdlifeNoAfrica_city_response[order(birdlifeNoAfrica_city_response$response), c('name', 'response_no_africa', 'response')] 
+```
+
+
+```{r}
+blNoAfrica_richness_sum <- model_summary('birdlife', 'richness', blrNoAfrica_richness_result)
+blNoAfrica_richness_sum
+```
+
+```{r}
+birdlifeNoAfrica_richness_plot <- blNoAfrica_richness_sum[blNoAfrica_richness_sum$model == 'full',]
+
+birdlifeNoAfrica_richness_plot$explanatory <- factor(birdlifeNoAfrica_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlifeNoAfrica_richness_plot$type <- 'Proportion of landcover\n5 km around site'
+birdlifeNoAfrica_richness_plot$type[birdlifeNoAfrica_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
+birdlifeNoAfrica_richness_plot$type[birdlifeNoAfrica_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+
+birdlifeNoAfrica_plot = ggplot(birdlifeNoAfrica_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=richness_birdlife_estimate-richness_birdlife_error, xmax=richness_birdlife_estimate+richness_birdlife_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(birdlifeNoAfrica_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
+  theme(legend.justification = "top")
+birdlifeNoAfrica_plot
+ggsave('percentage_of_regional_pool__output__birdlife_richness_no_africa.jpg')
+```
+
+------------------------------------------------------------------
+Birdlife [No Afrotropics and no Australisia]: Difference in richness
+------------------------------------------------------------------
+```{r}
+birdlifeNeitherAfrNorAus = birdlife[birdlife$realm != 'Afrotropic' & birdlife$realm != 'Australasia',]
+nrow(birdlifeNeitherAfrNorAus)
+```
+
+```{r, cache = TRUE}
+blrNAA_richness_result <- model_average_richness(birdlifeNeitherAfrNorAus)
+blrNAA_richness_result
+```
+
+
+```{r}
+blNAA_richness_sum <- model_summary('birdlife', 'richness', blrNAA_richness_result)
+blNAA_richness_sum
+```
+
+```{r}
+birdlifeNAA_richness_plot <- blNAA_richness_sum[blNAA_richness_sum$model == 'full',]
+
+birdlifeNAA_richness_plot$explanatory <- factor(birdlifeNAA_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlifeNAA_richness_plot$type <- 'Proportion of landcover\n5 km around site'
+birdlifeNAA_richness_plot$type[birdlifeNAA_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
+birdlifeNAA_richness_plot$type[birdlifeNAA_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+
+birdlifeNAA_plot = ggplot(birdlifeNAA_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=richness_birdlife_estimate-richness_birdlife_error, xmax=richness_birdlife_estimate+richness_birdlife_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(birdlifeNAA_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
+  theme(legend.justification = "top")
+birdlifeNAA_plot
+ggsave('percentage_of_regional_pool__output__birdlife_richness_no_africa_nor_australisia.jpg')
+```
+
+
+------------------------------------------------------------------
+Birdlife [Urban Only]: Difference in richness
+------------------------------------------------------------------
+```{r}
+birdlife$urban_rounded = floor(birdlife$urban * 10) / 10
+ggplot(birdlife, aes(x = urban_rounded)) + geom_bar()
+```
+```{r}
+birdlifeHigherUrban = birdlife[birdlife$urban > 0.2,]
+nrow(birdlifeHigherUrban)
+```
+
+```{r, cache = TRUE}
+blrHigherUrban_richness_result <- model_average_richness(birdlifeHigherUrban)
+blrHigherUrban_richness_result
+```
+
+
+```{r}
+blrHigherUrban_richness_sum <- model_summary('birdlife', 'richness', blrHigherUrban_richness_result)
+blrHigherUrban_richness_sum
+```
+
+```{r}
+birdlifeHR_richness_plot <- blrHigherUrban_richness_sum[blrHigherUrban_richness_sum$model == 'full',]
+
+birdlifeHR_richness_plot$explanatory <- factor(birdlifeHR_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlifeHR_richness_plot$type <- 'Proportion of landcover\n5 km around site'
+birdlifeHR_richness_plot$type[birdlifeHR_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
+birdlifeHR_richness_plot$type[birdlifeHR_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+
+birdlifeHR_plot = ggplot(birdlifeHR_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=richness_birdlife_estimate-richness_birdlife_error, xmax=richness_birdlife_estimate+richness_birdlife_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(birdlifeHR_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
+  theme(legend.justification = "top")
+birdlifeHR_plot
+ggsave('percentage_of_regional_pool__output__birdlife_richness_higher_urban.jpg')
+```
+
+------------------------------------------------------------------
+Birdlife [Check pseudoreplication]: Difference in richness
+------------------------------------------------------------------
+
+```{r}
+locality_samples = read_csv('percentage_of_regional_richness__input__sampled_localities_min_distance_500m.csv')
+table(locality_samples$SAMPLE_ID)
+```
+
+
+```{r}
+plot_sample = function(sample_id) {
+  birdlife_sample0 = birdlife[birdlife$locality_id %in% locality_samples$LOCALITY_ID[locality_samples$SAMPLE_ID == sample_id],]
+  
+  birdlife_sample0_richness_result <- model_average_richness(birdlife_sample0)
+  birdlife_sample0_richness_summary <- model_summary('birdlife', 'richness', birdlife_sample0_richness_result)
+  
+  birdlife_sample0_richness_plot <- birdlife_sample0_richness_summary[birdlife_sample0_richness_summary$model == 'full',]
+  
+  birdlife_sample0_richness_plot$explanatory <- factor(birdlife_sample0_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+  birdlife_sample0_richness_plot$type <- 'Proportion of landcover\n5 km around site'
+  birdlife_sample0_richness_plot$type[birdlife_sample0_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
+  birdlife_sample0_richness_plot$type[birdlife_sample0_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+  
+  birdlifeSample0_plot = ggplot(birdlife_sample0_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
+    geom_line() +
+    geom_point()+
+    geom_errorbar(aes(xmin=richness_birdlife_estimate-richness_birdlife_error, xmax=richness_birdlife_estimate+richness_birdlife_error), width=.2,
+                   position=position_dodge(0.05)) +
+    scale_y_discrete(
+      limits = rev(levels(birdlife_sample0_richness_plot$explanatory)), 
+      labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+    theme_bw() +
+    geom_vline(xintercept=0, linetype="dotted") +
+    guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
+    theme(legend.justification = "top")
+  birdlifeSample0_plot
+}
+```
+
+```{r}
+plot_sample('0')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample0.jpg')
+```
+
+```{r}
+plot_sample('1')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample1.jpg')
+```
+
+
+```{r}
+plot_sample('2')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample2.jpg')
+```
+
+```{r}
+plot_sample('3')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample3.jpg')
+```
+
+```{r}
+plot_sample('4')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample4.jpg')
+```
+
+```{r}
+plot_sample('5')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample5.jpg')
+```
+
+```{r}
+plot_sample('6')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample6.jpg')
+```
+
+```{r}
+plot_sample('7')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample7.jpg')
+```
+
+```{r}
+plot_sample('8')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample8.jpg')
+```
+
+```{r}
+plot_sample('9')
+ggsave('percentage_of_regional_pool__output__birdlife_locality_sample9.jpg')
+```

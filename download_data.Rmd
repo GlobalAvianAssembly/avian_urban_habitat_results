@@ -20,7 +20,7 @@ library(scales)
 
 ```{r}
 response <- try(system('~/google-cloud-sdk/bin/gcloud projects list --quiet', intern = T))
-projectid <- strsplit(response[2], " ")[[1]][1]
+projectid <- strsplit(response[3], " ")[[1]][1]
 ```
   
 
@@ -51,7 +51,8 @@ create_dataset <- function(poolname) {
     urban_area.ecosystem.biome.biome_name AS biome,
     urban_area.country_economy.gdp_estimate_thousand_dollars_per_person AS national_gdp_estimate_thousand_dollars_per_person,
     urban_area.country_economy.income_group AS national_income_group,
-    locality_id
+    locality_id,
+    number_of_checklists
 FROM model.urban_hotspot
 JOIN model2.all_species USING(locality_id, city_id)
 JOIN model.urban_area USING (city_id)", '##POOL_NAME##', poolname)
@@ -73,7 +74,6 @@ load_dataset <- function(poolname) {
     data <- create_dataset(poolname)
     write_csv(data, filename)
   }
-  
   
   data <- read_csv(filename)
   
@@ -110,6 +110,10 @@ birdlife <- load_dataset('birdlife')
 birdlife
 ```
 
+```{r}
+library("PerformanceAnalytics")
+rcorr(as.matrix(birdlife[,c('closed_forest', 'cultivated', 'herbaceous_vegetation', 'herbaceous_wetland', 'open_forest', 'permanent_water', 'shrubs', 'urban')],  method="spearman"))
+```
 
 Both
 ----------------------

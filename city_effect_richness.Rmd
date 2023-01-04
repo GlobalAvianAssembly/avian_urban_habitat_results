@@ -80,7 +80,7 @@ merlin_predictors <- merlin_city_data_fixed[,-1]
 merlin_predictors
 ```
 
-```{r}
+```{r, cache = TRUE}
 merlin_interp <- VSURF(x = merlin_predictors, y  = merlin_response)
 ```
 
@@ -118,7 +118,7 @@ birdlife_predictors
 ```
 
 
-```{r}
+```{r, cache = TRUE}
 birdlife_interp <- VSURF(x = birdlife_predictors, y  = birdlife_response)
 ```
 

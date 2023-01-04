@@ -1,0 +1,94 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+Show richness not impacted by number of checklists
+```{r}
+library(tidyverse)
+data = read_csv('referee_comments__input__checklists_by_richness.csv')
+data
+```
+
+```{r}
+summary(glm(data = data, formula = percentage_of_regional_pool_present ~ number_of_checklists))
+```
+
+```{r}
+summary(glm(data = data, formula = percentage_of_regional_pool_present ~ log(number_of_checklists)))
+```
+
+```{r}
+ggplot(data, aes(x = log(number_of_checklists), y = percentage_of_regional_pool_present)) + geom_point() + geom_smooth(method = "glm", formula = "y ~ I(x^2)")
+```
+
+```{r}
+data$group <- as.factor(floor(data$number_of_checklists / 300) * 300)
+
+g1 = ggplot(data) + 
+  geom_point(alpha = 0.2, color = "green", aes(x = number_of_checklists, y = percentage_of_regional_pool_present)) +
+  geom_boxplot(aes(x = number_of_checklists, y = percentage_of_regional_pool_present, group = group)) + 
+  geom_smooth(method = "glm", formula = "y ~ I(x^2)", aes(x = number_of_checklists, y = percentage_of_regional_pool_present)) +
+  xlab("Number of hotspot checklists") + ylab("Sampled percentage\nof regional pool") 
+g1
+```
+```{r}
+g2 = ggplot(data) + 
+  geom_bar(fill = "red", binwidth=300, stat="bin", aes(x = number_of_checklists)) + xlab("Number of hotspot checklists") + ylab("Number of hotspots")
+g2
+```
+
+```{r}
+library(gtable)
+library(grid) # low-level grid functions are required
+```
+
+```{r}
+gg1 <- ggplotGrob(g1)
+gg2 <- ggplotGrob(g2)
+g <- rbind(gg1, gg2, size="first") # stack the two plots
+g$widths <- unit.pmax(gg1$widths, gg2$widths) # use the largest widths
+# center the legend vertically
+g$layout[grepl("guide", g$layout$name),c("t","b")] <- c(1,nrow(g))
+grid.newpage()
+grid.draw(g)
+```
+```{r}
+jpeg('referee_comments__output__number_of_checklists.jpg')
+grid.draw(g)
+dev.off()
+```
+
+```{r}
+data$group2 <- as.factor(floor(data$number_of_checklists / 30) * 30)
+
+g3 = ggplot(data[data$number_of_checklists < 200,]) + 
+  geom_point(alpha = 0.2, color = "green", aes(x = number_of_checklists, y = percentage_of_regional_pool_present)) +
+  geom_boxplot(aes(x = number_of_checklists, y = percentage_of_regional_pool_present, group = group2)) + 
+  geom_smooth(method = "glm", formula = "y ~ I(x^2)", aes(x = number_of_checklists, y = percentage_of_regional_pool_present)) +
+  xlab("Number of hotspot checklists") + ylab("Sampled percentage\nof regional pool") 
+g3
+```
+```{r}
+g4 = ggplot(data[data$number_of_checklists < 200,]) + 
+  geom_bar(fill = "red", binwidth=30, stat="bin", aes(x = number_of_checklists)) + xlab("Number of hotspot checklists") + ylab("Number of hotspots")
+g4
+```
+```{r}
+gg1 <- ggplotGrob(g3)
+gg2 <- ggplotGrob(g4)
+g <- rbind(gg1, gg2, size="first") # stack the two plots
+g$widths <- unit.pmax(gg1$widths, gg2$widths) # use the largest widths
+# center the legend vertically
+g$layout[grepl("guide", g$layout$name),c("t","b")] <- c(1,nrow(g))
+grid.newpage()
+grid.draw(g)
+```
+```{r}
+nrow(data[data$number_of_checklists < 200,]) / nrow(data) * 100
+```
+
+```{r}
+summary(glm(data = data[data$number_of_checklists < 200,], formula = percentage_of_regional_pool_present ~ number_of_checklists))
+```

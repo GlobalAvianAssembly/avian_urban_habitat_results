@@ -295,7 +295,7 @@ Save the results
 
 ```{r}
 jpeg(file="phylogeny__output__birdlife_family_tree.jpg", width = 2056, height=2056)
-plot(birdlife_family_continuous_trait_evolution, type="fan", outline=FALSE, fsize=2, lwd = 10, cex.legend=0.5, leg.txt="Cities/regional pools")
+plot(birdlife_family_continuous_trait_evolution, type="fan", outline=FALSE, fsize=2, lwd = c(20, 10), cex.legend=0.5, leg.txt="Cities/regional pools")
 dev.off()
 ```
 

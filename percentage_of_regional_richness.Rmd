@@ -333,7 +333,7 @@ birdlife300_plot = ggplot(birdlife300_richness_plot, aes(y=explanatory, x=richne
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
   theme(legend.justification = "top")
 birdlife300_plot
-ggsave('percentage_of_regional_pool__output__birdlife_richness_300_checklists_or_less_result.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_richness_300_checklists_or_less_result.jpg')
 ```
 
 
@@ -392,7 +392,7 @@ birdlifeNoAustralia_plot = ggplot(birdlifeNoAustralia_richness_plot, aes(y=expla
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
   theme(legend.justification = "top")
 birdlifeNoAustralia_plot
-ggsave('percentage_of_regional_pool__output__birdlife_richness_no_australia.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_richness_no_australia.jpg')
 ```
 
 ------------------------------------------------------------------
@@ -450,7 +450,7 @@ birdlifeNoAfrica_plot = ggplot(birdlifeNoAfrica_richness_plot, aes(y=explanatory
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
   theme(legend.justification = "top")
 birdlifeNoAfrica_plot
-ggsave('percentage_of_regional_pool__output__birdlife_richness_no_africa.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_richness_no_africa.jpg')
 ```
 
 ------------------------------------------------------------------
@@ -493,7 +493,7 @@ birdlifeNAA_plot = ggplot(birdlifeNAA_richness_plot, aes(y=explanatory, x=richne
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
   theme(legend.justification = "top")
 birdlifeNAA_plot
-ggsave('percentage_of_regional_pool__output__birdlife_richness_no_africa_nor_australisia.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_richness_no_africa_nor_australisia.jpg')
 ```
 
 
@@ -541,7 +541,7 @@ birdlifeHR_plot = ggplot(birdlifeHR_richness_plot, aes(y=explanatory, x=richness
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
   theme(legend.justification = "top")
 birdlifeHR_plot
-ggsave('percentage_of_regional_pool__output__birdlife_richness_higher_urban.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_richness_higher_urban.jpg')
 ```
 
 ------------------------------------------------------------------
@@ -586,51 +586,51 @@ plot_sample = function(sample_id) {
 
 ```{r}
 plot_sample('0')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample0.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample0.jpg')
 ```
 
 ```{r}
 plot_sample('1')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample1.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample1.jpg')
 ```
 
 
 ```{r}
 plot_sample('2')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample2.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample2.jpg')
 ```
 
 ```{r}
 plot_sample('3')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample3.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample3.jpg')
 ```
 
 ```{r}
 plot_sample('4')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample4.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample4.jpg')
 ```
 
 ```{r}
 plot_sample('5')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample5.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample5.jpg')
 ```
 
 ```{r}
 plot_sample('6')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample6.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample6.jpg')
 ```
 
 ```{r}
 plot_sample('7')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample7.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample7.jpg')
 ```
 
 ```{r}
 plot_sample('8')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample8.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample8.jpg')
 ```
 
 ```{r}
 plot_sample('9')
-ggsave('percentage_of_regional_pool__output__birdlife_locality_sample9.jpg')
+ggsave('percentage_of_regional_richness__output__birdlife_locality_sample9.jpg')
 ```

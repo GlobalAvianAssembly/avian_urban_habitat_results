@@ -219,7 +219,7 @@ summary(merlin_niche_mixed_model)
 ```
 
 ```{r}
-write_csv(merlin_niche_city_response[, c('name', 'response')], 'merlin_city_niche_resilience_intercept.csv')
+write_csv(merlin_niche_city_response[, c('name', 'response')], 'niche_resilience__output__merlin_city_niche_resilience_intercept.csv')
 ```
 
 

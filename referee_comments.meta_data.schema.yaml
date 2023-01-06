@@ -1,0 +1,10 @@
+models:
+  - name: referee_comments__input__checklists_by_richness.csv
+    description: Data to compare percentage of regional richness at hotspot with the total number of checklists present. Single row per hotspot. Exported from BigQuery.
+    columns:
+      - name: locality_id
+        description: The eBird ID for the hotspot
+      - name: percentage_of_regional_pool_present
+        description: The percentage of Birdlife regional pool present at the hotspot
+      - name: number_of_checklists
+        description: The total number of valid checklists present at the hotspot (as defined by our checklists filters).

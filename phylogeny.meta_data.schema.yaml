@@ -1,0 +1,28 @@
+models:
+  - name: phylogeny__input__birdlife_family_presence.csv
+    description: the urban tolerance of birdlife families. Exported from BigQuery
+    columns:
+      - name: birdlife_v3_family_name
+        description: The scientific family name of the species from the Birdlife dataset
+      - name: city_count
+        description: The number of cities this family is present in, defined as being present on any single hotspot with in a city vector.
+      - name: region_count
+        description: The number of regional pools this family is present in.
+      - name: presence_ratio
+        description: The ratio of number of cities / number of regional pools.
+
+  - name: phylogeny__input__birdlife_species_presence.csv
+    description: The urban tolerance of birdlife species. Exported from BigQuery
+    columns:
+      - name: jetz_scientific_name
+        description: The species name mapped to the Jetz taxonomy.
+      - name: city_count
+        description: The number of cities this species is present in, defined as being present on any single hotspot with in a city vector.
+      - name: region_count
+        description: The number of regional pools this species is present in.
+      - name: presence_ratio
+        description: The ratio of number of cities / number of regional pools.
+      - name: birdlife_v3_family_name
+        description: The scientific family name of the species from the Birdlife dataset
+      - name: birdlife_v3_family_name_english
+        description: The english description of the family.

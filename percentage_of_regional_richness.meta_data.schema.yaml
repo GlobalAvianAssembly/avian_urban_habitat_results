@@ -1,0 +1,72 @@
+models:
+  - name: percentage_of_regional_pool_richness__output__birdlife_city_richness_intercept.csv
+    description: Output from R anaylsis using the Birdlife constructed regional pool. The random effect intercept when fitting the model to explain percentage of regional richness retained at a hotspot. Contains a row per city.
+    columns:
+      - name: name
+        description: The name of a city
+      - name: response
+        description: The random effect intercept value. A higher value indicates that a city contains hotspots that manage to retain a higher value for percentage of regional richness.
+
+  - name: percentage_of_regional_pool_richness__output__merlin_city_richness_intercept.csv
+    description: Output from R anaylsis using the eBird constructed regional pool. The random effect intercept when fitting the model to explain percentage of regional richness retained at a hotspot. Contains a row per city.
+    columns:
+      - name: name
+        description: The name of a city
+      - name: response
+        description: The random effect intercept value. A higher value indicates that a city contains hotspots that manage to retain a higher value for percentage of regional richness.
+
+  - name: percentage_of_regional_pool_richness__output__either_city_richness_intercept.csv
+    description: Output from R anaylsis using the regional pool constructed from species in either the Birdlife or the eBird regional pool. The random effect intercept when fitting the model to explain percentage of regional richness retained at a hotspot. Contains a row per city.
+    columns:
+      - name: name
+        description: The name of a city
+      - name: response
+        description: The random effect intercept value. A higher value indicates that a city contains hotspots that manage to retain a higher value for percentage of regional richness.
+
+  - name: percentage_of_regional_pool_richness__output__both_city_richness_intercept.csv
+    description: Output from R anaylsis using the regional pool constructed from species in both the Birdlife and the eBird regional pool. The random effect intercept when fitting the model to explain percentage of regional richness retained at a hotspot. Contains a row per city.
+    columns:
+      - name: name
+        description: The name of a city
+      - name: response
+        description: The random effect intercept value. A higher value indicates that a city contains hotspots that manage to retain a higher value for percentage of regional richness.
+
+  - name: percentage_of_regional_pool_richness__output__richness_result.csv
+    description: Model averaging coefficents from MuMIn dredge to find predictors for proportion of regional richness at hotspots. Covers four constructed regional pools, one with birdlife regional data, one with eBird regional data, one for species in both pools, and one for species in either pool.
+    columns:
+      - name: explanatory
+        description: The name of the predictor
+      - name: model
+        description: Either 'full' or 'subset' from dredge selected models.
+      - name: richness_merlin_estimate
+        description: The averaged estimate value for this explanatory variable using data from the eBird constructed regional pool and default clustering configuration
+      - name: richness_merlin_error
+        description: The averaged error value for this explanatory variable using data from the eBird constructed regional pool and default clustering configuration
+      - name: richness_merlin_p
+        description: The averaged p-value for this explanatory variable using data from the eBird constructed regional pool and default clustering configuration
+      - name: richness_birdlife_estimate
+        description: The averaged estimate value for this explanatory variable using data from the Birdlife constructed regional pool and default clustering configuration
+      - name: richness_birdlife_error
+        description: The averaged error value for this explanatory variable using data from the Birdlife constructed regional pool and default clustering configuration
+      - name: richness_birdlife_p
+        description: The averaged p-value for this explanatory variable using data from the Birdlife constructed regional pool and default clustering configuration
+      - name: richness_both_estimate
+        description: The averaged estimate value for this explanatory variable using data from the regional pool constructed from species in both eBird and Birdlife pools, and default clustering configuration
+      - name: richness_both_error
+        description: The averaged error value for this explanatory variable using data from the regional pool constructed from species in both eBird and Birdlife pools, and default clustering configuration
+      - name: richness_both_p
+        description: The averaged p-value for this explanatory variable using data from the regional pool constructed from species in both eBird and Birdlife pools, and default clustering configuration
+      - name: richness_either_estimate
+        description: The averaged estimate value for this explanatory variable using data from the regional pool constructed from species in either eBird or Birdlife pools, and default clustering configuration
+      - name: richness_either_error
+        description: The averaged error value for this explanatory variable using data from the regional pool constructed from species in either eBird or Birdlife pools, and default clustering configuration
+      - name: richness_either_p
+        description: The averaged p-value for this explanatory variable using data from the regional pool constructed from species in either eBird or Birdlife pools, and default clustering configuration
+
+  - name: percentage_of_regional_richness__input__sampled_localities_min_distance_500m.csv
+    description: Ten different samples of hotspots, with each sample containing localities that are at least 500m apart. Samples generated from custom Java code.
+    columns:
+      - name: LOCALITY_ID
+        description: the eBird hotspot ID included in this sample
+      - name: SAMPLE_ID
+        description: the ID of the sample, from 0 to 9.

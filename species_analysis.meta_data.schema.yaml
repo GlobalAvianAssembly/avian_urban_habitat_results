@@ -1,0 +1,56 @@
+models:
+  - name: species_analysis__input__birdlife_urban_niche_counts.csv
+    description: Total number of niches in dataset. Exported from BigQuery
+    columns:
+      - name: trophic_niche
+        description: Name of trophic niche
+      - name: urban_niche_count
+        description: The total number of niches present within that trophic niche (using default clustering configuration).
+
+  - name: species_analysis__input__trophic_niche_accumulation.csv
+    description: Niche presence accumulation data for each trophic niche as percentage of species increased. Exported from BigQuery. A row per trophic niche and percent.
+    columns:
+      - name: trophic_niche
+        description: Name of trophic niche
+      - name: percent
+        description: The percentage of all species present.
+      - name: merlin_niche_count
+        description: The total number of niches currently present from the eBird constructed regional pool
+      - name: merlin_remaining_species
+        description: Whether there are still species that are not present from the eBird constructed regional pool.
+      - name: birdlife_niche_count
+        description: The total number of niches currently present from the Birdlife constructed regional pool
+      - name: birdlife_remaining_species
+        description: Whether there are still species that are not present from the Birdlife constructed regional pool.
+
+  - name: species_analysis__input__urbanite_taxonomic_families.csv
+    description: Data to explore occurance of species families, exported from BigQuery
+    columns:
+      - name: taxonomic_family
+        description: Name of species family
+      - name: birdlife_city_count
+        description: The number of cities family is present in using regional pool constructed from Birdlife data.
+      - name: birdlife_pool_count
+        description: The number of regional pools family is present in using regional pool constructed from Birdlife data.
+      - name: merlin_city_count
+        description: The number of cities family is present in using regional pool constructed from eBird data.
+      - name: merlin_pool_count
+        description: The number of regional pools family is present in using regional pool constructed from eBird data.
+      - name: birdlife_city_ratio
+        description: The number of cities present / number of regional pools present, using data from regional pool constructed from Birdlife data.
+      - name: merlin_city_ratio
+        description: The number of cities present / number of regional pools present, using data from regional pool constructed from eBird data.
+
+  - name: species_analysis__output__niche_accumulation_results.csv
+    description: Data to explore niche representation of individual trophic niches within cities. Row per trophic niche.
+    columns:
+      - name: trophic_niche
+        description: Name of trophic niche
+      - name: total_niche_count
+        description: Total number of niches present within trophic niche
+      - name: urban_niche_count
+        description: Total number of niches within trophic niche that appear within cities
+      - name: total_percent_urban
+        description: the proprotion of niches within trophic niche that are urban.
+
+

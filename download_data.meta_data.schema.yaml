@@ -1,0 +1,406 @@
+models:
+  - name: download_data__input__city_data.csv
+    description: Dataset describing city in terms local landscape, physical geography, and governance. Contains one row per city. Exported from BigQuery dataset.
+    columns:
+      - name: name
+        description: The name of the city taken from GHSL Data Package 2019 https://data.jrc.ec.europa.eu/dataset/42e8be89-54ff-464e-be7b-bf9e64da5218 (Pesaresi et al. 2019)
+      - name: population
+        description: The total population in 2015 taken from GHSL Data Package 2019 https://data.jrc.ec.europa.eu/dataset/42e8be89-54ff-464e-be7b-bf9e64da5218 (Pesaresi et al. 2019)
+      - name: total_area
+        description: The total area of the city calculated from the city wide vector in Google Earth Engine.
+      - name: city_gdp_per_population
+        description: GDP value taken from UN habitat dataset by metropolitan area (Mwaniki 2017) and divided by the European Commission’s Global Human Settlements 2015 population estimate (Pesaresi et al. 2019).
+      - name: percentage_urban_area_as_open_public_spaces
+        description: Value taken from UN Habitat dataset of provision of urban open spaces (Mwaniki 2020)
+      - name: percentage_urban_area_as_open_public_spaces_and_streets
+        description: Value taken from UN Habitat dataset of provision of urban open spaces (Mwaniki 2020)
+      - name: percentage_urban_area_as_streets
+        description: Value taken from UN Habitat dataset of provision of urban open spaces (Mwaniki 2020)
+      - name: share_of_population_within_400m_of_open_space
+        description: Value taken from UN Habitat dataset of provision of urban open spaces (Mwaniki 2020)
+      - name: closed_forest
+        description: Proportion of total city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the city vector.
+      - name: cultivated
+        description: Proportion of total city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the city vector.
+      - name: herbaceous_vegetation
+        description: Proportion of total city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the city vector.
+      - name: herbaceous_wetland
+        description: Proportion of total city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the city vector.
+      - name: open_forest
+        description: Proportion of total city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the city vector.
+      - name: permanent_water
+        description: Proportion of total city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the city vector.
+      - name: shrubs
+        description: Proportion of total city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the city vector.
+      - name: urban
+        description: Proportion of total city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the city vector.
+      - name: city_mean_elevation
+        description: Average elevation within the city vector from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: city_elevation_delta
+        description: Difference between maximum elevation and minimum elevation within the city vector from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: region_100km_mean_elevation
+        description: Average elevation in the 100km buffer outside of the city vector from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: region_100km_elevation_delta
+        description: Difference between maximum elevation and minimum elevation in the 100km buffer outside of the city vector from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: region_50km_mean_elevation
+        description: Average elevation in the 50km buffer outside of the city vector from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: region_50km_elevation_delta
+        description: Difference between maximum elevation and minimum elevation in the 50km buffer outside of the city vector from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: region_20km_mean_elevation
+        description: Average elevation in the 20km buffer outside of the city vector from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: region_20km_elevation_delta
+        description: Difference between maximum elevation and minimum elevation in the 20km buffer outside of the city vector from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: region_100km_urban
+        description: Proportion of total 100km buffer outside of the city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the buffer.
+      - name: region_100km_cultivated
+        description: Proportion of total 100km buffer outside of the city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the buffer.
+      - name: region_50km_urban
+        description: Proportion of total 50km buffer outside of the city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the buffer.
+      - name: region_50km_cultivated
+        description: Proportion of total 50km buffer outside of the city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the buffer.
+      - name: region_20km_urban
+        description: Proportion of total 20km buffer outside of the city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the buffer.
+      - name: region_20km_cultivated
+        description: Proportion of total 20km buffer outside of the city area covered. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine divided by calculated total area of the buffer.
+      - name: mean_population_exposure_to_pm2_5_2019
+        description: From mean exposure to PM 2.5 UN Habitat Urban dataset (Mwaniki 2019)
+      - name: city_average_pop_density
+        description: Average population density across city vector from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: city_delta_pop_density
+        description: The difference between the minimum and maximum population density across city vector from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: city_max_pop_density
+        description: The maximum population density across city vector from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: region_100km_average_pop_density
+        description: Average population density across the 100km buffer outside the city vector from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: region_50km_average_pop_density
+        description: Average population density across the 50km buffer outside the city vector from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: region_20km_average_pop_density
+        description: Average population density across the 20km buffer outside the city vector from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: city_includes_estuary
+        description: Whether the city vector includes an estuary from the Global Estuary database (Alder 2003), calculated in Google Earth Engine.
+      - name: region_100km_includes_estuary
+        description: Whether the 100km buffer outside the city vector includes an estuary from the Global Estuary database (Alder 2003), calculated in Google Earth Engine.
+      - name: region_50km_includes_estuary
+        description: Whether the 50km buffer outside the city vector includes an estuary from the Global Estuary database (Alder 2003), calculated in Google Earth Engine.
+      - name: region_20km_includes_estuary
+        description: Whether the 20km buffer outside the city vector includes an estuary from the Global Estuary database (Alder 2003), calculated in Google Earth Engine.
+      - name: pop1950
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop1955
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop1960
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop1965
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop1970
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop1975
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop1980
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop1985
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop1990
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop1995
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop2000
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop2005
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop2010
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop2015
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: pop2020
+        description: Population estimates from 1950 – 2020 at 5-year intervals from Nordpil (2010) based on data from the UN Population Division.
+      - name: biome_name
+        description: The biome vector from the Ecoregions dataset (Resolve 2017) that covers the largest area of the city vector. Calculated in Google Earth Engine.
+      - name: realm
+        description: The realm vector from the Ecoregions dataset (Resolve 2017) that covers the largest area of the city vector. Calculated in Google Earth Engine.
+      - name: number_of_biomes
+        description: Counting the total number of biome vectors from the Ecoregions dataset (Resolve 2017) that intersect with the city vector. Calculated in Google Earth Engine.
+      - name: happiness_future_life
+        description: Values for individual cities taken from Cities and Happiness; A Global Ranking and Analysis (De Neve and Krekel 2020)
+      - name: happiness_positive_effect
+        description: Values for individual cities taken from Cities and Happiness; A Global Ranking and Analysis (De Neve and Krekel 2020).
+      - name: happiness_negative_effect
+        description: Values for individual cities taken from Cities and Happiness; A Global Ranking and Analysis (De Neve and Krekel 2020).
+      - name: temperature_annual_average
+        description: Climate from World Bioclimatic Variables (Hijmans et al. 2005) averaged across city vector. Calculated using Google Earth Engine and band bio01.
+      - name: temperature_monthly_min
+        description: Climate from World Bioclimatic Variables (Hijmans et al. 2005) averaged across city vector. Calculated using Google Earth Engine and band bio06.
+      - name: temperature_monthly_max
+        description: Climate from World Bioclimatic Variables (Hijmans et al. 2005) averaged across city vector. Calculated using Google Earth Engine and band bio05.
+      - name: rainfall_annual_average
+        description: Climate from World Bioclimatic Variables (Hijmans et al. 2005) averaged across city vector. Calculated using Google Earth Engine and band bio12.
+      - name: rainfall_monthly_min
+        description: Climate from World Bioclimatic Variables (Hijmans et al. 2005) averaged across city vector. Calculated using Google Earth Engine and band bio14.
+      - name: rainfall_monthly_max
+        description: Climate from World Bioclimatic Variables (Hijmans et al. 2005) averaged across city vector. Calculated using Google Earth Engine and band bio13.
+      - name: merlin_pool_size
+        description: The total number of species present in the regional pool constructed using eBird data.
+      - name: birdlife_pool_size
+        description: The total number of species present in the regional pool constructed using Birdlife data.
+      - name: either_pool_size
+        description: The total number of species present in either the merlin regional pool or the birdlife regional pool.
+      - name: both_pool_size
+        description: The total number of species present in both the merlin regional pool and the birdlife regional pool.
+      - name: city_ndvi
+        description: Average Normalized Difference Vegetation Index (NDVI) from NASA’s MODIS Terra Vegetation Indicies (Didan 2022) within city vector. Calculated using Google Earth Engine.
+      - name: city_ssm
+        description: Average surface soil moisture taken from NASA’s enhanced global moisture data (O'Neill et al. 2016) within city vector. Calculated using Google Earth Engine and band ssm.
+      - name: city_susm
+        description: Average subsurface soil moisture taken from NASA’s enhanced global moisture data (O'Neill et al. 2016) within city vector. Calculated using Google Earth Engine and band susm.
+      - name: region_20km_ndvi
+        description: Average Normalized Difference Vegetation Index (NDVI) from NASA’s MODIS Terra Vegetation Indicies (Didan 2022) within the 20km buffer outside the city vector. Calculated using Google Earth Engine.
+      - name: region_20km_ssm
+        description: Average surface soil moisture taken from NASA’s enhanced global moisture data (O'Neill et al. 2016) within the 20km buffer outside the city vector. Calculated using Google Earth Engine and band ssm.
+      - name: region_20km_susm
+        description: Average subsurface soil moisture taken from NASA’s enhanced global moisture data (O'Neill et al. 2016) within the 20km buffer outside the city vector. Calculated using Google Earth Engine and band susm.
+      - name: region_50km_ndvi
+        description: Average Normalized Difference Vegetation Index (NDVI) from NASA’s MODIS Terra Vegetation Indicies (Didan 2022) within the 50km buffer outside the city vector. Calculated using Google Earth Engine.
+      - name: region_50km_ssm
+        description: Average surface soil moisture taken from NASA’s enhanced global moisture data (O'Neill et al. 2016) within the 50km buffer outside the city vector. Calculated using Google Earth Engine and band ssm.
+      - name: region_50km_susm
+        description: Average subsurface soil moisture taken from NASA’s enhanced global moisture data (O'Neill et al. 2016) within the 50km buffer outside the city vector. Calculated using Google Earth Engine and band susm.
+      - name: region_100km_ndvi
+        description: Average Normalized Difference Vegetation Index (NDVI) from NASA’s MODIS Terra Vegetation Indicies (Didan 2022) within the 100km buffer outside the city vector. Calculated using Google Earth Engine.
+      - name: region_100km_ssm
+        description: Average surface soil moisture taken from NASA’s enhanced global moisture data (O'Neill et al. 2016) within the 100km buffer outside the city vector. Calculated using Google Earth Engine and band ssm.
+      - name: region_100km_susm
+        description: Average subsurface soil moisture taken from NASA’s enhanced global moisture data (O'Neill et al. 2016) within the 100km buffer outside the city vector. Calculated using Google Earth Engine and band susm.
+      - name: city_percentage_protected
+        description: Total area covered by protected area vectors from UNEP-WCMC and IUCN (2021) Protected Areas dataset, excluding marine areas, areas with category or designation Not Applicable, or have a proposed status, within the city vector divided by the total area of the city vector. Calculated in Google Earth Engine.
+      - name: region_20km_percentage_protected
+        description: Total area covered by protected area vectors from UNEP-WCMC and IUCN (2021) Protected Areas dataset, excluding marine areas, areas with category or designation Not Applicable, or have a proposed status, within the 20km buffer outside city vector divided by the total area of the buffer vector. Calculated in Google Earth Engine.
+      - name: region_50km_percentage_protected
+        description: Total area covered by protected area vectors from UNEP-WCMC and IUCN (2021) Protected Areas dataset, excluding marine areas, areas with category or designation Not Applicable, or have a proposed status, within the 50km buffer outside city vector divided by the total area of the buffer vector. Calculated in Google Earth Engine.
+      - name: region_100km_percentage_protected
+        description: Total area covered by protected area vectors from UNEP-WCMC and IUCN (2021) Protected Areas dataset, excluding marine areas, areas with category or designation Not Applicable, or have a proposed status, within the 100km buffer outside city vector divided by the total area of the buffer vector. Calculated in Google Earth Engine.
+      - name: city_centre_latitude
+        description: Laitude of city centre taken from Nordpil (2010).
+
+  - name: download_data__output__hotspot_metrics_birdlife.csv
+    description: Dataset describing each hotspot in relation to the regional pool constructed using Birdlife data. Contains a row per hotspot, each hotspot is located within a single city. Exported from BigQuery dataset.
+    columns:
+      - name: percentage_of_regional_pool_present
+        description: The percentage of species present at the hotspot that are also present in the associated city's regional pool.
+      - name: difference_from_locality_trait_gravity
+        description: The distance the average trait centre of the hotspot is from that of the regional pool. Calculated as sqrt((pool pc1 avg - hotspot pc1 avg)^2 + (pool pc2 avg - hotspot pc2 avg)^2 + (pool pc3 avg - hotspot pc3 avg)^2 + (pool pc4 avg - hotspot pc4 avg)^2)
+      - name: percentage_of_niches_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (default clustering configuration).
+      - name: percentage_of_niches_2_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (configuration to produce fewer niches).
+      - name: percentage_of_niches_3_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (configuration to produce more niches).
+      - name: latitude
+        description: The latitude of the hotspot from eBird data.
+      - name: longitude
+        description: The longitude of the hotspot from eBird data.
+      - name: closed_forest
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: cultivated
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: herbaceous_vegetation
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: herbaceous_wetland
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: open_forest
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: permanent_water
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: shrubs
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: urban
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: mean_elevation
+        description: Average elevation in the 5km buffer around the hotspot latidude/longitude from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: elevation_delta
+        description: Difference between maximum and minimum elevation in the 5km buffer around the hotspot latidude/longitude from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: average_population_density
+        description: Average population density in the 5km buffer around the hotspot latidude/longitude from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: city_name
+        description: The name of the city this hotspot is located within
+      - name: continent
+        description: The continent this hotspot is located on.
+      - name: realm
+        description: The realm vector from the Ecoregions dataset (Resolve 2017) that contains this hotspot. Calculated in Google Earth Engine.
+      - name: biome
+        description: The biome vector from the Ecoregions dataset (Resolve 2017) that contains this hotspot. Calculated in Google Earth Engine.
+      - name: national_gdp_estimate_thousand_dollars_per_person
+        description: National GDP from World Bank dataset.
+      - name: national_income_group
+        description: National income group from World Bank dataset.
+      - name: locality_id
+        description: The eBird hotspot ID
+      - name: number_of_checklists
+        description: The total number of eBird valid checklists submitted at this hotspot (as defined by our checklists filters).
+
+  - name: download_data__output__hotspot_metrics_merlin.csv
+    description: Dataset describing each hotspot in relation to the regional pool constructed using eBird data. Contains a row per hotspot, each hotspot is located within a single city. Exported from BigQuery dataset.
+    columns:
+      - name: percentage_of_regional_pool_present
+        description: The percentage of species present at the hotspot that are also present in the associated city's regional pool.
+      - name: difference_from_locality_trait_gravity
+        description: The distance the average trait centre of the hotspot is from that of the regional pool. Calculated as sqrt((pool pc1 avg - hotspot pc1 avg)^2 + (pool pc2 avg - hotspot pc2 avg)^2 + (pool pc3 avg - hotspot pc3 avg)^2 + (pool pc4 avg - hotspot pc4 avg)^2)
+      - name: percentage_of_niches_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (default clustering configuration).
+      - name: percentage_of_niches_2_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (configuration to produce fewer niches).
+      - name: percentage_of_niches_3_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (configuration to produce more niches).
+      - name: latitude
+        description: The latitude of the hotspot from eBird data.
+      - name: longitude
+        description: The longitude of the hotspot from eBird data.
+      - name: closed_forest
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: cultivated
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: herbaceous_vegetation
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: herbaceous_wetland
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: open_forest
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: permanent_water
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: shrubs
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: urban
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: mean_elevation
+        description: Average elevation in the 5km buffer around the hotspot latidude/longitude from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: elevation_delta
+        description: Difference between maximum and minimum elevation in the 5km buffer around the hotspot latidude/longitude from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: average_population_density
+        description: Average population density in the 5km buffer around the hotspot latidude/longitude from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: city_name
+        description: The name of the city this hotspot is located within
+      - name: continent
+        description: The continent this hotspot is located on.
+      - name: realm
+        description: The realm vector from the Ecoregions dataset (Resolve 2017) that contains this hotspot. Calculated in Google Earth Engine.
+      - name: biome
+        description: The biome vector from the Ecoregions dataset (Resolve 2017) that contains this hotspot. Calculated in Google Earth Engine.
+      - name: national_gdp_estimate_thousand_dollars_per_person
+        description: National GDP from World Bank dataset.
+      - name: national_income_group
+        description: National income group from World Bank dataset.
+      - name: locality_id
+        description: The eBird hotspot ID
+      - name: number_of_checklists
+        description: The total number of eBird valid checklists submitted at this hotspot (as defined by our checklists filters).
+
+  - name: download_data__output__hotspot_metrics_either.csv
+    description: Dataset describing each hotspot in relation to the regional pool constructed by species being present in either eBird or Birdlife regional pools. Contains a row per hotspot, each hotspot is located within a single city. Exported from BigQuery dataset.
+    columns:
+      - name: percentage_of_regional_pool_present
+        description: The percentage of species present at the hotspot that are also present in the associated city's regional pool.
+      - name: difference_from_locality_trait_gravity
+        description: The distance the average trait centre of the hotspot is from that of the regional pool. Calculated as sqrt((pool pc1 avg - hotspot pc1 avg)^2 + (pool pc2 avg - hotspot pc2 avg)^2 + (pool pc3 avg - hotspot pc3 avg)^2 + (pool pc4 avg - hotspot pc4 avg)^2)
+      - name: percentage_of_niches_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (default clustering configuration).
+      - name: percentage_of_niches_2_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (configuration to produce fewer niches).
+      - name: percentage_of_niches_3_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (configuration to produce more niches).
+      - name: latitude
+        description: The latitude of the hotspot from eBird data.
+      - name: longitude
+        description: The longitude of the hotspot from eBird data.
+      - name: closed_forest
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: cultivated
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: herbaceous_vegetation
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: herbaceous_wetland
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: open_forest
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: permanent_water
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: shrubs
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: urban
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: mean_elevation
+        description: Average elevation in the 5km buffer around the hotspot latidude/longitude from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: elevation_delta
+        description: Difference between maximum and minimum elevation in the 5km buffer around the hotspot latidude/longitude from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: average_population_density
+        description: Average population density in the 5km buffer around the hotspot latidude/longitude from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: city_name
+        description: The name of the city this hotspot is located within
+      - name: continent
+        description: The continent this hotspot is located on.
+      - name: realm
+        description: The realm vector from the Ecoregions dataset (Resolve 2017) that contains this hotspot. Calculated in Google Earth Engine.
+      - name: biome
+        description: The biome vector from the Ecoregions dataset (Resolve 2017) that contains this hotspot. Calculated in Google Earth Engine.
+      - name: national_gdp_estimate_thousand_dollars_per_person
+        description: National GDP from World Bank dataset.
+      - name: national_income_group
+        description: National income group from World Bank dataset.
+      - name: locality_id
+        description: The eBird hotspot ID
+      - name: number_of_checklists
+        description: The total number of eBird valid checklists submitted at this hotspot (as defined by our checklists filters).
+
+  - name: download_data__output__hotspot_metrics_both.csv
+    description: Dataset describing each hotspot in relation to the regional pool constructed by species being present in both eBird and Birdlife regional pools. Contains a row per hotspot, each hotspot is located within a single city. Exported from BigQuery dataset.
+    columns:
+      - name: percentage_of_regional_pool_present
+        description: The percentage of species present at the hotspot that are also present in the associated city's regional pool.
+      - name: difference_from_locality_trait_gravity
+        description: The distance the average trait centre of the hotspot is from that of the regional pool. Calculated as sqrt((pool pc1 avg - hotspot pc1 avg)^2 + (pool pc2 avg - hotspot pc2 avg)^2 + (pool pc3 avg - hotspot pc3 avg)^2 + (pool pc4 avg - hotspot pc4 avg)^2)
+      - name: percentage_of_niches_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (default clustering configuration).
+      - name: percentage_of_niches_2_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (configuration to produce fewer niches).
+      - name: percentage_of_niches_3_present
+        description: The percentage of niches present at the hotspot that are also present in the associated city's regional pool (configuration to produce more niches).
+      - name: latitude
+        description: The latitude of the hotspot from eBird data.
+      - name: longitude
+        description: The longitude of the hotspot from eBird data.
+      - name: closed_forest
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: cultivated
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: herbaceous_vegetation
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: herbaceous_wetland
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: open_forest
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: permanent_water
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: shrubs
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: urban
+        description: The proportion of the 5km buffer around the hotspot latidude/longitude covered by this landcover class. Calculated from land cover raster from Copernicus Global Land Covers (Buchhorn et al. 2019) in Google Earth Engine.
+      - name: mean_elevation
+        description: Average elevation in the 5km buffer around the hotspot latidude/longitude from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: elevation_delta
+        description: Difference between maximum and minimum elevation in the 5km buffer around the hotspot latidude/longitude from European Environment Agency (2016) calculated using Google Earth Engine.
+      - name: average_population_density
+        description: Average population density in the 5km buffer around the hotspot latidude/longitude from the Global Human Settlement Layer population raster (Schiavina et al. 2019) calculated using Google Earth Engine.
+      - name: city_name
+        description: The name of the city this hotspot is located within
+      - name: continent
+        description: The continent this hotspot is located on.
+      - name: realm
+        description: The realm vector from the Ecoregions dataset (Resolve 2017) that contains this hotspot. Calculated in Google Earth Engine.
+      - name: biome
+        description: The biome vector from the Ecoregions dataset (Resolve 2017) that contains this hotspot. Calculated in Google Earth Engine.
+      - name: national_gdp_estimate_thousand_dollars_per_person
+        description: National GDP from World Bank dataset.
+      - name: national_income_group
+        description: National income group from World Bank dataset.
+      - name: locality_id
+        description: The eBird hotspot ID
+      - name: number_of_checklists
+        description: The total number of eBird valid checklists submitted at this hotspot (as defined by our checklists filters).

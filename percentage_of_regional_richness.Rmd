@@ -20,6 +20,13 @@ model_average_richness <- function(data) {
 }
 ```
 
+```{r}
+model_average_richness_with_num_checklists <- function(data) {
+  data$number_of_checklists_scaled = rescale(data$number_of_checklists, to = c(0, 1), from = range(data$number_of_checklists, na.rm = TRUE, finite = TRUE))
+  model_average(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + urban + realm + number_of_checklists_scaled + (1|city_name), data, 4)
+}
+```
+
 ----------------------
 Find city predictors
 ----------------------
@@ -169,7 +176,44 @@ birdlife_plot
 ggsave('percentage_of_regional_pool__output__birdlife_richness_result.jpg')
 ```
 
+-----------------------
+Birdlife with number of checklists as covariate
+----------------------
+```{r}
+bl_with_num_cl_richness_result = model_average_richness_with_num_checklists(birdlife)
+bl_with_num_cl_richness_result
+```
 
+
+```{r}
+bl_with_num_cl_richness_sum <- model_summary('birdlife_with_num_cl', 'richness', bl_with_num_cl_richness_result)
+bl_with_num_cl_richness_sum
+```
+
+
+```{r}
+bl_with_num_cl_richness_plot <- bl_with_num_cl_richness_sum[bl_with_num_cl_richness_sum$model == 'full',]
+bl_with_num_cl_richness_plot$explanatory <- factor(bl_with_num_cl_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
+bl_with_num_cl_richness_plot$type <- 'Proportion of landcover\n5 km around site'
+bl_with_num_cl_richness_plot$type[bl_with_num_cl_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
+bl_with_num_cl_richness_plot$type[bl_with_num_cl_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+bl_with_num_cl_richness_plot$type[bl_with_num_cl_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
+
+bl_with_num_cl_plot = ggplot(bl_with_num_cl_richness_plot, aes(y=explanatory, x=richness_birdlife_with_num_cl_estimate, colour = type)) + 
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(xmin=richness_birdlife_with_num_cl_estimate-richness_birdlife_with_num_cl_error, xmax=richness_birdlife_with_num_cl_estimate+richness_birdlife_with_num_cl_error), width=.2,
+                 position=position_dodge(0.05)) +
+  scale_y_discrete(
+    limits = rev(levels(bl_with_num_cl_richness_plot$explanatory)), 
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Number\nof checklists')) +
+  theme_bw() +
+  geom_vline(xintercept=0, linetype="dotted") +
+  guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
+  theme(legend.justification = "top")
+bl_with_num_cl_plot
+ggsave('percentage_of_regional_pool__output__birdlife_with_num_cl_richness_result.jpg')
+```
 
 ----------------------
 Both: Difference in richness
@@ -292,21 +336,6 @@ blr300_richness_result
 ```
 
 
-Cities ordered by response for hotspots with 300 or less checklists
-```{r}
-birdlife300_city_response <- create_city_dataset(birdlife300_mixed_model)
-birdlife300_city_response = birdlife300_city_response[,c('name', 'response')]
-names(birdlife300_city_response) = c('name', 'response_300_checklists')
-birdlife300_city_response = left_join(birdlife300_city_response, birdlife_city_response[,c('name', 'response')])
-birdlife300_city_response[order(birdlife300_city_response$response_300_checklists), c('name', 'response_300_checklists', 'response')]
-```
-
-Cities ordered by response for all hotspots
-```{r}
-birdlife300_city_response[order(birdlife300_city_response$response), c('name', 'response_300_checklists', 'response')]
-```
-
-
 ```{r}
 bl300_richness_sum <- model_summary('birdlife', 'richness', blr300_richness_result)
 bl300_richness_sum
@@ -348,21 +377,6 @@ nrow(birdlifeNoAustralia)
 ```{r, cache = TRUE}
 blrNoAustralia_richness_result <- model_average_richness(birdlifeNoAustralia)
 blrNoAustralia_richness_result
-```
-
-
-Cities ordered by response for hotspots with no australasia
-```{r}
-birdlifeNoAustralia_city_response <- create_city_dataset(birdlifeNoAustralia_mixed_model)
-birdlifeNoAustralia_city_response = birdlifeNoAustralia_city_response[,c('name', 'response')]
-names(birdlifeNoAustralia_city_response) = c('name', 'response_no_australasia')
-birdlifeNoAustralia_city_response = left_join(birdlifeNoAustralia_city_response, birdlife_city_response[,c('name', 'response')])
-birdlifeNoAustralia_city_response[order(birdlifeNoAustralia_city_response$response_no_australasia), c('name', 'response_no_australasia', 'response')]
-```
-
-Cities ordered by response for all hotspots
-```{r}
-birdlifeNoAustralia_city_response[order(birdlifeNoAustralia_city_response$response), c('name', 'response_no_australasia', 'response')]
 ```
 
 
@@ -408,26 +422,6 @@ blrNoAfrica_richness_result <- model_average_richness(birdlifeNoAfrica)
 blrNoAfrica_richness_result
 ```
 
-
-Cities ordered by response for hotspots with no afrotropics
-```{r}
-birdlifeNoAfrica_city_response <- create_city_dataset(birdlifeNoAfrica_mixed_model)
-birdlifeNoAfrica_city_response = birdlifeNoAfrica_city_response[,c('name', 'response')]
-names(birdlifeNoAfrica_city_response) = c('name', 'response_no_africa')
-birdlifeNoAfrica_city_response = left_join(birdlifeNoAfrica_city_response, birdlife_city_response[,c('name', 'response')])
-birdlifeNoAfrica_city_response[order(birdlifeNoAfrica_city_response$response_no_africa), c('name', 'response_no_africa', 'response')]
-```
-
-Cities ordered by response for all hotspots
-```{r}
-birdlifeNoAfrica_city_response[order(birdlifeNoAfrica_city_response$response), c('name', 'response_no_africa', 'response')] 
-```
-
-
-```{r}
-blNoAfrica_richness_sum <- model_summary('birdlife', 'richness', blrNoAfrica_richness_result)
-blNoAfrica_richness_sum
-```
 
 ```{r}
 birdlifeNoAfrica_richness_plot <- blNoAfrica_richness_sum[blNoAfrica_richness_sum$model == 'full',]
@@ -504,6 +498,7 @@ Birdlife [Urban Only]: Difference in richness
 birdlife$urban_rounded = floor(birdlife$urban * 10) / 10
 ggplot(birdlife, aes(x = urban_rounded)) + geom_bar()
 ```
+
 ```{r}
 birdlifeHigherUrban = birdlife[birdlife$urban > 0.2,]
 nrow(birdlifeHigherUrban)

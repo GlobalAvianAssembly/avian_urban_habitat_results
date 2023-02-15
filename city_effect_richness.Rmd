@@ -130,10 +130,7 @@ names(birdlife_predictors[,birdlife_interp$varselect.interp])
 ------------------------------------------
 So....
 ------------------------------------------
-Merlin: "abs_city_centre_latitude"     "region_50km_elevation_delta"  "biome_name"                   "region_50km_ssm"             
- [5] "region_100km_ssm"             "region_20km_elevation_delta"  "region_20km_urban"            "region_100km_elevation_delta"
- [9] "temperature_annual_average"   "city_ndvi"                    "city_gdp_per_population"      "shrubs"                      
-[13] "permanent_water"              "city_centre_latitude"         "region_20km_cultivated"     
+Merlin: "abs_city_centre_latitude"    "region_50km_elevation_delta" "region_50km_ssm"             "region_100km_ssm" 
 Birdlife: "population_growth" "region_50km_ssm"  
 
 -----------------------------
@@ -160,272 +157,67 @@ merlin_city_data_fixed_no_boreal <- merlin_city_data_fixed[merlin_city_data_fixe
 ```
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_ndvi + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ abs_city_centre_latitude + region_50km_elevation_delta + region_50km_ssm + region_100km_ssm))$delta[1]
 ```
 
--- CVE 19.72841
+-- CVE 20.89733
 -- Can we drop one?
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_ndvi + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ abs_city_centre_latitude + region_50km_elevation_delta + region_50km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_ndvi + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ abs_city_centre_latitude + region_50km_elevation_delta + region_100km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_100km_elevation_delta + temperature_annual_average + city_ndvi + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ abs_city_centre_latitude + region_50km_ssm + region_100km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + temperature_annual_average + city_ndvi + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta + region_50km_ssm + region_100km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + city_ndvi + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
 
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_ndvi + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_ndvi + city_gdp_per_population + permanent_water + city_centre_latitude + region_20km_cultivated))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_ndvi + city_gdp_per_population + shrubs + city_centre_latitude + region_20km_cultivated))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_ndvi + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(data = merlin_city_data_fixed_no_boreal, formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_ndvi + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude))$delta[1]
-```
-
--- drop city_ndvi to give smaller CVE of 19.35
+-- drop region_50km_ssm to give smaller CVE of 20.59091
 -- can we drop another?
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ abs_city_centre_latitude + region_50km_elevation_delta, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ abs_city_centre_latitude + region_100km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta + region_100km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + shrubs + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + permanent_water + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + city_centre_latitude + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + city_centre_latitude, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
--- drop city_centre_latitude to give smaller CVE of 19.06
+-- drop abs_city_centre_latitude to give smaller CVE of 20.34958
 -- can we drop another?
 
 ```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_elevation_delta + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
--- drop region_20km_elevation_delta to give smaller CVE of 18.76
--- can we drop another?
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + city_gdp_per_population + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + shrubs + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + permanent_water + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + region_20km_cultivated, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
--- drop region_20km_cultivated to give smaller CVE of 18.54
--- can we drop another?
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + temperature_annual_average + city_gdp_per_population + shrubs + permanent_water, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + city_gdp_per_population + shrubs + permanent_water, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + shrubs + permanent_water, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + permanent_water, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
--- drop permanent_water to give smaller CVE of 18.34
--- can we drop another?
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + temperature_annual_average + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + temperature_annual_average + city_gdp_per_population, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
--- drop temperature_annual_average to give smaller CVE of 18.14
--- can we drop another?
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_20km_urban + region_100km_elevation_delta + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_100km_elevation_delta + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_20km_urban + region_100km_elevation_delta + city_gdp_per_population, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
--- drop region_20km_urban to give smaller CVE of 18.03
--- can we drop another?
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_elevation_delta + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + city_gdp_per_population + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_100km_elevation_delta + shrubs, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_100km_elevation_delta + city_gdp_per_population, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
--- drop shrubs to give smaller CVE of 17.95
--- can we drop another?
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_elevation_delta + city_gdp_per_population, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + city_gdp_per_population, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_100km_elevation_delta, data = merlin_city_data_fixed_no_boreal))$delta[1]
-```
-
--- drop city_gdp_per_population to give smaller CVE of 17.94
--- can we drop another?
-```{r}
-cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_elevation_delta, data = merlin_city_data_fixed_no_boreal))$delta[1]
+cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
 
 ```{r}
 cv.glm(merlin_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm, data = merlin_city_data_fixed_no_boreal))$delta[1]
 ```
+
 -- No
 
 ----------------------------------------------------------------------------------------------
--- best model with region_100km_ssm + region_100km_elevation_delta (CV error 17.91216)
+-- best model with region_100km_ssm + region_50km_elevation_delta (CV error 17.91216)
 ----------------------------------------------------------------------------------------------
 
 ```{r}
-summary(glm(data = merlin_city_data_fixed, formula = response ~ region_100km_ssm + region_100km_elevation_delta))
+summary(glm(data = merlin_city_data_fixed, formula = response ~ region_100km_ssm + region_50km_elevation_delta))
 ```
 
 ```{r}
-reg_merlin = glm(data = merlin_city_data_fixed, formula = response ~ region_100km_ssm + region_100km_elevation_delta)
+reg_merlin = glm(data = merlin_city_data_fixed, formula = response ~ region_100km_ssm + region_50km_elevation_delta)
 with(summary(reg_merlin), 1 - deviance/null.deviance)
 ```
 
@@ -436,69 +228,10 @@ birdlife_city_data_fixed_no_boreal <- birdlife_city_data_fixed[birdlife_city_dat
 ```
 
 ```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + biome_name + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
+cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ population_growth + region_50km_ssm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
 -- can we drop a variable?
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + biome_name + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_elevation_delta + biome_name + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + biome_name + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta + biome_name, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
--- drop biome_name to give CVE of 6.503421
--- can we drop another?
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_elevation_delta + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_100km_ssm + region_50km_ssm + region_50km_elevation_delta, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
--- drop region_100km_ssm to give CVE of 6.417311
--- can we drop another?
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_elevation_delta + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
-```{r}
-cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm + region_50km_elevation_delta, data = birdlife_city_data_fixed_no_boreal))$delta[1]
-```
-
--- drop region_50km_elevation_delta to give CVE of 6.342025
--- can we drop another?
 
 ```{r}
 cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ population_growth, data = birdlife_city_data_fixed_no_boreal))$delta[1]
@@ -508,13 +241,14 @@ cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ population_g
 cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ region_50km_ssm, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
 
--- drop city_gdp_per_population to give CVE of 6.291299
+
+-- drop population_growth to give CVE of 6.291298
 -- is this better than no variable?
 
 ```{r}
 cv.glm(birdlife_city_data_fixed_no_boreal, glm(formula = response ~ 1, data = birdlife_city_data_fixed_no_boreal))$delta[1]
 ```
--- yes, just!
+-- yes
 
 ----------------------------------------------------
 -- so best model with birdlife is region_50km_ssm
@@ -533,7 +267,6 @@ with(summary(reg_birdlife), 1 - deviance/null.deviance)
 ```{r}
 ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = response)) + geom_point() + geom_smooth(method = "glm")
 ```
-
 
 
 
@@ -567,7 +300,7 @@ birdlife_ssm = ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = res
   geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_se, color = "red") +
   theme_bw() +
-  ylab("Standardized bird retention response") + xlab("Regional (50km) SSM")
+  ylab("Standardized response") + xlab("Regional (50km) SSM")
 
 birdlife_ssm
 ggsave("city_effect_richness__output__birdlife.jpg")
@@ -610,7 +343,7 @@ ggplot(merlin_city_data_named, aes(x = region_100km_ssm, y = response)) +
   geom_smooth(method = "glm") +
   theme_bw() +
   theme(legend.position="bottom") +
-  ylab("Standardized bird retention response") + xlab("SSM in 100 km surrounding city") + guides(size=guide_legend(title="Regional (50 km) elevation delta"))
+  ylab("Standardized response") + xlab("SSM in 100 km surrounding city") + guides(size=guide_legend(title="Regional (50 km) elevation delta"))
 
 ggsave("city_effect_richness__output__merlin.jpg")
 ```
@@ -667,7 +400,7 @@ birdlife_ldg = ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude, y = 
   geom_text_repel(aes(label = name), data = outside_ldg_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_ldg_se, color = "red") +
   theme_bw() +
-  ylab("Standardized bird retention response") + xlab("Latitude (of city centre)") + labs(title = "Birdlife LDG")
+  ylab("Standardized response") + xlab("Latitude (of city centre)") + labs(title = "Birdlife LDG")
 
 birdlife_ldg
 ggsave('city_effect_richness__output__ldg_birdlife.jpg')
@@ -685,7 +418,7 @@ birdlife_plot_ldg = ggplot(birdlife_data_with_lat, aes(x = city_centre_latitude,
   scale_colour_gradientn(colours = c("#ffee00", "#0019ff"), limits=c(5,22)) +
   guides(colour=guide_legend(title="SSM in 50 km surrounding city")) +
   theme_bw() +
-  ylab("Standardized bird retention response") + xlab("Latitude (of city centre)") + 
+  ylab("Standardized response") + xlab("Latitude (of city centre)") + 
   theme(legend.position="bottom", legend.box = "horizontal")
 
 birdlife_plot_ldg
@@ -701,7 +434,7 @@ birdlife_ssm2 = ggplot(birdlife_city_data_named, aes(x = region_50km_ssm, y = re
   scale_colour_gradientn(colours = c("#ffee00", "#0019ff"), limits=c(5,22)) +
   guides(colour=guide_legend(title="SSM in 50 km surrounding city")) +
   theme_bw() +
-  ylab("Standardized bird retention response") + xlab("SSM in 50 km surrounding city") +
+  ylab("Standardized response") + xlab("SSM in 50 km surrounding city") +
   theme(legend.position="bottom", legend.box = "horizontal")
 
 birdlife_ssm2
@@ -711,7 +444,7 @@ birdlife_ssm2
 library(ggpubr)
 birdlife_figure = ggarrange(birdlife_ssm2 + rremove("ylab"), birdlife_plot_ldg + rremove("ylab"), labels = c("a", "b"), ncol = 2, common.legend = T, legend = "bottom")
 annotate_figure(birdlife_figure,
-                left = text_grob("Standardized bird retention response", rot = 90))
+                left = text_grob("Standardized response", rot = 90))
 
 ggsave('city_effect_richness__output__ldg_birdlife_with_ssm.jpg', height = 1500, width = 2250, units = "px")
 ```
@@ -733,7 +466,7 @@ ggplot(merlin_data_with_lat, aes(x = city_centre_latitude, y = response)) +
   geom_text_repel(aes(label = name), data = outside_se, size = 3, nudge_y = 1, color = "red") +
   geom_point(data = outside_se, color = "red") +
   theme_bw() +
-  ylab("Standardized bird retention response") + xlab("Latitude (of city centre)")
+  ylab("Standardized response") + xlab("Latitude (of city centre)")
 
 ggsave('city_effect_richness__output__ldg_merlin.jpg')
 ```

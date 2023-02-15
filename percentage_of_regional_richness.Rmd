@@ -16,13 +16,6 @@ source("./helper__dredge_functions.R")
 
 ```{r}
 model_average_richness <- function(data) {
-  model_average(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + urban + realm + (1|city_name), data, 4)
-}
-```
-
-```{r}
-model_average_richness_with_num_checklists <- function(data) {
-  data$number_of_checklists_scaled = rescale(data$number_of_checklists, to = c(0, 1), from = range(data$number_of_checklists, na.rm = TRUE, finite = TRUE))
   model_average(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + urban + realm + number_of_checklists_scaled + (1|city_name), data, 4)
 }
 ```
@@ -51,12 +44,12 @@ merlin_richness_result
 ```
 
 ```{r}
-merlin_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), merlin)
+merlin_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + number_of_checklists_scaled + (1|city_name), merlin)
 r.squaredGLMM(merlin_mixed_model)
 ```
 
 ```{r}
-merlin_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, merlin)
+merlin_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + number_of_checklists_scaled, merlin)
 anova(merlin_mixed_model, merlin_fixed_model)
 ```
 
@@ -86,10 +79,11 @@ summary(merlin_mixed_model)
 
 ```{r}
 merlin_richness_plot <- merlin_richness_sum[merlin_richness_sum$model == 'full',]
-merlin_richness_plot$explanatory <- factor(merlin_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+merlin_richness_plot$explanatory <- factor(merlin_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
 merlin_richness_plot$type <- 'Proportion of landcover\n5 km around site'
 merlin_richness_plot$type[merlin_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
 merlin_richness_plot$type[merlin_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+merlin_richness_plot$type[merlin_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
 
 ggplot(merlin_richness_plot, aes(y=explanatory, x=richness_merlin_estimate, colour = type)) + 
   geom_line() +
@@ -98,7 +92,7 @@ ggplot(merlin_richness_plot, aes(y=explanatory, x=richness_merlin_estimate, colo
                  position=position_dodge(0.05)) +
   scale_y_discrete(
     limits = rev(levels(merlin_richness_plot$explanatory)), 
-    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Sqrt number\nof checklists')) +
   theme_bw() +
   geom_vline(xintercept=0, linetype="dotted") +
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional richness\n± Standard Error') + ylab('Predictor') +
@@ -106,7 +100,6 @@ ggplot(merlin_richness_plot, aes(y=explanatory, x=richness_merlin_estimate, colo
 
 ggsave('percentage_of_regional_pool__output__merlin_richness_result.jpg')
 ```
-
 
 ----------------------
 Birdlife: Difference in richness
@@ -155,10 +148,11 @@ summary(birdlife_mixed_model)
 
 ```{r}
 birdlife_richness_plot <- bl_richness_sum[bl_richness_sum$model == 'full',]
-birdlife_richness_plot$explanatory <- factor(birdlife_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlife_richness_plot$explanatory <- factor(birdlife_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
 birdlife_richness_plot$type <- 'Proportion of landcover\n5 km around site'
 birdlife_richness_plot$type[birdlife_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
 birdlife_richness_plot$type[birdlife_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+birdlife_richness_plot$type[birdlife_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
 
 birdlife_plot = ggplot(birdlife_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
   geom_line() +
@@ -167,7 +161,7 @@ birdlife_plot = ggplot(birdlife_richness_plot, aes(y=explanatory, x=richness_bir
                  position=position_dodge(0.05)) +
   scale_y_discrete(
     limits = rev(levels(birdlife_richness_plot$explanatory)), 
-    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Sqrt number\nof checklists')) +
   theme_bw() +
   geom_vline(xintercept=0, linetype="dotted") +
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
@@ -176,44 +170,7 @@ birdlife_plot
 ggsave('percentage_of_regional_pool__output__birdlife_richness_result.jpg')
 ```
 
------------------------
-Birdlife with number of checklists as covariate
-----------------------
-```{r}
-bl_with_num_cl_richness_result = model_average_richness_with_num_checklists(birdlife)
-bl_with_num_cl_richness_result
-```
 
-
-```{r}
-bl_with_num_cl_richness_sum <- model_summary('birdlife_with_num_cl', 'richness', bl_with_num_cl_richness_result)
-bl_with_num_cl_richness_sum
-```
-
-
-```{r}
-bl_with_num_cl_richness_plot <- bl_with_num_cl_richness_sum[bl_with_num_cl_richness_sum$model == 'full',]
-bl_with_num_cl_richness_plot$explanatory <- factor(bl_with_num_cl_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
-bl_with_num_cl_richness_plot$type <- 'Proportion of landcover\n5 km around site'
-bl_with_num_cl_richness_plot$type[bl_with_num_cl_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
-bl_with_num_cl_richness_plot$type[bl_with_num_cl_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
-bl_with_num_cl_richness_plot$type[bl_with_num_cl_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
-
-bl_with_num_cl_plot = ggplot(bl_with_num_cl_richness_plot, aes(y=explanatory, x=richness_birdlife_with_num_cl_estimate, colour = type)) + 
-  geom_line() +
-  geom_point()+
-  geom_errorbar(aes(xmin=richness_birdlife_with_num_cl_estimate-richness_birdlife_with_num_cl_error, xmax=richness_birdlife_with_num_cl_estimate+richness_birdlife_with_num_cl_error), width=.2,
-                 position=position_dodge(0.05)) +
-  scale_y_discrete(
-    limits = rev(levels(bl_with_num_cl_richness_plot$explanatory)), 
-    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Number\nof checklists')) +
-  theme_bw() +
-  geom_vline(xintercept=0, linetype="dotted") +
-  guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
-  theme(legend.justification = "top")
-bl_with_num_cl_plot
-ggsave('percentage_of_regional_pool__output__birdlife_with_num_cl_richness_result.jpg')
-```
 
 ----------------------
 Both: Difference in richness
@@ -224,12 +181,12 @@ both_richness_result
 ```
 
 ```{r}
-both_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), both)
+both_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + number_of_checklists_scaled + (1|city_name), both)
 r.squaredGLMM(both_mixed_model)
 ```
 
 ```{r}
-both_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, both)
+both_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + elevation_delta_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + number_of_checklists_scaled, both)
 anova(both_mixed_model, both_fixed_model)
 ```
 
@@ -256,12 +213,12 @@ either_richness_result
 ```
 
 ```{r}
-either_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + (1|city_name), either)
+either_mixed_model <- lmer(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + number_of_checklists_scaled + (1|city_name), either)
 r.squaredGLMM(either_mixed_model)
 ```
 
 ```{r}
-either_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm, either)
+either_fixed_model <- lm(percentage_of_regional_pool_present ~ mean_elevation_scaled + closed_forest + cultivated + herbaceous_vegetation + herbaceous_wetland + open_forest + permanent_water + shrubs + realm + number_of_checklists_scaled, either)
 anova(either_mixed_model, either_fixed_model)
 ```
 
@@ -344,10 +301,11 @@ bl300_richness_sum
 ```{r}
 birdlife300_richness_plot <- bl300_richness_sum[bl300_richness_sum$model == 'full',]
 
-birdlife300_richness_plot$explanatory <- factor(birdlife300_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlife300_richness_plot$explanatory <- factor(birdlife300_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
 birdlife300_richness_plot$type <- 'Proportion of landcover\n5 km around site'
 birdlife300_richness_plot$type[birdlife300_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
 birdlife300_richness_plot$type[birdlife300_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+birdlife300_richness_plot$type[birdlife300_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
 
 birdlife300_plot = ggplot(birdlife300_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
   geom_line() +
@@ -356,7 +314,7 @@ birdlife300_plot = ggplot(birdlife300_richness_plot, aes(y=explanatory, x=richne
                  position=position_dodge(0.05)) +
   scale_y_discrete(
     limits = rev(levels(birdlife300_richness_plot$explanatory)), 
-    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Sqrt number\nof checklists')) +
   theme_bw() +
   geom_vline(xintercept=0, linetype="dotted") +
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
@@ -388,10 +346,11 @@ blNoAustralia_richness_sum
 ```{r}
 birdlifeNoAustralia_richness_plot <- blNoAustralia_richness_sum[blNoAustralia_richness_sum$model == 'full',]
 
-birdlifeNoAustralia_richness_plot$explanatory <- factor(birdlifeNoAustralia_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlifeNoAustralia_richness_plot$explanatory <- factor(birdlifeNoAustralia_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
 birdlifeNoAustralia_richness_plot$type <- 'Proportion of landcover\n5 km around site'
 birdlifeNoAustralia_richness_plot$type[birdlifeNoAustralia_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
 birdlifeNoAustralia_richness_plot$type[birdlifeNoAustralia_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+birdlifeNoAustralia_richness_plot$type[birdlifeNoAustralia_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
 
 birdlifeNoAustralia_plot = ggplot(birdlifeNoAustralia_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
   geom_line() +
@@ -400,7 +359,7 @@ birdlifeNoAustralia_plot = ggplot(birdlifeNoAustralia_richness_plot, aes(y=expla
                  position=position_dodge(0.05)) +
   scale_y_discrete(
     limits = rev(levels(birdlifeNoAustralia_richness_plot$explanatory)), 
-    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Sqrt number\nof checklists')) +
   theme_bw() +
   geom_vline(xintercept=0, linetype="dotted") +
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
@@ -422,14 +381,18 @@ blrNoAfrica_richness_result <- model_average_richness(birdlifeNoAfrica)
 blrNoAfrica_richness_result
 ```
 
+```{r}
+blNoAfrica_richness_sum = model_summary('birdlife', 'richness', blrNoAfrica_richness_result)
+```
 
 ```{r}
 birdlifeNoAfrica_richness_plot <- blNoAfrica_richness_sum[blNoAfrica_richness_sum$model == 'full',]
 
-birdlifeNoAfrica_richness_plot$explanatory <- factor(birdlifeNoAfrica_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlifeNoAfrica_richness_plot$explanatory <- factor(birdlifeNoAfrica_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
 birdlifeNoAfrica_richness_plot$type <- 'Proportion of landcover\n5 km around site'
 birdlifeNoAfrica_richness_plot$type[birdlifeNoAfrica_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
 birdlifeNoAfrica_richness_plot$type[birdlifeNoAfrica_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+birdlifeNoAfrica_richness_plot$type[birdlifeNoAfrica_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
 
 birdlifeNoAfrica_plot = ggplot(birdlifeNoAfrica_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
   geom_line() +
@@ -438,7 +401,7 @@ birdlifeNoAfrica_plot = ggplot(birdlifeNoAfrica_richness_plot, aes(y=explanatory
                  position=position_dodge(0.05)) +
   scale_y_discrete(
     limits = rev(levels(birdlifeNoAfrica_richness_plot$explanatory)), 
-    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Sqrt number\nof checklists')) +
   theme_bw() +
   geom_vline(xintercept=0, linetype="dotted") +
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
@@ -469,10 +432,11 @@ blNAA_richness_sum
 ```{r}
 birdlifeNAA_richness_plot <- blNAA_richness_sum[blNAA_richness_sum$model == 'full',]
 
-birdlifeNAA_richness_plot$explanatory <- factor(birdlifeNAA_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlifeNAA_richness_plot$explanatory <- factor(birdlifeNAA_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
 birdlifeNAA_richness_plot$type <- 'Proportion of landcover\n5 km around site'
 birdlifeNAA_richness_plot$type[birdlifeNAA_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
 birdlifeNAA_richness_plot$type[birdlifeNAA_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+birdlifeNAA_richness_plot$type[birdlifeNAA_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
 
 birdlifeNAA_plot = ggplot(birdlifeNAA_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
   geom_line() +
@@ -481,7 +445,7 @@ birdlifeNAA_plot = ggplot(birdlifeNAA_richness_plot, aes(y=explanatory, x=richne
                  position=position_dodge(0.05)) +
   scale_y_discrete(
     limits = rev(levels(birdlifeNAA_richness_plot$explanatory)), 
-    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Sqrt number\nof checklists')) +
   theme_bw() +
   geom_vline(xintercept=0, linetype="dotted") +
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
@@ -518,10 +482,11 @@ blrHigherUrban_richness_sum
 ```{r}
 birdlifeHR_richness_plot <- blrHigherUrban_richness_sum[blrHigherUrban_richness_sum$model == 'full',]
 
-birdlifeHR_richness_plot$explanatory <- factor(birdlifeHR_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+birdlifeHR_richness_plot$explanatory <- factor(birdlifeHR_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
 birdlifeHR_richness_plot$type <- 'Proportion of landcover\n5 km around site'
 birdlifeHR_richness_plot$type[birdlifeHR_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
 birdlifeHR_richness_plot$type[birdlifeHR_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+birdlifeHR_richness_plot$type[birdlifeHR_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
 
 birdlifeHR_plot = ggplot(birdlifeHR_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
   geom_line() +
@@ -530,7 +495,7 @@ birdlifeHR_plot = ggplot(birdlifeHR_richness_plot, aes(y=explanatory, x=richness
                  position=position_dodge(0.05)) +
   scale_y_discrete(
     limits = rev(levels(birdlifeHR_richness_plot$explanatory)), 
-    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+    labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Sqrt number\nof checklists')) +
   theme_bw() +
   geom_vline(xintercept=0, linetype="dotted") +
   guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +
@@ -558,10 +523,11 @@ plot_sample = function(sample_id) {
   
   birdlife_sample0_richness_plot <- birdlife_sample0_richness_summary[birdlife_sample0_richness_summary$model == 'full',]
   
-  birdlife_sample0_richness_plot$explanatory <- factor(birdlife_sample0_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic'))
+  birdlife_sample0_richness_plot$explanatory <- factor(birdlife_sample0_richness_plot$explanatory, levels = c('closed_forest', 'open_forest', 'shrubs', 'herbaceous_vegetation', 'herbaceous_wetland', 'permanent_water', 'cultivated', 'urban', 'mean_elevation_scaled', 'elevation_delta_scaled', 'realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic', 'number_of_checklists_scaled'))
   birdlife_sample0_richness_plot$type <- 'Proportion of landcover\n5 km around site'
   birdlife_sample0_richness_plot$type[birdlife_sample0_richness_plot$explanatory %in% c('mean_elevation_scaled', 'elevation_delta_scaled')] <- 'Scaled (0-1) average\nelevation 5 km around site'
   birdlife_sample0_richness_plot$type[birdlife_sample0_richness_plot$explanatory %in% c('realmAfrotropic', 'realmAustralasia', 'realmIndomalayan', 'realmNearctic', 'realmNeotropic')] <- 'Realm'
+  birdlife_sample0_richness_plot$type[birdlife_sample0_richness_plot$explanatory %in% c('number_of_checklists_scaled')] <- 'Scaled (0 - 1) number\nof checklists'
   
   birdlifeSample0_plot = ggplot(birdlife_sample0_richness_plot, aes(y=explanatory, x=richness_birdlife_estimate, colour = type)) + 
     geom_line() +
@@ -570,7 +536,7 @@ plot_sample = function(sample_id) {
                    position=position_dodge(0.05)) +
     scale_y_discrete(
       limits = rev(levels(birdlife_sample0_richness_plot$explanatory)), 
-      labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical')) +
+      labels = c('closed_forest' = 'Closed forest', 'open_forest' = 'Open forest', 'shrubs' = 'Shrubs', 'herbaceous_vegetation' = 'Herbaceous\nvegetation', 'herbaceous_wetland' = 'Herbaceous\nwetland', 'permanent_water' = 'Permanent\nwater', 'cultivated' = 'Cultivated', 'urban' = 'Urban', 'mean_elevation_scaled' = 'Mean elevation\nscaled', 'elevation_delta_scaled' = 'Elevation delta\nscaled', 'realmAfrotropic' = 'Afrotropical', 'realmAustralasia' = 'Austaliasian', 'realmIndomalayan' = 'Indomalayan', 'realmNearctic' = 'Nearctic', 'realmNeotropic' = 'Neotropical', 'number_of_checklists_scaled' = 'Sqrt number\nof checklists')) +
     theme_bw() +
     geom_vline(xintercept=0, linetype="dotted") +
     guides(colour=guide_legend(title="Predictor type")) + xlab('Increase in proportion of regional pool richness\n± Standard Error') + ylab('Predictor') +

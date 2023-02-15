@@ -16,6 +16,7 @@ library(dplyr)
 library(lme4)
 library(MuMIn)
 library(scales)
+library(Hmisc)
 ```
 
 ```{r}
@@ -89,6 +90,8 @@ load_dataset <- function(poolname) {
   data$latitude_scaled = rescale(data$latitude, to = c(0, 1), from = range(data$latitude, na.rm = TRUE, finite = TRUE))
   data$longitude_scaled = rescale(data$longitude, to = c(0, 1), from = range(data$longitude, na.rm = TRUE, finite = TRUE))
   data$absolute_latitude_scaled = abs(data$latitude_scaled)
+  data$number_of_checklists_sqrt = sqrt(data$number_of_checklists)
+  data$number_of_checklists_scaled = rescale(data$number_of_checklists_sqrt, to = c(0, 1), from = range(data$number_of_checklists_sqrt, na.rm = TRUE, finite = TRUE))
   data
 }
 ```

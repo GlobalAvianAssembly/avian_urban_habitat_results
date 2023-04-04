@@ -24,7 +24,7 @@ The analysis for comparing the percentage of regional pool richness retained at 
 
 The city random effect interecepts are outputed from `percentage_of_regional_richness.Rmd` into: 
 * `percentage_of_regional_richness__output__birdlife_city_richness_intercept.csv`
-*`percentage_of_regional_richness__output__merlin_city_richness_intercept.csv`
+* `percentage_of_regional_richness__output__merlin_city_richness_intercept.csv`
 * `percentage_of_regional_richness__output__both_city_richness_intercept.csv`
 * `percentage_of_regional_richness__output__either_city_richness_intercept.csv`
 

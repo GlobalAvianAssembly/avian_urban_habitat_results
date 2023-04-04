@@ -30,7 +30,7 @@ The city random effect interecepts are outputed from `percentage_of_regional_ric
 
 The analysis of these files for comparing cities is covered in `city_effect_richness.Rmd`.
 
-Finally, `referee_comments.Rmd` examines whether the impact in number of checklists on the percentage of regional pool richness retained within a hotspot.
+Finally, `referee_comments.Rmd` examines the impact of the number of checklists on the percentage of regional pool richness retained within a hotspot.
 
 ## Phylogenetic signal for urban adaptability
 `phylogeny.Rmd` covers the analysis of phylogeny. `phylogeny.meta_data.schema.yaml` contains the schema for data used within this analysis.

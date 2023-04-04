@@ -32,6 +32,8 @@ The analysis of these files for comparing cities is covered in `city_effect_rich
 
 Finally, `referee_comments.Rmd` examines the impact of the number of checklists on the percentage of regional pool richness retained within a hotspot.
 
+Google Earth Engine was used to generate the environmental variables used to describe the regions around hotspots and the cities. The code used is here https://zenodo.org/record/7798971.
+
 ## Phylogenetic signal for urban adaptability
 `phylogeny.Rmd` covers the analysis of phylogeny. `phylogeny.meta_data.schema.yaml` contains the schema for data used within this analysis.
 
@@ -39,5 +41,7 @@ Finally, `referee_comments.Rmd` examines the impact of the number of checklists 
 `niche_resilience.Rmd` cover the analysis for the predictors for the percentage of niches retained from the regional pool at each hotspot. The city random effect intercepts are stored in CSVs from this analysis but not used again. See `niche_resilience.meta_data.schema.yaml` for more information on the CSV files produced. Before running this file first run `download_data.Rmd`
 
 `species_analysis.Rmd` covers the analysis of niche loss/accumulation within cities. It uses exported accumluation data, details of which can be found in `species_analysis.meta_data.schema.yaml`.
+
+The clusters used to represent niches were generated using species morphology, the code is here https://zenodo.org/record/7798990.
 
 

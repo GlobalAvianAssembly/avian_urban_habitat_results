@@ -9,7 +9,7 @@ The manuscript splits the methods and results into three sections:
 
 The files used for each section are detailed below.
 
-The manuscript presents the results of using regional pools generated from Birdlife international distribution data. In appendix 1 an alternative analysis is presented using regional pools generated from eBird data; please note that within the R analysis the eBird regional pool is referred to as Merlin as the data used to generate the regional pool from eBird is from the datasets that powers the Cornel Lab's Merlin application.  This analysis also includes results from two additional regional pools; (1) when species are present in both the Birdlife regional pool and the eBird/merlin regional pool, and (2) when species are present in either the Birdlife regional pool or the eBird/merlin regional pool.
+The manuscript presents the results of using regional pools generated from BirdLife International distribution data. In appendix 1 an alternative analysis is presented using regional pools generated from eBird data; please note that within the R analysis the eBird regional pool is referred to as Merlin as the data used to generate the regional pool from eBird is from the datasets that power the Cornel Lab's Merlin smartphone application.  This analysis also includes results from two additional regional pools; (1) when species are present in both the BirdLife regional pool and the eBird/Merlin regional pool, and (2) when species are present in either the BirdLife regional pool or the eBird/Merlin regional pool.
 
 In general for each analysis file named `xxx_analysis.Rmd` there will also be the following corresponding files: 
 * `xxx_analysis.nb.html`: an html output of the notebook containing R code and outputs
